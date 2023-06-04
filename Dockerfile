@@ -22,6 +22,9 @@ COPY . .
 # Build the app to the /dist folder
 RUN npm run build
 
+# Generate Prisma client
+RUN npx prisma generate
+
 ################
 ## PRODUCTION ##
 ################
