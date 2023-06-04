@@ -1,7 +1,6 @@
 version: "3.8"
 services:
   api:
-    # image: usr-oliver/nestjs-dockerized 
     build:
       dockerfile: Dockerfile
       context: .
@@ -20,34 +19,24 @@ services:
     depends_on:
       - mysql
     environment:
-      DB_HOST: mysql
-      DB_PORT: 3306
-      DB_USER: root
-      DB_PASSWORD: 
-      DB_DATABASE: app
+      - DATABASE_URL=mysql://root:@mysql:3306/nestapp
 
     ports:
       - 3000:3000
       # debugging port
       - 9229:9229
 
-
   mysql:
     image: mysql:latest
     restart: always
     environment:
-      MYSQL_DATABASE: app
-      MYSQL_USER: root1
-      MYSQL_ALLOW_EMPTY_PASSWORD: true # Set to true for empty password
-      MYSQL_PASSWORD: 
+      MYSQL_DATABASE: nestapp
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_ROOT_PASSWORD: 
-
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
       - '3306:3306'
-    logging:
-      driver: none  # Disable logging for MySQL service
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -60,9 +49,5 @@ services:
       PMA_HOST: mysql
       PMA_PORT: 3306
       MYSQL_ROOT_PASSWORD: 
-    logging:
-      driver: none  # Disable logging for phpMyAdmin service
-  
 volumes:
   mysql_data:
-
