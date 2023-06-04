@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+ 
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: app
+      MYSQL_USER: root1
+      MYSQL_ALLOW_EMPTY_PASSWORD: true # Set to true for empty password
+      MYSQL_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: 
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - '3306:3306'
+    logging:
+      driver: none  # Disable logging for MySQL service
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: 
+    logging:
+      driver: none  # Disable logging for phpMyAdmin service
+  
+volumes:
+  mysql_data:
+
