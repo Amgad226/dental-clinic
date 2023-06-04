@@ -7,6 +7,11 @@ export class AppController{
     @Get('/')
     hello(): string {
       return this.appService.helloWorld();
-
     }
+    
+    @Get('/testPrisma')
+    testPrisma(): any {
+      return this.appService.storeDiseaseForTest();
+    }
+    
 }

@@ -5,8 +5,8 @@ services:
     image: mysql:latest
     restart: always
     environment:
-      MYSQL_DATABASE: app
-      MYSQL_USER: root1
+      MYSQL_DATABASE: nestapp
+      MYSQL_USER: root
       MYSQL_ALLOW_EMPTY_PASSWORD: true # Set to true for empty password
       MYSQL_PASSWORD: 
       MYSQL_ROOT_PASSWORD: 
