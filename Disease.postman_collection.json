@@ -1,24 +1,24 @@
 {
 	"info": {
-		"_postman_id": "72ca1b96-842a-45f7-befb-0dd2a5ff3cc0",
-		"name": "Treatment Type",
+		"_postman_id": "9d4eecfa-6cd0-436f-994a-af68d5b95aa6",
+		"name": "Disease",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "all",
+			"name": "All",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/treatment_type/all",
+					"raw": "http://localhost:3000/disease/all",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"treatment_type",
+						"disease",
 						"all"
 					]
 				}
@@ -29,16 +29,10 @@
 			"name": "create",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "default"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\" : \"test3\"\r\n}",
+					"raw": "{\r\n    \"name\":\"dis3\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -46,14 +40,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/treatment_type/create",
+					"raw": "http://localhost:3000/disease/create",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"treatment_type",
+						"disease",
 						"create"
 					]
 				}
@@ -67,7 +61,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\" : \"siiii updateed\"\r\n}",
+					"raw": "{\r\n    \"name\" : \"dis updated\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -75,36 +69,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/treatment_type/update/1",
+					"raw": "http://localhost:3000/disease/update/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"treatment_type",
+						"disease",
 						"update",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "delete",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/treatment_type/delete/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"treatment_type",
-						"delete",
 						"1"
 					]
 				}
@@ -117,15 +90,36 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/treatment_type/show/1",
+					"raw": "http://localhost:3000/disease/show/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"treatment_type",
+						"disease",
 						"show",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/disease/delete/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"disease",
+						"delete",
 						"1"
 					]
 				}
