@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "9d4eecfa-6cd0-436f-994a-af68d5b95aa6",
-		"name": "Disease",
+		"_postman_id": "bb8ca86e-5313-4ad8-99fe-f40cd094dd48",
+		"name": "Bad Habits",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -11,14 +11,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/disease/all",
+					"raw": "http://localhost:3000/bad_habit/all",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"disease",
+						"bad_habit",
 						"all"
 					]
 				}
@@ -32,7 +32,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\":\"dis3\"\r\n}",
+					"raw": "{\r\n    \"name\" : \"test1\"\r\n\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -40,14 +40,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/disease/create",
+					"raw": "http://localhost:3000/bad_habit/create",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"disease",
+						"bad_habit",
 						"create"
 					]
 				}
@@ -61,7 +61,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\" : \"dis updated\"\r\n}",
+					"raw": "{\r\n    \"name\":\"test updated\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -69,14 +69,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/disease/update/1",
+					"raw": "http://localhost:3000/bad_habit/update/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"disease",
+						"bad_habit",
 						"update",
 						"1"
 					]
@@ -111,16 +111,16 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/disease/delete/1",
+					"raw": "http://localhost:3000/bad_habit/delete/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"disease",
+						"bad_habit",
 						"delete",
-						"1"
+						"2"
 					]
 				}
 			},
