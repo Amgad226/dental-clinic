@@ -1,0 +1,31 @@
+<h1>Graph QL</h1>
+<div>
+    <div>there two main pieces of graph ql </div>
+    <div>the first one is type definition witch is where you write actual graphql code to define shape of the data that's available on the server  </div>
+    <div>the second half of this puzzle are your resolvers this is where you tell graphql how to return the actual data to the client </div>
+    <pre>
+        const typeDefs = gpl`
+        type User {
+            id: ID!
+            screenName:string!
+            posts :[post]!
+        }
+        type Post {
+            id:ID!
+            text:String!
+            user_id:ID!
+            user:User!
+            likes:Int!
+        }
+        type Query{
+            tweets:[Tweet]
+            user(id: string ):User  
+        }
+        `
+
+    </pre>
+    <ul>
+        <li></li>
+        </ul>
+
+</div>
