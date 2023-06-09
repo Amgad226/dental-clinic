@@ -1,0 +1,31 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateDiseaseInput {
+  name: String!
+}
+
+type Disease {
+  """Example field (placeholder)"""
+  id: Int!
+
+  """Example field (placeholder)"""
+  name: String!
+}
+
+type Mutation {
+  createDisease(createDiseaseInput: CreateDiseaseInput!): Disease!
+  removeDisease(id: Int!): Disease!
+  updateDisease(updateDiseaseInput: UpdateDiseaseInput!): Disease!
+}
+
+type Query {
+  disease(id: Int!): Disease!
+  diseases: [Disease!]!
+}
+
+input UpdateDiseaseInput {
+  id: Int!
+  name: String!
+}

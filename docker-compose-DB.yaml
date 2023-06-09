@@ -6,9 +6,7 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: nestapp
-      MYSQL_USER: root
-      MYSQL_ALLOW_EMPTY_PASSWORD: true # Set to true for empty password
-      MYSQL_PASSWORD: 
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_ROOT_PASSWORD: 
 
     volumes:
