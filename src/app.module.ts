@@ -8,6 +8,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 // import { DiseasModule } from './diseas/diseas.module';
 import { DiseaseModule } from './graphql/disease/disease.module';
+import { BadHabitModule } from './graphql/bad_habit/bad_habit.module';
 
 
 @Module({
@@ -30,6 +31,7 @@ import { DiseaseModule } from './graphql/disease/disease.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,}),
     DiseaseModule,
+    BadHabitModule,
   ],
   controllers: [AppController],
   providers:[AppService],

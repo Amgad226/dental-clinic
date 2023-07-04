@@ -2,6 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type BadHabit {
+  id: Int!
+  name: String!
+}
+
+input CreateBadHabitInput {
+  name: String!
+}
+
 input CreateDiseaseInput {
   name: String!
 }
@@ -15,14 +24,24 @@ type Disease {
 }
 
 type Mutation {
+  createBadHabit(createBadHabitInput: CreateBadHabitInput!): BadHabit!
   createDisease(createDiseaseInput: CreateDiseaseInput!): Disease!
+  removeBadHabit(id: Int!): BadHabit!
   removeDisease(id: Int!): Disease!
+  updateBadHabit(updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
   updateDisease(updateDiseaseInput: UpdateDiseaseInput!): Disease!
 }
 
 type Query {
+  badHabit(id: Int!): BadHabit!
+  badHabits: [BadHabit!]!
   disease(id: Int!): Disease!
   diseases: [Disease!]!
+}
+
+input UpdateBadHabitInput {
+  id: Int!
+  name: String!
 }
 
 input UpdateDiseaseInput {
