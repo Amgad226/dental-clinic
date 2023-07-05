@@ -15,6 +15,10 @@ input CreateDiseaseInput {
   name: String!
 }
 
+input CreateTreatmentTypeInput {
+  name: String!
+}
+
 type Disease {
   """Example field (placeholder)"""
   id: Int!
@@ -26,10 +30,13 @@ type Disease {
 type Mutation {
   createBadHabit(createBadHabitInput: CreateBadHabitInput!): BadHabit!
   createDisease(createDiseaseInput: CreateDiseaseInput!): Disease!
+  createTreatmentType(createTreatmentTypeInput: CreateTreatmentTypeInput!): TreatmentType!
   removeBadHabit(id: Int!): BadHabit!
   removeDisease(id: Int!): Disease!
+  removeTreatmentType(id: Int!): TreatmentType!
   updateBadHabit(updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
   updateDisease(updateDiseaseInput: UpdateDiseaseInput!): Disease!
+  updateTreatmentType(updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
 }
 
 type Query {
@@ -37,6 +44,13 @@ type Query {
   badHabits: [BadHabit!]!
   disease(id: Int!): Disease!
   diseases: [Disease!]!
+  treatmentType(id: Int!): TreatmentType!
+  treatmentTypes: [TreatmentType!]!
+}
+
+type TreatmentType {
+  id: Int!
+  name: String!
 }
 
 input UpdateBadHabitInput {
@@ -45,6 +59,11 @@ input UpdateBadHabitInput {
 }
 
 input UpdateDiseaseInput {
+  id: Int!
+  name: String!
+}
+
+input UpdateTreatmentTypeInput {
   id: Int!
   name: String!
 }
