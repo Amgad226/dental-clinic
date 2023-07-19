@@ -20,7 +20,7 @@ services:
     image: phpmyadmin/phpmyadmin:latest
     restart: always
     ports:
-      - "80:80"
+      - "82:80"
     depends_on:
       - mysql
     environment:

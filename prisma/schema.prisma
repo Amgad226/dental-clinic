@@ -2,150 +2,152 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "windows", "debian-openssl-1.1.x"]
-
 }
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL") 
+  url      = env("DATABASE_URL")
 }
 
-
 model ChemicalMaterial {
-  id                          Int                         @id @default(autoincrement())
-  name                        String
+  id   Int    @id @default(autoincrement())
+  name String
 
-  diseaseChemicalMaterials    DiseaseChemicalMaterial []   
-  badHabitChemicalMaterials   BadHabitChemicalMaterial[]  
-  chemicalChemicalMaterials1  ChemicalChemicalMaterial[]  @relation("ChemicalMaterial1")
-  chemicalChemicalMaterials2  ChemicalChemicalMaterial[]  @relation("ChemicalMaterial2")
-  medicineChemicalMaterials   MedicineChemicalMaterial [] 
+  diseaseChemicalMaterials   DiseaseChemicalMaterial[]
+  badHabitChemicalMaterials  BadHabitChemicalMaterial[]
+  chemicalChemicalMaterials1 ChemicalChemicalMaterial[] @relation("ChemicalMaterial1")
+  chemicalChemicalMaterials2 ChemicalChemicalMaterial[] @relation("ChemicalMaterial2")
+  medicineChemicalMaterials  MedicineChemicalMaterial[]
+
   @@map("chemical_materials") // Optionally, you can specify the table name
 }
 
 model Disease {
-  id                          Int                         @id   @default(autoincrement())
-  name                        String
+  id   Int    @id @default(autoincrement())
+  name String
 
-  diseaseChemicalMaterials DiseaseChemicalMaterial[] 
-   @@map("diseases")
+  diseaseChemicalMaterials DiseaseChemicalMaterial[]
+
+  @@map("diseases")
 }
 
-model BadHabit{
-  id                          Int                         @id   @default(autoincrement())
-  name                        String
+model BadHabit {
+  id   Int    @id @default(autoincrement())
+  name String
 
-  badHabitChemicalMaterials BadHabitChemicalMaterial[] 
-   @@map("bad_habit")
+  badHabitChemicalMaterials BadHabitChemicalMaterial[]
+
+  @@map("bad_habit")
 }
-
 
 model DiseaseChemicalMaterial {
-  id                          Int                         @id @default(autoincrement())
-  chemical_material_id        Int
-  disease_id                  Int
-  disease                     Disease                     @relation(fields: [disease_id],           references: [id])
-  chemical_material           ChemicalMaterial            @relation(fields: [chemical_material_id], references: [id])
-   @@map("diseases_chemical_materials")
+  id                   Int              @id @default(autoincrement())
+  chemical_material_id Int
+  disease_id           Int
+  disease              Disease          @relation(fields: [disease_id], references: [id])
+  chemical_material    ChemicalMaterial @relation(fields: [chemical_material_id], references: [id])
+
+  @@map("diseases_chemical_materials")
 }
 
 model BadHabitChemicalMaterial {
-  id                          Int                         @id @default(autoincrement())
-  chemical_material_id        Int
-  bad_habit_id                Int
-  disease                     BadHabit                    @relation(fields: [bad_habit_id],        references: [id])
-  chemical_material           ChemicalMaterial            @relation(fields: [chemical_material_id], references: [id])
-   @@map("bad_habits_chemical_materials")
+  id                   Int              @id @default(autoincrement())
+  chemical_material_id Int
+  bad_habit_id         Int
+  disease              BadHabit         @relation(fields: [bad_habit_id], references: [id])
+  chemical_material    ChemicalMaterial @relation(fields: [chemical_material_id], references: [id])
+
+  @@map("bad_habits_chemical_materials")
 }
 
 model ChemicalChemicalMaterial {
-  id                          Int                         @id @default(autoincrement())
-  chemical_material_1_id      Int
-  chemical_material_2_id      Int
-  chemical_material_1         ChemicalMaterial            @relation("ChemicalMaterial1", fields: [chemical_material_1_id], references: [id])
-  chemical_material_2         ChemicalMaterial            @relation("ChemicalMaterial2", fields: [chemical_material_2_id], references: [id])
-   @@map("chemical_materials_chemical_materials")
+  id                     Int              @id @default(autoincrement())
+  chemical_material_1_id Int
+  chemical_material_2_id Int
+  chemical_material_1    ChemicalMaterial @relation("ChemicalMaterial1", fields: [chemical_material_1_id], references: [id])
+  chemical_material_2    ChemicalMaterial @relation("ChemicalMaterial2", fields: [chemical_material_2_id], references: [id])
+
+  @@map("chemical_materials_chemical_materials")
 }
 
-
 model Medicine {
-  id                          Int                         @id  @default(autoincrement())
-  name                        String
+  id   Int    @id @default(autoincrement())
+  name String
 
-  medicineChemicalMaterials MedicineChemicalMaterial[] 
-   @@map("medicines")
+  medicineChemicalMaterials MedicineChemicalMaterial[]
 
+  @@map("medicines")
 }
 
 model MedicineChemicalMaterial {
-  id                          Int                         @id @default(autoincrement())
-  chemical_material_id        Int
-  medicine_id                 Int
-        
-  medicine                     Medicine                    @relation(fields: [medicine_id],           references: [id])
-  chemical_material           ChemicalMaterial            @relation(fields: [chemical_material_id], references: [id])
-   @@map("medicines_chemical_materials")
+  id                   Int @id @default(autoincrement())
+  chemical_material_id Int
+  medicine_id          Int
 
+  medicine          Medicine         @relation(fields: [medicine_id], references: [id])
+  chemical_material ChemicalMaterial @relation(fields: [chemical_material_id], references: [id])
+
+  @@map("medicines_chemical_materials")
 }
 
 model TreatmentType {
-  id                          Int                         @id  @default(autoincrement())
-  name                        String
+  id   Int    @id @default(autoincrement())
+  name String
 
   treatments Treatment[]
-   @@map("treatments_types")
 
+  @@map("treatments_types")
 }
 
 model Treatment {
-  id                          Int                         @id   @default(autoincrement())
-  name                        String
-  price                       Float
-  color                       String
-  treatment_type_id           Int
-  treatment_type              TreatmentType               @relation(fields: [treatment_type_id],           references: [id])
+  id                Int           @id @default(autoincrement())
+  name              String
+  price             Float
+  color             String
+  treatment_type_id Int
+  treatment_type    TreatmentType @relation(fields: [treatment_type_id], references: [id])
 
   steps Step[]
-   @@map("treatments")
 
+  @@map("treatments")
 }
 
 model Step {
-  id                          Int                         @id   @default(autoincrement())
-  name                        String
-  treatment_id                Int
-  treatment                   Treatment                   @relation(fields: [treatment_id],references: [id])
+  id           Int       @id @default(autoincrement())
+  name         String
+  treatment_id Int
+  treatment    Treatment @relation(fields: [treatment_id], references: [id])
 
   subSteps SubStep[]
-   @@map("steps")
 
+  @@map("steps")
 }
 
 model SubStep {
-  id                          Int                         @id   @default(autoincrement())
-  name                        String
-  step_id                     Int
-  step                        Step                        @relation(fields: [step_id],references: [id])
-   @@map("subs_step")
+  id      Int    @id @default(autoincrement())
+  name    String
+  step_id Int
+  step    Step   @relation(fields: [step_id], references: [id])
 
+  @@map("subs_step")
 }
 
-
 model ProblemType {
-  id                          Int                         @id   @default(autoincrement())
-  name                        String
+  id   Int    @id @default(autoincrement())
+  name String
 
   problems Problem[]
-   @@map("problem_types")
 
+  @@map("problem_types")
 }
 
 model Problem {
-  id                          Int                         @id   @default(autoincrement())
-  name                        String
-  Problem_type_id             Int
-  Problem_type                ProblemType                 @relation(fields: [Problem_type_id], references: [id])
+  id              Int         @id @default(autoincrement())
+  name            String
+  Problem_type_id Int
+  Problem_type    ProblemType @relation(fields: [Problem_type_id], references: [id])
+
   @@map("problems")
 }
