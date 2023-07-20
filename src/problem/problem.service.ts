@@ -8,21 +8,29 @@ export class ProblemService {
   constructor(private prisma: PrismaService) { }
 
   async create({ name, problem_type_id }: CreateProblemInput) {
-    return await this.prisma.problem.create({
-      data: {
-        name: name,
-        problem_type_id:1,
-        Problem_type: {
-          connect: {
-            id: 1
+    const t_id = this.prisma.problemType.findUniqueOrThrow({ where: { id: problem_type_id } })
+    if (t_id) {
+      return await this.prisma.problem.create({
+        data: {
+          name: name,
+          Problem_type: {
+            connect: {
+              id: +problem_type_id,
+            },
           }
-        }
-      },
-    });
+        },
+      });
+    }
   }
 
   async findAll() {
-    return await this.prisma.problem.findMany();
+    return await this.prisma.problem.findMany(
+      {
+        include: {
+          Problem_type: true
+        }
+      } 
+    );
   }
 
   async findOne(id: number) {
