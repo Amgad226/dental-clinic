@@ -3,7 +3,6 @@ import { ProblemTypeService } from './problem_type.service';
 import { ProblemType } from './entities/problem_type.entity';
 import { CreateProblemTypeInput } from './dto/create-problem_type.input';
 import { UpdateProblemTypeInput } from './dto/update-problem_type.input';
-import { graphQLWrapper } from 'src/utils';
 
 @Resolver(() => ProblemType)
 export class ProblemTypeResolver {

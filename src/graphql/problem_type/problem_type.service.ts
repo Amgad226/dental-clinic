@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ProblemTypeService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(createProblemTypeInput: CreateProblemTypeInput) {
     return await this.prisma.problemType.create({
@@ -27,9 +27,9 @@ export class ProblemTypeService {
       data: { ...updateProblemTypeInput },
     });
   }
-  //
+
   async remove(id: number) {
     return await this.prisma.problemType.delete({ where: { id } });
   }
 }
-//
+

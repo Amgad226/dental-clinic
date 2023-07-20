@@ -146,8 +146,8 @@ model ProblemType {
 model Problem {
   id              Int         @id @default(autoincrement())
   name            String
-  Problem_type_id Int
-  Problem_type    ProblemType @relation(fields: [Problem_type_id], references: [id])
+  problem_type_id Int
+  Problem_type    ProblemType @relation(fields: [problem_type_id], references: [id])
 
   @@map("problems")
 }

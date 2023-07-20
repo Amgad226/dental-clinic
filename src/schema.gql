@@ -15,6 +15,14 @@ input CreateDiseaseInput {
   name: String!
 }
 
+input CreateProblemInput {
+  """problem name"""
+  name: String!
+
+  """problem name"""
+  problem_type_id: String!
+}
+
 input CreateProblemTypeInput {
   """The Name of the problem type"""
   name: String!
@@ -35,16 +43,30 @@ type Disease {
 type Mutation {
   createBadHabit(createBadHabitInput: CreateBadHabitInput!): BadHabit!
   createDisease(createDiseaseInput: CreateDiseaseInput!): Disease!
+  createProblem(createProblemInput: CreateProblemInput!): Problem!
   createProblemType(createProblemTypeInput: CreateProblemTypeInput!): ProblemType!
   createTreatmentType(createTreatmentTypeInput: CreateTreatmentTypeInput!): TreatmentType!
   removeBadHabit(id: Int!): BadHabit!
   removeDisease(id: Int!): Disease!
+  removeProblem(id: Int!): Problem!
   removeProblemType(id: Int!): ProblemType!
   removeTreatmentType(id: Int!): TreatmentType!
   updateBadHabit(updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
   updateDisease(updateDiseaseInput: UpdateDiseaseInput!): Disease!
+  updateProblem(updateProblemInput: UpdateProblemInput!): Problem!
   updateProblemType(updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
   updateTreatmentType(updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
+}
+
+type Problem {
+  """problem id"""
+  id: Int!
+
+  """problem id"""
+  name: String!
+
+  """problem id"""
+  problem_type: Int!
 }
 
 type ProblemType {
@@ -58,8 +80,10 @@ type Query {
   badHabits: [BadHabit!]!
   disease(id: Int!): Disease!
   diseases: [Disease!]!
+  problem(id: Int!): Problem!
   problemType(id: Int!): ProblemType!
   problemTypes: [ProblemType!]!
+  problems: [Problem!]!
   treatmentType(id: Int!): TreatmentType!
   treatmentTypes: [TreatmentType!]!
 }
@@ -77,6 +101,12 @@ input UpdateBadHabitInput {
 input UpdateDiseaseInput {
   id: Int!
   name: String!
+}
+
+input UpdateProblemInput {
+  id: Int!
+  name: String!
+  problem_type_id: Int!
 }
 
 input UpdateProblemTypeInput {
