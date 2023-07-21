@@ -53,19 +53,29 @@ type Mutation {
   removeTreatmentType(id: Int!): TreatmentType!
   updateBadHabit(updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
   updateDisease(updateDiseaseInput: UpdateDiseaseInput!): Disease!
-  updateProblem(updateProblemInput: UpdateProblemInput!): Problem!
+  updateProblem(id: Int!, updateProblemInput: UpdateProblemInput!): Problem!
   updateProblemType(updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
   updateTreatmentType(updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
 }
 
+type PaginateProblem {
+  item_per_page: Int!
+  items: [Problem!]!
+  page: Int!
+  totalPages: Int!
+}
+
 type Problem {
+  """Problem_type"""
+  Problem_type: ProblemType!
+
   """problem id"""
   id: Int!
 
-  """problem id"""
+  """problem name"""
   name: String!
 
-  """problem id"""
+  """problem_type_id id"""
   problem_type_id: Int!
 }
 
@@ -83,7 +93,7 @@ type Query {
   problem(id: Int!): Problem!
   problemType(id: Int!): ProblemType!
   problemTypes: [ProblemType!]!
-  problems: [Problem!]!
+  problems(item_per_page: Float, page: Float): PaginateProblem!
   treatmentType(id: Int!): TreatmentType!
   treatmentTypes: [TreatmentType!]!
 }
@@ -104,7 +114,6 @@ input UpdateDiseaseInput {
 }
 
 input UpdateProblemInput {
-  id: Int!
   name: String!
   problem_type_id: Int!
 }
