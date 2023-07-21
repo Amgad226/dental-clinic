@@ -89,6 +89,8 @@ model MedicineChemicalMaterial {
   medicine          Medicine         @relation(fields: [medicine_id], references: [id])
   chemical_material ChemicalMaterial @relation(fields: [chemical_material_id], references: [id])
 
+
+
   @@map("medicines_chemical_materials")
 }
 

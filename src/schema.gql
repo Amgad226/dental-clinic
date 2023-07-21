@@ -20,6 +20,19 @@ input CreateDiseaseInput {
   name: String!
 }
 
+input CreateProblemInput {
+  """problem name"""
+  name: String!
+
+  """problem name"""
+  problem_type_id: String!
+}
+
+input CreateProblemTypeInput {
+  """The Name of the problem type"""
+  name: String!
+}
+
 input CreateTreatmentTypeInput {
   name: String!
 }
@@ -39,17 +52,50 @@ type LogoutResponse {
 type Mutation {
   createBadHabit(createBadHabitInput: CreateBadHabitInput!): BadHabit!
   createDisease(createDiseaseInput: CreateDiseaseInput!): Disease!
+  createProblem(createProblemInput: CreateProblemInput!): Problem!
+  createProblemType(createProblemTypeInput: CreateProblemTypeInput!): ProblemType!
   createTreatmentType(createTreatmentTypeInput: CreateTreatmentTypeInput!): TreatmentType!
   logout(userId: Float!): LogoutResponse!
   removeBadHabit(id: Int!): BadHabit!
   removeDisease(id: Int!): Disease!
+  removeProblem(id: Int!): Problem!
+  removeProblemType(id: Int!): ProblemType!
   removeTreatmentType(id: Int!): TreatmentType!
   reomveUser(id: Int!): Auth!
   signup(signUpInput: SignUpInput!): SignResponse!
   singin(signInInput: SignInInput!): SignResponse!
   updateBadHabit(updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
   updateDisease(updateDiseaseInput: UpdateDiseaseInput!): Disease!
+  updateProblem(id: Int!, updateProblemInput: UpdateProblemInput!): Problem!
+  updateProblemType(updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
   updateTreatmentType(updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
+}
+
+type PaginateProblem {
+  item_per_page: Int!
+  items: [Problem!]!
+  page: Int!
+  totalPages: Int!
+}
+
+type Problem {
+  """Problem_type"""
+  Problem_type: ProblemType!
+
+  """problem id"""
+  id: Int!
+
+  """problem name"""
+  name: String!
+
+  """problem_type_id id"""
+  problem_type_id: Int!
+}
+
+type ProblemType {
+  """Example field (placeholder)"""
+  id: Int!
+  name: String!
 }
 
 type Query {
@@ -57,6 +103,10 @@ type Query {
   badHabits: [BadHabit!]!
   disease(id: Int!): Disease!
   diseases: [Disease!]!
+  problem(id: Int!): Problem!
+  problemType(id: Int!): ProblemType!
+  problemTypes: [ProblemType!]!
+  problems(item_per_page: Float, page: Float): PaginateProblem!
   treatmentType(id: Int!): TreatmentType!
   treatmentTypes: [TreatmentType!]!
 }
@@ -89,6 +139,16 @@ input UpdateBadHabitInput {
 }
 
 input UpdateDiseaseInput {
+  id: Int!
+  name: String!
+}
+
+input UpdateProblemInput {
+  name: String!
+  problem_type_id: Int!
+}
+
+input UpdateProblemTypeInput {
   id: Int!
   name: String!
 }

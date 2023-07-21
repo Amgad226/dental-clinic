@@ -1,18 +1,18 @@
-import { Module } from '@nestjs/common';
-
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { PrismaModule } from './prisma/prisma.module';
-import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-// import { DiseasModule } from './diseas/diseas.module';
+import { Module } from '@nestjs/common';
+import { AppService } from './app.service';
+import { GraphQLModule } from '@nestjs/graphql';
+import { AppController } from './app.controller';
+import { PrismaModule } from './prisma/prisma.module';
 import { DiseaseModule } from './graphql/disease/disease.module';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { BadHabitModule } from './graphql/bad_habit/bad_habit.module';
 import { TreatmentTypeModule } from './graphql/treatment_type/treatment_type.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
+import { ProblemTypeModule } from './graphql/problem_type/problem_type.module';
+import { ProblemModule } from './problem/problem.module';
 
 
 @Module({
@@ -35,9 +35,10 @@ import { ConfigModule } from '@nestjs/config';
     TreatmentTypeModule,
     AuthModule,
     UserModule,
+    ProblemTypeModule,
+    ProblemModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule { }
-// problems

@@ -16,7 +16,8 @@ export class DiseaseResolver {
   }
 
   @Query(() => [Disease], { name: 'diseases' })
-  findAll() {
+  findAll() 
+  {
     return graphQLWrapper(async () => {
       return this.diseaseService.findAll();
     })();
