@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Auth {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type BadHabit {
   id: Int!
   name: String!
@@ -27,13 +32,21 @@ type Disease {
   name: String!
 }
 
+type LogoutResponse {
+  loggedOut: Boolean!
+}
+
 type Mutation {
   createBadHabit(createBadHabitInput: CreateBadHabitInput!): BadHabit!
   createDisease(createDiseaseInput: CreateDiseaseInput!): Disease!
   createTreatmentType(createTreatmentTypeInput: CreateTreatmentTypeInput!): TreatmentType!
+  logout(userId: Float!): LogoutResponse!
   removeBadHabit(id: Int!): BadHabit!
   removeDisease(id: Int!): Disease!
   removeTreatmentType(id: Int!): TreatmentType!
+  reomveUser(id: Int!): Auth!
+  signup(signUpInput: SignUpInput!): SignResponse!
+  singin(signInInput: SignInInput!): SignResponse!
   updateBadHabit(updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
   updateDisease(updateDiseaseInput: UpdateDiseaseInput!): Disease!
   updateTreatmentType(updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
@@ -46,6 +59,23 @@ type Query {
   diseases: [Disease!]!
   treatmentType(id: Int!): TreatmentType!
   treatmentTypes: [TreatmentType!]!
+}
+
+input SignInInput {
+  email: String!
+  password: String!
+}
+
+type SignResponse {
+  accessToken: String!
+  refreshToken: String!
+  user: User!
+}
+
+input SignUpInput {
+  email: String!
+  password: String!
+  userName: String!
 }
 
 type TreatmentType {
@@ -66,4 +96,10 @@ input UpdateDiseaseInput {
 input UpdateTreatmentTypeInput {
   id: Int!
   name: String!
+}
+
+type User {
+  email: String!
+  id: Int!
+  userName: String!
 }
