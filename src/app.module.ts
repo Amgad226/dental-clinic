@@ -12,6 +12,7 @@ import { ProblemTypeModule } from './graphql/problem_type/problem_type.module';
 import { ProblemModule } from './problem/problem.module';
 import { ChemicalMaterialModule } from './graphql/chemical_material/chemical_material.module';
 import { ConfigModule } from '@nestjs/config';
+import { TreatmentModule } from './graphql/treatment/treatment.module';
 
 const apolloDriverConfig: ApolloDriverConfig = {
   formatError: (error: any) => {
@@ -45,7 +46,8 @@ const graphQLModuleConfig: any = {
     TreatmentTypeModule,
     ProblemTypeModule,
     ProblemModule,
-    ChemicalMaterialModule
+    ChemicalMaterialModule,
+    TreatmentModule
   ],
   controllers: [AppController],
   providers: [AppService],

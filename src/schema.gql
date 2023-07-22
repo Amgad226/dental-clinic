@@ -33,12 +33,19 @@ input CreateProblemInput {
   name: String!
 
   """problem name"""
-  problem_type_id: String!
+  problem_type_id: Int!
 }
 
 input CreateProblemTypeInput {
   """The Name of the problem type"""
   name: String!
+}
+
+input CreateTreatmentInput {
+  color: String!
+  name: String!
+  price: Float!
+  treatment_type_id: Int!
 }
 
 input CreateTreatmentTypeInput {
@@ -56,19 +63,22 @@ type Mutation {
   createDisease(createDiseaseInput: CreateDiseaseInput!): Disease!
   createProblem(createProblemInput: CreateProblemInput!): Problem!
   createProblemType(createProblemTypeInput: CreateProblemTypeInput!): ProblemType!
+  createTreatment(createTreatmentInput: CreateTreatmentInput!): Treatment!
   createTreatmentType(createTreatmentTypeInput: CreateTreatmentTypeInput!): TreatmentType!
   removeBadHabit(id: Int!): BadHabit!
   removeChemicalMaterial(id: Int!): ChemicalMaterial!
   removeDisease(id: Int!): Disease!
   removeProblem(id: Int!): Problem!
   removeProblemType(id: Int!): ProblemType!
+  removeTreatment(id: Int!): Treatment!
   removeTreatmentType(id: Int!): TreatmentType!
   updateBadHabit(id: Int!, updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
   updateChemicalMaterial(id: Int!, updateChemicalMaterialInput: UpdateChemicalMaterialInput!): ChemicalMaterial!
   updateDisease(id: Int!, updateDiseaseInput: UpdateDiseaseInput!): Disease!
   updateProblem(id: Int!, updateProblemInput: UpdateProblemInput!): Problem!
   updateProblemType(updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
-  updateTreatmentType(updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
+  updateTreatment(id: Int!, updateTreatmentInput: UpdateTreatmentInput!): Treatment!
+  updateTreatmentType(id: Int!, updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
 }
 
 type PaginateChemicalMaterial {
@@ -130,8 +140,19 @@ type Query {
   problemType(id: Int!): ProblemType!
   problemTypes: [ProblemType!]!
   problems(item_per_page: Float, page: Float): PaginateProblem!
+  treatment(id: Int!): Treatment!
   treatmentType(id: Int!): TreatmentType!
   treatmentTypes: [TreatmentType!]!
+  treatments(item_per_page: Float, page: Float): paginateTreatment!
+}
+
+type Treatment {
+  color: String!
+  id: Int!
+  name: String!
+  price: Float!
+  treatment_type: TreatmentType!
+  treatment_type_id: Int!
 }
 
 type TreatmentType {
@@ -163,7 +184,21 @@ input UpdateProblemTypeInput {
   name: String!
 }
 
+input UpdateTreatmentInput {
+  color: String!
+  name: String!
+  price: Float!
+  treatment_type_id: Int!
+}
+
 input UpdateTreatmentTypeInput {
   id: Int!
   name: String!
+}
+
+type paginateTreatment {
+  item_per_page: Int!
+  items: [Treatment!]!
+  page: Int!
+  totalPages: Int!
 }
