@@ -7,6 +7,14 @@ type BadHabit {
   name: String!
 }
 
+type Category {
+  """id field (placeholder)"""
+  id: Int!
+
+  """name field (placeholder)"""
+  name: String!
+}
+
 type ChemicalMaterial {
   """Example field (placeholder)"""
   id: Int!
@@ -19,12 +27,31 @@ input CreateBadHabitInput {
   name: String!
 }
 
+input CreateCategoryInput {
+  """name field (placeholder)"""
+  name: String!
+}
+
 input CreateChemicalMaterialInput {
   """Chemical Material Name """
   name: String!
 }
 
 input CreateDiseaseInput {
+  name: String!
+}
+
+input CreateMedicineInput {
+  """chemical_material_id field """
+  category_id: Int!
+
+  """chemical_material_id field """
+  chemical_material_id: [Int!]!
+
+  """concentration field """
+  concentration: Float!
+
+  """name field """
   name: String!
 }
 
@@ -50,22 +77,47 @@ type Disease {
   name: String!
 }
 
+type Medicine {
+  """Problem_type"""
+  category: Category!
+
+  """chemical_material_id field """
+  category_id: Int!
+
+  """chemical_material_id field """
+  chemical_material_id: [Int!]!
+
+  """concentration field """
+  concentration: Float!
+
+  """id field """
+  id: Int!
+
+  """name field """
+  name: String!
+}
+
 type Mutation {
   createBadHabit(createBadHabitInput: CreateBadHabitInput!): BadHabit!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
   createChemicalMaterial(createChemicalMaterialInput: CreateChemicalMaterialInput!): ChemicalMaterial!
   createDisease(createDiseaseInput: CreateDiseaseInput!): Disease!
+  createMedicine(createMedicineInput: CreateMedicineInput!): Medicine!
   createProblem(createProblemInput: CreateProblemInput!): Problem!
   createProblemType(createProblemTypeInput: CreateProblemTypeInput!): ProblemType!
   createTreatmentType(createTreatmentTypeInput: CreateTreatmentTypeInput!): TreatmentType!
   removeBadHabit(id: Int!): BadHabit!
+  removeCategory(id: Int!): Category!
   removeChemicalMaterial(id: Int!): ChemicalMaterial!
   removeDisease(id: Int!): Disease!
+  removeMedicine(id: Int!): Medicine!
   removeProblem(id: Int!): Problem!
   removeProblemType(id: Int!): ProblemType!
   removeTreatmentType(id: Int!): TreatmentType!
   updateBadHabit(id: Int!, updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
   updateChemicalMaterial(id: Int!, updateChemicalMaterialInput: UpdateChemicalMaterialInput!): ChemicalMaterial!
   updateDisease(id: Int!, updateDiseaseInput: UpdateDiseaseInput!): Disease!
+  updateMedicine(id: Float!, updateMedicineInput: UpdateMedicineInput!): Medicine!
   updateProblem(id: Int!, updateProblemInput: UpdateProblemInput!): Problem!
   updateProblemType(updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
   updateTreatmentType(updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
@@ -122,10 +174,13 @@ type ProblemType {
 type Query {
   badHabit(id: Int!): BadHabit!
   badHabits(item_per_page: Float, page: Float): Paginatebadhabit!
+  categories: [Category!]!
   chemicalMaterial(id: Int!): ChemicalMaterial!
   chemicalMaterials(item_per_page: Float, page: Float): PaginateChemicalMaterial!
   disease(id: Int!): Disease!
   diseases(item_per_page: Float, page: Float): Paginatedisease!
+  medicine(id: Int!): Medicine!
+  medicines(item_per_page: Float, page: Float): paginateMedicine!
   problem(id: Int!): Problem!
   problemType(id: Int!): ProblemType!
   problemTypes: [ProblemType!]!
@@ -153,6 +208,20 @@ input UpdateDiseaseInput {
   name: String!
 }
 
+input UpdateMedicineInput {
+  """chemical_material_id field """
+  category_id: Int!
+
+  """chemical_material_id field """
+  chemical_material_id: [Int!]!
+
+  """concentration field """
+  concentration: Int!
+
+  """name field """
+  name: String!
+}
+
 input UpdateProblemInput {
   name: String!
   problem_type_id: Int!
@@ -166,4 +235,11 @@ input UpdateProblemTypeInput {
 input UpdateTreatmentTypeInput {
   id: Int!
   name: String!
+}
+
+type paginateMedicine {
+  item_per_page: Int!
+  items: [Medicine!]!
+  page: Int!
+  totalPages: Int!
 }

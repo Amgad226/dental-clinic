@@ -45,7 +45,9 @@ export class ProblemService {
       take: item_per_page,
       skip: skip,
       include: {
-        Problem_type: true,
+        // ['Problem_type']: true,
+        ['Problem_type']: true,
+
       },
     });
     const totalProblem = await this.prisma.problem.count();
@@ -58,7 +60,7 @@ export class ProblemService {
     return await this.prisma.problem.findUnique({
       where: { id },
       include: {
-        Problem_type: true,
+        ['Problem_type']: true,
       },
     });
   }

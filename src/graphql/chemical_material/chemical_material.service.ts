@@ -3,7 +3,10 @@ import { CreateChemicalMaterialInput } from './dto/create-chemical_material.inpu
 import { UpdateChemicalMaterialInput } from './dto/update-chemical_material.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PaginatorService } from 'src/pagination/PaginatorService';
+import { GraphQLError } from 'graphql';
+import { request } from 'express';
 
+request;
 @Injectable()
 export class ChemicalMaterialService {
   constructor(private prisma: PrismaService) {}
@@ -21,7 +24,7 @@ export class ChemicalMaterialService {
   }
 
   async findOne(id: number) {
-    return await this.prisma.chemicalMaterial.findUniqueOrThrow({
+    return await this.prisma.chemicalMaterial.findUnique({
       where: { id: +id },
     });
   }
@@ -30,11 +33,9 @@ export class ChemicalMaterialService {
     id: number,
     updateChemicalMaterialInput: UpdateChemicalMaterialInput,
   ) {
-    //check if chemicalMaterial is exist in chemical_materials table
-    await this.prisma.chemicalMaterial.findUniqueOrThrow({
-      where: { id: +id },
-    });
-
+    //check if chemicalMaterial is exist in problem table
+    await this.prisma.chemicalMaterial.findUniqueOrThrow({ where: { id: +id } })
+  
     return await this.prisma.chemicalMaterial.update({
       where: { id },
       data: { ...updateChemicalMaterialInput },
@@ -42,10 +43,14 @@ export class ChemicalMaterialService {
   }
 
   async remove(id: number) {
-    //check if chemicalMaterial is exist in chemical_materials table
-    await this.prisma.chemicalMaterial.findUniqueOrThrow({
-      where: { id: +id },
-    });
+    //check if chemicalMaterial is exist in problem table
+    if (
+      !(await this.prisma.chemicalMaterial.findUnique({ where: { id: +id } }))
+    ) {
+      throw new GraphQLError('problem not found', {
+        extensions: { code: 404 },
+      });
+    }
 
     return await this.prisma.chemicalMaterial.delete({ where: { id } });
   }
