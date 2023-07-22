@@ -37,9 +37,7 @@ export class ChemicalMaterialResolver {
   }
 
   @Query(() => ChemicalMaterial, { name: 'chemicalMaterial' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    console.log(1);
-    
+  findOne(@Args('id', { type: () => Int }) id: number) {    
     return this.chemicalMaterialService.findOne(id);
   }
 

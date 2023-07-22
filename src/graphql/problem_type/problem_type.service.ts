@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateProblemTypeInput } from './dto/create-problem_type.input';
 import { UpdateProblemTypeInput } from './dto/update-problem_type.input';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PaginatorService } from 'src/pagination/PaginatorService';
+import { GraphQLError } from 'graphql';
 
 @Injectable()
 export class ProblemTypeService {
@@ -17,19 +19,54 @@ export class ProblemTypeService {
     return await this.prisma.problemType.findMany();
   }
 
+  
   async findOne(id: number) {
-    return await this.prisma.problemType.findUnique({ where: { id } });
+    const problemType = await this.prisma.problemType.findUnique({
+      where: {id: id},
+    }) 
+    if (!problemType) {
+      throw new GraphQLError('problemType not found', {
+        extensions: {
+          code: 404,
+        },
+      });
+    }
+    return  problemType;
   }
 
+
   async update(id: number, updateProblemTypeInput: UpdateProblemTypeInput) {
+    const problemType = await this.prisma.problemType.findUnique({
+      where: {id: id},
+    }) 
+
+    if (!problemType) {
+      throw new GraphQLError('problemType not found', {
+        extensions: {
+          code: 404,
+        },
+      });
+    }
     return await this.prisma.problemType.update({
-      where: { id },
-      data: { ...updateProblemTypeInput },
+      where:{id:id},
+      data:{name:updateProblemTypeInput.name}
     });
   }
 
   async remove(id: number) {
-    return await this.prisma.problemType.delete({ where: { id } });
+    const problemType = await this.prisma.problemType.findUnique({
+      where: {id: id},
+    }) 
+    if (!problemType) {
+      throw new GraphQLError('problemType not found', {
+        extensions: {
+          code: 404,
+        },
+      });
+    }
+    return await this.prisma.problemType.delete({
+      where:{id:id},
+    });
   }
 }
 

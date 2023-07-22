@@ -20,23 +20,50 @@ export class BadHabitService {
   }
 
   async findOne(id: number) {
-    return await this.prisma.badHabit.findUniqueOrThrow({ where: { id: id } });
+    const badhabit = await this.prisma.badHabit.findUnique({
+      where: {id: id},
+    }) 
+    if (!badhabit) {
+      throw new GraphQLError('bad_habit not found', {
+        extensions: {
+          code: 404,
+        },
+      });
+    }
+    return  badhabit;
   }
 
   async update(id: number, updateBadHabitInput: UpdateBadHabitInput) {
-    await this.prisma.badHabit.findUniqueOrThrow({ where: { id: id } });
+    const badhabit = await this.prisma.badHabit.findUnique({
+      where: {id: id},
+    }) 
 
+    if (!badhabit) {
+      throw new GraphQLError('badhabit not found', {
+        extensions: {
+          code: 404,
+        },
+      });
+    }
     return await this.prisma.badHabit.update({
-      where: { id: id },
-      data: { name: updateBadHabitInput.name },
+      where:{id:id},
+      data:{name:updateBadHabitInput.name}
     });
   }
 
   async remove(id: number) {
-    await this.prisma.badHabit.findUniqueOrThrow({ where: { id: id } });
-
+    const badHabit = await this.prisma.badHabit.findUnique({
+      where: {id: id},
+    }) 
+    if (!badHabit) {
+      throw new GraphQLError('badHabit not found', {
+        extensions: {
+          code: 404,
+        },
+      });
+    }
     return await this.prisma.badHabit.delete({
-      where: { id: id },
+      where:{id:id},
     });
   }
 }

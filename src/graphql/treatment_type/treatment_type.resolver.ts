@@ -24,8 +24,10 @@ export class TreatmentTypeResolver {
   }
 
   @Mutation(() => TreatmentType)
-  updateTreatmentType(@Args('updateTreatmentTypeInput') updateTreatmentTypeInput: UpdateTreatmentTypeInput) {
-    return this.treatmentTypeService.update(updateTreatmentTypeInput.id, updateTreatmentTypeInput);
+  updateTreatmentType(
+  @Args('id', { type: () => Int }) id: number,
+  @Args('updateTreatmentTypeInput') updateTreatmentTypeInput: UpdateTreatmentTypeInput) {
+    return this.treatmentTypeService.update(id, updateTreatmentTypeInput);
   }
 
   @Mutation(() => TreatmentType)

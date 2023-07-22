@@ -3,6 +3,7 @@ import { CreateDiseaseInput } from './dto/create-disease.input';
 import { UpdateDiseaseInput } from './dto/update-disease.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GraphQLError } from 'graphql';
+import { PaginatorService } from 'src/pagination/PaginatorService';
 
 @Injectable()
 export class DiseaseService {
@@ -13,17 +14,7 @@ export class DiseaseService {
   }
 
   async findAll(page: any, item_per_page: any) {
-    if (page != 0) page--;
-
-    let skip = page * item_per_page;
-
-    const diseases = await this.prisma.disease.findMany({
-      take: item_per_page,
-      skip: skip,
-    });
-    const totaldisease = await this.prisma.disease.count();
-    const totalPages = Math.round(totaldisease / item_per_page);
-    return { data: diseases, totalPages: totalPages };
+    return await PaginatorService(this.prisma.disease, page, item_per_page);
   }
 
   async findOne(id: number) {

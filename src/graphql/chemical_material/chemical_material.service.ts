@@ -3,6 +3,7 @@ import { CreateChemicalMaterialInput } from './dto/create-chemical_material.inpu
 import { UpdateChemicalMaterialInput } from './dto/update-chemical_material.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PaginatorService } from 'src/pagination/PaginatorService';
+import { GraphQLError } from 'graphql';
 
 @Injectable()
 export class ChemicalMaterialService {
@@ -20,33 +21,51 @@ export class ChemicalMaterialService {
     );
   }
 
+
   async findOne(id: number) {
-    return await this.prisma.chemicalMaterial.findUniqueOrThrow({
-      where: { id: +id },
-    });
+    const chemicalMaterial = await this.prisma.chemicalMaterial.findUnique({
+      where: {id: id},
+    }) 
+    if (!chemicalMaterial) {
+      throw new GraphQLError('chemicalMaterial not found', {
+        extensions: {
+          code: 404,
+        },
+      });
+    }
+    return  chemicalMaterial;
   }
 
-  async update(
-    id: number,
-    updateChemicalMaterialInput: UpdateChemicalMaterialInput,
-  ) {
-    //check if chemicalMaterial is exist in chemical_materials table
-    await this.prisma.chemicalMaterial.findUniqueOrThrow({
-      where: { id: +id },
-    });
+  async update(id: number, updateChemicalMaterialInput: UpdateChemicalMaterialInput) {
+    const chemicalMaterial = await this.prisma.chemicalMaterial.findUnique({
+      where: {id: id},
+    }) 
 
+    if (!chemicalMaterial) {
+      throw new GraphQLError('chemicalMaterial not found', {
+        extensions: {
+          code: 404,
+        },
+      });
+    }
     return await this.prisma.chemicalMaterial.update({
-      where: { id },
-      data: { ...updateChemicalMaterialInput },
+      where:{id:id},
+      data:{name:updateChemicalMaterialInput.name}
     });
   }
-
   async remove(id: number) {
-    //check if chemicalMaterial is exist in chemical_materials table
-    await this.prisma.chemicalMaterial.findUniqueOrThrow({
-      where: { id: +id },
+    const chemicalMaterial = await this.prisma.chemicalMaterial.findUnique({
+      where: {id: id},
+    }) 
+    if (!chemicalMaterial) {
+      throw new GraphQLError('chemicalMaterial not found', {
+        extensions: {
+          code: 404,
+        },
+      });
+    }
+    return await this.prisma.chemicalMaterial.delete({
+      where:{id:id},
     });
-
-    return await this.prisma.chemicalMaterial.delete({ where: { id } });
   }
 }
