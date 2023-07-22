@@ -7,7 +7,20 @@ type BadHabit {
   name: String!
 }
 
+type ChemicalMaterial {
+  """Example field (placeholder)"""
+  id: Int!
+
+  """Example field (placeholder)"""
+  name: String!
+}
+
 input CreateBadHabitInput {
+  name: String!
+}
+
+input CreateChemicalMaterialInput {
+  """Chemical Material Name """
   name: String!
 }
 
@@ -39,20 +52,30 @@ type Disease {
 
 type Mutation {
   createBadHabit(createBadHabitInput: CreateBadHabitInput!): BadHabit!
+  createChemicalMaterial(createChemicalMaterialInput: CreateChemicalMaterialInput!): ChemicalMaterial!
   createDisease(createDiseaseInput: CreateDiseaseInput!): Disease!
   createProblem(createProblemInput: CreateProblemInput!): Problem!
   createProblemType(createProblemTypeInput: CreateProblemTypeInput!): ProblemType!
   createTreatmentType(createTreatmentTypeInput: CreateTreatmentTypeInput!): TreatmentType!
   removeBadHabit(id: Int!): BadHabit!
+  removeChemicalMaterial(id: Int!): ChemicalMaterial!
   removeDisease(id: Int!): Disease!
   removeProblem(id: Int!): Problem!
   removeProblemType(id: Int!): ProblemType!
   removeTreatmentType(id: Int!): TreatmentType!
   updateBadHabit(id: Int!, updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
+  updateChemicalMaterial(id: Int!, updateChemicalMaterialInput: UpdateChemicalMaterialInput!): ChemicalMaterial!
   updateDisease(id: Int!, updateDiseaseInput: UpdateDiseaseInput!): Disease!
   updateProblem(id: Int!, updateProblemInput: UpdateProblemInput!): Problem!
   updateProblemType(updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
   updateTreatmentType(updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
+}
+
+type PaginateChemicalMaterial {
+  item_per_page: Int!
+  items: [ChemicalMaterial!]!
+  page: Int!
+  totalPages: Int!
 }
 
 type PaginateProblem {
@@ -99,6 +122,8 @@ type ProblemType {
 type Query {
   badHabit(id: Int!): BadHabit!
   badHabits(item_per_page: Float, page: Float): Paginatebadhabit!
+  chemicalMaterial(id: Int!): ChemicalMaterial!
+  chemicalMaterials(item_per_page: Float, page: Float): PaginateChemicalMaterial!
   disease(id: Int!): Disease!
   diseases(item_per_page: Float, page: Float): Paginatedisease!
   problem(id: Int!): Problem!
@@ -115,6 +140,11 @@ type TreatmentType {
 }
 
 input UpdateBadHabitInput {
+  name: String!
+}
+
+input UpdateChemicalMaterialInput {
+  """Chemical Material"""
   name: String!
 }
 

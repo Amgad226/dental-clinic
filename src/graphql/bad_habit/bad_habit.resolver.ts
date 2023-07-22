@@ -23,8 +23,8 @@ export class BadHabitResolver {
     return {
       items: badHabits.data,
       totalPages: badHabits.totalPages,
-      page: page,
-      item_per_page: item_per_page,
+      page: badHabits.page,
+      item_per_page: badHabits.item_per_page,
     };
   }
 
