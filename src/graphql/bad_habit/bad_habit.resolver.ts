@@ -3,6 +3,7 @@ import { BadHabitService } from './bad_habit.service';
 import { BadHabit } from './entities/bad_habit.entity';
 import { CreateBadHabitInput } from './dto/create-bad_habit.input';
 import { UpdateBadHabitInput } from './dto/update-bad_habit.input';
+import { Paginatebadhabit } from './entities/PAginatebadhabit';
 
 @Resolver(() => BadHabit)
 export class BadHabitResolver {
@@ -13,9 +14,18 @@ export class BadHabitResolver {
     return this.badHabitService.create(createBadHabitInput);
   }
 
-  @Query(() => [BadHabit], { name: 'badHabits' })
-  findAll() {
-    return this.badHabitService.findAll();
+  @Query(() =>Paginatebadhabit, { name: 'badHabits' })
+  async findAll(
+    @Args('page', { nullable: true }) page?: number,
+    @Args('item_per_page', { nullable: true }) item_per_page?: number,
+  ) {
+    const badHabits = await this.badHabitService.findAll(page, item_per_page);
+    return {
+      items: badHabits.data,
+      totalPages: badHabits.totalPages,
+      page: page,
+      item_per_page: item_per_page,
+    };
   }
 
   @Query(() => BadHabit, { name: 'badHabit' })
@@ -24,8 +34,10 @@ export class BadHabitResolver {
   }
 
   @Mutation(() => BadHabit)
-  updateBadHabit(@Args('updateBadHabitInput') updateBadHabitInput: UpdateBadHabitInput) {
-    return this.badHabitService.update(updateBadHabitInput.id, updateBadHabitInput);
+  updateBadHabit(
+    @Args('id', { type: () => Int }) id: number,
+    @Args('updateBadHabitInput') updateBadHabitInput: UpdateBadHabitInput) {
+    return this.badHabitService.update(id,updateBadHabitInput);
   }
 
   @Mutation(() => BadHabit)
