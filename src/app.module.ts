@@ -10,33 +10,42 @@ import { BadHabitModule } from './graphql/bad_habit/bad_habit.module';
 import { TreatmentTypeModule } from './graphql/treatment_type/treatment_type.module';
 import { ProblemTypeModule } from './graphql/problem_type/problem_type.module';
 import { ProblemModule } from './problem/problem.module';
+import { ChemicalMaterialModule } from './graphql/chemical_material/chemical_material.module';
+import { ConfigModule } from '@nestjs/config';
 
+const apolloDriverConfig: ApolloDriverConfig = {
+  formatError: (error: any) => {
+    const graphQLFormattedError = {
+      message: error.message || 'SERVER_ERROR',
+      code: error.extensions?.code || error.code || 500,
+    };
+    return graphQLFormattedError;
+  },
+  driver: ApolloDriver,
+  
+  playground: true,
+  autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+  sortSchema: true,
+  status400ForVariableCoercionErrors:true,
+  includeStacktraceInErrorResponses:true
+  
+};
 
+const graphQLModuleConfig: any = {
+  ...apolloDriverConfig,
+};
 @Module({
+  
   imports: [
+    ConfigModule.forRoot(),
     PrismaModule,
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-
-      formatError: (error: any) => {
-        // console.log(error);
-        const graphQLFormattedError = {
-          message: error.message || "SERVER_ERROR",
-          code: error.extensions?.code || error.code || 500,
-          // path:error.path
-          // name: error.extensions?.exception?.name || error.name || "name",
-        };
-        return graphQLFormattedError;
-      },
-      driver: ApolloDriver,
-      playground: true,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      sortSchema: true,
-    }),
+    GraphQLModule.forRoot<ApolloDriverConfig>(graphQLModuleConfig),
     DiseaseModule,
     BadHabitModule,
     TreatmentTypeModule,
     ProblemTypeModule,
-    ProblemModule
+    ProblemModule,
+    ChemicalMaterialModule
   ],
   controllers: [AppController],
   providers: [AppService],
