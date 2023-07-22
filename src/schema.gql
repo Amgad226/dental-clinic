@@ -33,10 +33,7 @@ input CreateTreatmentTypeInput {
 }
 
 type Disease {
-  """Example field (placeholder)"""
   id: Int!
-
-  """Example field (placeholder)"""
   name: String!
 }
 
@@ -51,8 +48,8 @@ type Mutation {
   removeProblem(id: Int!): Problem!
   removeProblemType(id: Int!): ProblemType!
   removeTreatmentType(id: Int!): TreatmentType!
-  updateBadHabit(updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
-  updateDisease(updateDiseaseInput: UpdateDiseaseInput!): Disease!
+  updateBadHabit(id: Int!, updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
+  updateDisease(id: Int!, updateDiseaseInput: UpdateDiseaseInput!): Disease!
   updateProblem(id: Int!, updateProblemInput: UpdateProblemInput!): Problem!
   updateProblemType(updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
   updateTreatmentType(updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
@@ -61,6 +58,20 @@ type Mutation {
 type PaginateProblem {
   item_per_page: Int!
   items: [Problem!]!
+  page: Int!
+  totalPages: Int!
+}
+
+type Paginatebadhabit {
+  item_per_page: Int!
+  items: [BadHabit!]!
+  page: Int!
+  totalPages: Int!
+}
+
+type Paginatedisease {
+  item_per_page: Int!
+  items: [Disease!]!
   page: Int!
   totalPages: Int!
 }
@@ -87,9 +98,9 @@ type ProblemType {
 
 type Query {
   badHabit(id: Int!): BadHabit!
-  badHabits: [BadHabit!]!
+  badHabits(item_per_page: Float, page: Float): Paginatebadhabit!
   disease(id: Int!): Disease!
-  diseases: [Disease!]!
+  diseases(item_per_page: Float, page: Float): Paginatedisease!
   problem(id: Int!): Problem!
   problemType(id: Int!): ProblemType!
   problemTypes: [ProblemType!]!
@@ -104,7 +115,6 @@ type TreatmentType {
 }
 
 input UpdateBadHabitInput {
-  id: Int!
   name: String!
 }
 
