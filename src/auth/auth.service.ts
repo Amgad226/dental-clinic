@@ -9,6 +9,7 @@ import { SignInInput } from './dto/singin-input';
 import { ForbiddenException } from '@nestjs/common/exceptions';
 import { LogoutResponse } from './dto/logout-response';
 import { SignResponse } from './dto/sign-response';
+import { ApolloError } from 'apollo-server-express';
 
 @Injectable()
 export class AuthService {
@@ -28,7 +29,6 @@ export class AuthService {
 
     return { accessToken, refreshToken, user }
   }
-
   async singin(singinInput: SignInInput): Promise<SignResponse> {
     const user = await this.prisma.user.findUnique({
       where: { email: singinInput.email }
@@ -44,7 +44,6 @@ export class AuthService {
     await this.updateRefreshToken(user.id, refreshToken);
     return { accessToken, refreshToken, user }
   }
-
   async logout(userId: number): Promise<LogoutResponse> {
     await this.prisma.user.updateMany({
       where: {
@@ -61,11 +60,10 @@ export class AuthService {
     // need to check if the user token is valid
     return await this.prisma.user.delete({ where: { id: userId } })
   }
-
   async createTokens(userId: number, email: string) {
     const accessToken = this.jwtService.sign({
       userId, email
-    }, { expiresIn: '1d', secret: this.configService.get('ACCESS_TOKEN_SECRET') })
+    }, { expiresIn: '60s', secret: this.configService.get('ACCESS_TOKEN_SECRET') })
     const refreshToken = this.jwtService.sign({
       userId,
       email,
@@ -84,5 +82,23 @@ export class AuthService {
       }
     })
 
+  }
+  async getNewTokens(userId: number, rt: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId }
+    })
+    if (!user) {
+      throw new ForbiddenException('Access Denied')
+    }
+    const isRefreshTokenMatch = await argon.verify(
+      user.hashedRefreshToken,
+      rt
+    )
+    if (!isRefreshTokenMatch) {
+      throw new ForbiddenException('Access Denied')
+    }
+    const { accessToken, refreshToken } = await this.createTokens(user.id, user.email);
+    await this.updateRefreshToken(user.id, refreshToken);
+    return { accessToken, refreshToken, user }
   }
 }

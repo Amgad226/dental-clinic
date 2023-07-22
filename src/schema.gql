@@ -55,6 +55,7 @@ type Mutation {
   createProblem(createProblemInput: CreateProblemInput!): Problem!
   createProblemType(createProblemTypeInput: CreateProblemTypeInput!): ProblemType!
   createTreatmentType(createTreatmentTypeInput: CreateTreatmentTypeInput!): TreatmentType!
+  geNewTokens: NewTokenResponse!
   logout(userId: Float!): LogoutResponse!
   removeBadHabit(id: Int!): BadHabit!
   removeDisease(id: Int!): Disease!
@@ -69,6 +70,11 @@ type Mutation {
   updateProblem(id: Int!, updateProblemInput: UpdateProblemInput!): Problem!
   updateProblemType(updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
   updateTreatmentType(updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
+}
+
+type NewTokenResponse {
+  accessToken: String!
+  refreshToken: String!
 }
 
 type PaginateProblem {
