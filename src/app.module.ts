@@ -49,7 +49,7 @@ const graphQLModuleConfig: any = {
     ProblemTypeModule,
     ProblemModule,
     ChemicalMaterialModule,
-    TreatmentModule
+    TreatmentModule,
     MedicineModule,
     CategoryModule
   ],
