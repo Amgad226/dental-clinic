@@ -4,7 +4,6 @@ import { UpdateChemicalMaterialInput } from './dto/update-chemical_material.inpu
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PaginatorService } from 'src/pagination/PaginatorService';
 import { GraphQLError } from 'graphql';
-
 @Injectable()
 export class ChemicalMaterialService {
   constructor(private prisma: PrismaService) {}

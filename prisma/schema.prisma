@@ -73,9 +73,12 @@ model ChemicalChemicalMaterial {
 }
 
 model Medicine {
-  id   Int    @id @default(autoincrement())
-  name String
+  id            Int    @id @default(autoincrement())
+  name          String
+  category_id   Int
+  concentration Float
 
+  category                  Category                   @relation("category", fields: [category_id], references: [id])
   medicineChemicalMaterials MedicineChemicalMaterial[]
 
   @@map("medicines")
@@ -150,4 +153,11 @@ model Problem {
   Problem_type    ProblemType @relation(fields: [problem_type_id], references: [id])
 
   @@map("problems")
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  medicines Medicine[] @relation("category")
 }
