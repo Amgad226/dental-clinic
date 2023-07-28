@@ -55,6 +55,56 @@ input CreateMedicineInput {
   name: String!
 }
 
+input CreatePatientBadHabitInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreatePatientCostInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreatePatientDesiseInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreatePatientDiagnosisInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreatePatientInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreatePatientMedicalImageInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreatePatientMedicalImagesTypeInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreatePatientMedicineInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreatePatientPaymentInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreatePatientTeethTreatmentInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 input CreateProblemInput {
   """problem name"""
   name: String!
@@ -110,6 +160,16 @@ type Mutation {
   createChemicalMaterial(createChemicalMaterialInput: CreateChemicalMaterialInput!): ChemicalMaterial!
   createDisease(createDiseaseInput: CreateDiseaseInput!): Disease!
   createMedicine(createMedicineInput: CreateMedicineInput!): Medicine!
+  createPatient(createPatientInput: CreatePatientInput!): Patient!
+  createPatientBadHabit(createPatientBadHabitInput: CreatePatientBadHabitInput!): PatientBadHabit!
+  createPatientCost(createPatientCostInput: CreatePatientCostInput!): PatientCost!
+  createPatientDesise(createPatientDesiseInput: CreatePatientDesiseInput!): PatientDesise!
+  createPatientDiagnosis(createPatientDiagnosisInput: CreatePatientDiagnosisInput!): PatientDiagnosis!
+  createPatientMedicalImage(createPatientMedicalImageInput: CreatePatientMedicalImageInput!): PatientMedicalImage!
+  createPatientMedicalImagesType(createPatientMedicalImagesTypeInput: CreatePatientMedicalImagesTypeInput!): PatientMedicalImagesType!
+  createPatientMedicine(createPatientMedicineInput: CreatePatientMedicineInput!): PatientMedicine!
+  createPatientPayment(createPatientPaymentInput: CreatePatientPaymentInput!): PatientPayment!
+  createPatientTeethTreatment(createPatientTeethTreatmentInput: CreatePatientTeethTreatmentInput!): PatientTeethTreatment!
   createProblem(createProblemInput: CreateProblemInput!): Problem!
   createProblemType(createProblemTypeInput: CreateProblemTypeInput!): ProblemType!
   createTreatment(createTreatmentInput: CreateTreatmentInput!): Treatment!
@@ -119,6 +179,16 @@ type Mutation {
   removeChemicalMaterial(id: Int!): ChemicalMaterial!
   removeDisease(id: Int!): Disease!
   removeMedicine(id: Int!): Medicine!
+  removePatient(id: Int!): Patient!
+  removePatientBadHabit(id: Int!): PatientBadHabit!
+  removePatientCost(id: Int!): PatientCost!
+  removePatientDesise(id: Int!): PatientDesise!
+  removePatientDiagnosis(id: Int!): PatientDiagnosis!
+  removePatientMedicalImage(id: Int!): PatientMedicalImage!
+  removePatientMedicalImagesType(id: Int!): PatientMedicalImagesType!
+  removePatientMedicine(id: Int!): PatientMedicine!
+  removePatientPayment(id: Int!): PatientPayment!
+  removePatientTeethTreatment(id: Int!): PatientTeethTreatment!
   removeProblem(id: Int!): Problem!
   removeProblemType(id: Int!): ProblemType!
   removeTreatment(id: Int!): Treatment!
@@ -127,6 +197,16 @@ type Mutation {
   updateChemicalMaterial(id: Int!, updateChemicalMaterialInput: UpdateChemicalMaterialInput!): ChemicalMaterial!
   updateDisease(id: Int!, updateDiseaseInput: UpdateDiseaseInput!): Disease!
   updateMedicine(id: Float!, updateMedicineInput: UpdateMedicineInput!): Medicine!
+  updatePatient(updatePatientInput: UpdatePatientInput!): Patient!
+  updatePatientBadHabit(updatePatientBadHabitInput: UpdatePatientBadHabitInput!): PatientBadHabit!
+  updatePatientCost(updatePatientCostInput: UpdatePatientCostInput!): PatientCost!
+  updatePatientDesise(updatePatientDesiseInput: UpdatePatientDesiseInput!): PatientDesise!
+  updatePatientDiagnosis(updatePatientDiagnosisInput: UpdatePatientDiagnosisInput!): PatientDiagnosis!
+  updatePatientMedicalImage(updatePatientMedicalImageInput: UpdatePatientMedicalImageInput!): PatientMedicalImage!
+  updatePatientMedicalImagesType(updatePatientMedicalImagesTypeInput: UpdatePatientMedicalImagesTypeInput!): PatientMedicalImagesType!
+  updatePatientMedicine(updatePatientMedicineInput: UpdatePatientMedicineInput!): PatientMedicine!
+  updatePatientPayment(updatePatientPaymentInput: UpdatePatientPaymentInput!): PatientPayment!
+  updatePatientTeethTreatment(updatePatientTeethTreatmentInput: UpdatePatientTeethTreatmentInput!): PatientTeethTreatment!
   updateProblem(id: Int!, updateProblemInput: UpdateProblemInput!): Problem!
   updateProblemType(updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
   updateTreatment(id: Int!, updateTreatmentInput: UpdateTreatmentInput!): Treatment!
@@ -161,6 +241,56 @@ type Paginatedisease {
   totalPages: Int!
 }
 
+type Patient {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type PatientBadHabit {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type PatientCost {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type PatientDesise {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type PatientDiagnosis {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type PatientMedicalImage {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type PatientMedicalImagesType {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type PatientMedicine {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type PatientPayment {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type PatientTeethTreatment {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Problem {
   """Problem_type"""
   Problem_type: ProblemType!
@@ -191,6 +321,25 @@ type Query {
   diseases(item_per_page: Float, page: Float): Paginatedisease!
   medicine(id: Int!): Medicine!
   medicines(item_per_page: Float, page: Float): paginateMedicine!
+  patient(id: Int!): Patient!
+  patientBadHabit(id: Int!): PatientBadHabit!
+  patientBadHabits: [PatientBadHabit!]!
+  patientCost(id: Int!): PatientCost!
+  patientCosts: [PatientCost!]!
+  patientDesise(id: Int!): PatientDesise!
+  patientDesises: [PatientDesise!]!
+  patientDiagnoses: [PatientDiagnosis!]!
+  patientDiagnosis(id: Int!): PatientDiagnosis!
+  patientMedicalImage(id: Int!): PatientMedicalImage!
+  patientMedicalImages: [PatientMedicalImage!]!
+  patientMedicalImagesType(id: Int!): PatientMedicalImagesType!
+  patientMedicalImagesTypes: [PatientMedicalImagesType!]!
+  patientMedicine(id: Int!): PatientMedicine!
+  patientMedicines: [PatientMedicine!]!
+  patientPayment(id: Int!): PatientPayment!
+  patientPayments: [PatientPayment!]!
+  patientTeethTreatment(id: Int!): PatientTeethTreatment!
+  patientTeethTreatments: [PatientTeethTreatment!]!
   problem(id: Int!): Problem!
   problemType(id: Int!): ProblemType!
   problemTypes: [ProblemType!]!
@@ -241,6 +390,66 @@ input UpdateMedicineInput {
 
   """name field """
   name: String!
+}
+
+input UpdatePatientBadHabitInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdatePatientCostInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdatePatientDesiseInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdatePatientDiagnosisInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdatePatientInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdatePatientMedicalImageInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdatePatientMedicalImagesTypeInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdatePatientMedicineInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdatePatientPaymentInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdatePatientTeethTreatmentInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
 
 input UpdateProblemInput {

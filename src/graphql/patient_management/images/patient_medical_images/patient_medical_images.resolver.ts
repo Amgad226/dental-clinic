@@ -1,0 +1,35 @@
+import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { PatientMedicalImagesService } from './patient_medical_images.service';
+import { PatientMedicalImage } from './entities/patient_medical_image.entity';
+import { CreatePatientMedicalImageInput } from './dto/create-patient_medical_image.input';
+import { UpdatePatientMedicalImageInput } from './dto/update-patient_medical_image.input';
+
+@Resolver(() => PatientMedicalImage)
+export class PatientMedicalImagesResolver {
+  constructor(private readonly patientMedicalImagesService: PatientMedicalImagesService) {}
+
+  @Mutation(() => PatientMedicalImage)
+  createPatientMedicalImage(@Args('createPatientMedicalImageInput') createPatientMedicalImageInput: CreatePatientMedicalImageInput) {
+    return this.patientMedicalImagesService.create(createPatientMedicalImageInput);
+  }
+
+  @Query(() => [PatientMedicalImage], { name: 'patientMedicalImages' })
+  findAll() {
+    return this.patientMedicalImagesService.findAll();
+  }
+
+  @Query(() => PatientMedicalImage, { name: 'patientMedicalImage' })
+  findOne(@Args('id', { type: () => Int }) id: number) {
+    return this.patientMedicalImagesService.findOne(id);
+  }
+
+  @Mutation(() => PatientMedicalImage)
+  updatePatientMedicalImage(@Args('updatePatientMedicalImageInput') updatePatientMedicalImageInput: UpdatePatientMedicalImageInput) {
+    return this.patientMedicalImagesService.update(updatePatientMedicalImageInput.id, updatePatientMedicalImageInput);
+  }
+
+  @Mutation(() => PatientMedicalImage)
+  removePatientMedicalImage(@Args('id', { type: () => Int }) id: number) {
+    return this.patientMedicalImagesService.remove(id);
+  }
+}
