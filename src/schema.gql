@@ -265,12 +265,16 @@ input UpdateTreatmentTypeInput {
   name: String!
 }
 
-type paginateTreatment {
-  item_per_page: Int!
-  items: [Treatment!]!
 type paginateMedicine {
   item_per_page: Int!
   items: [Medicine!]!
+  page: Int!
+  totalPages: Int!
+}
+
+type paginateTreatment {
+  item_per_page: Int!
+  items: [Treatment!]!
   page: Int!
   totalPages: Int!
 }

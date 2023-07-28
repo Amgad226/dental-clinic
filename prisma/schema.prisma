@@ -29,6 +29,7 @@ model Disease {
   name String
 
   diseaseChemicalMaterials DiseaseChemicalMaterial[]
+  PatientDisease           PatientDisease[]
 
   @@map("diseases")
 }
@@ -38,6 +39,7 @@ model BadHabit {
   name String
 
   badHabitChemicalMaterials BadHabitChemicalMaterial[]
+  PatientBadHabet           PatientBadHabet[]
 
   @@map("bad_habit")
 }
@@ -80,6 +82,7 @@ model Medicine {
 
   category                  Category                   @relation("category", fields: [category_id], references: [id])
   medicineChemicalMaterials MedicineChemicalMaterial[]
+  PatientMedicine           PatientMedicine[]
 
   @@map("medicines")
 }
@@ -112,7 +115,10 @@ model Treatment {
   treatment_type_id Int
   treatment_type    TreatmentType @relation(fields: [treatment_type_id], references: [id])
 
-  steps Step[]
+  steps                 Step[]
+  PatientCost           PatientCost[]
+  PatientPayment        PatientPayment[]
+  patientTeethTreatment patientTeethTreatment[]
 
   @@map("treatments")
 }
@@ -151,6 +157,7 @@ model Problem {
   name            String
   problem_type_id Int
   Problem_type    ProblemType @relation(fields: [problem_type_id], references: [id])
+  Diagnose        Diagnose[]
 
   @@map("problems")
 }
@@ -161,3 +168,118 @@ model Category {
 
   medicines Medicine[] @relation("category")
 }
+
+enum Gender {
+  male
+  female
+}
+
+model Patient {
+  id                    Int                     @id @default(autoincrement())
+  name                  String
+  gender                Gender
+  phone                 String?
+  birthdate             DateTime?
+  Job                   String?
+  main_complaint        String?
+  main_status           String?
+  created_at            DateTime                @default(now())
+  PatientDisease        PatientDisease[]
+  PatientBadHabet       PatientBadHabet[]
+  PatientMedicine       PatientMedicine[]
+  PatientCost           PatientCost[]
+  PatientPayment        PatientPayment[]
+  Diagnose              Diagnose[]
+  patientTeethTreatment patientTeethTreatment[]
+
+  @@map("patients")
+}
+
+model PatientDisease {
+  id         Int     @id @default(autoincrement())
+  paitent_id Int
+  disease_id Int
+  paitent    Patient @relation(fields: [paitent_id], references: [id])
+  disease    Disease @relation(fields: [disease_id], references: [id])
+}
+
+model PatientBadHabet {
+  id           Int      @id @default(autoincrement())
+  bad_habet_id Int
+  paitent_id   Int
+  paitent      Patient  @relation(fields: [paitent_id], references: [id])
+  bad_habet    BadHabit @relation(fields: [bad_habet_id], references: [id])
+}
+
+model PatientMedicine {
+  id          Int      @id @default(autoincrement())
+  medicine_id Int
+  paitent_id  Int
+  paitent     Patient  @relation(fields: [paitent_id], references: [id])
+  bad_habet   Medicine @relation(fields: [medicine_id], references: [id])
+}
+
+model MedicalImageType {
+  id           Int            @id @default(autoincrement())
+  name         String
+  MedicalImage MedicalImage[]
+}
+
+model MedicalImage {
+  id                    Int              @id @default(autoincrement())
+  src                   String
+  medical_image_type_id Int
+  imageType             MedicalImageType @relation(fields: [medical_image_type_id], references: [id])
+  created_at            DateTime         @default(now())
+}
+
+model PatientCost {
+  id           Int      @id @default(autoincrement())
+  amount       Float
+  description  String?
+  treatment_id Int?
+  paitent_id   Int?
+  data         DateTime @default(now())
+
+  paitent   Patient?   @relation(fields: [paitent_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  treatment Treatment? @relation(fields: [treatment_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}
+
+model PatientPayment {
+  id           Int      @id @default(autoincrement())
+  amount       Float
+  description  String?
+  data         DateTime @default(now())
+  paitent_id   Int
+  treatment_Id Int?
+
+  paitent   Patient    @relation(fields: [paitent_id], references: [id])
+  Treatment Treatment? @relation(fields: [treatment_Id], references: [id])
+}
+
+model Diagnose {
+  id                 Int     @id @default(autoincrement())
+  paitent_id         Int
+  problem_id         Int
+  expected_treatment String?
+  paitent            Patient @relation(fields: [paitent_id], references: [id])
+  problem            Problem @relation(fields: [problem_id], references: [id])
+}
+
+model teeth {
+  id                    Int                     @id @default(autoincrement())
+  number                Int
+  patientTeethTreatment patientTeethTreatment[]
+}
+
+model patientTeethTreatment {
+  id           Int       @id @default(autoincrement())
+  paitent_id   Int
+  teeth_id     Int
+  treatment_Id Int
+  paitent      Patient   @relation(fields: [paitent_id], references: [id])
+  treatment    Treatment @relation(fields: [treatment_Id], references: [id])
+  teeth        teeth     @relation(fields: [teeth_id], references: [id])
+}
+
+// 
