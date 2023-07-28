@@ -1,26 +1,55 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePatientInput } from './dto/create-patient.input';
 import { UpdatePatientInput } from './dto/update-patient.input';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { PaginatorService } from 'src/pagination/PaginatorService';
+import { GraphQLError } from 'graphql';
 
 @Injectable()
 export class PatientService {
-  create(createPatientInput: CreatePatientInput) {
-    return 'This action adds a new patient';
+  constructor(private prisma: PrismaService) { }
+  async create(createPatientInput: CreatePatientInput) {
+    return await this.prisma.patient.create({
+      data: {
+        ...createPatientInput
+      }
+    });
   }
 
-  findAll() {
-    return `This action returns all patient`;
+  async findAll(page?: number, item_per_page?: number) {
+    return await PaginatorService(this.prisma.patient, page, item_per_page)
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} patient`;
+  async findOne(id: number) {
+    const patient = await this.prisma.patient.findUnique({ where: { id } })
+    if (!patient) {
+      throw new GraphQLError('patient not found', {
+        extensions: {
+          code: 404,
+        },
+      });
+    }
+    return patient;
   }
 
-  update(id: number, updatePatientInput: UpdatePatientInput) {
-    return `This action updates a #${id} patient`;
+  async update(id: number, updatePatientInput: UpdatePatientInput) {
+    const patient = await this.prisma.patient.findUnique({ where: { id } })
+    if (!patient) {
+      throw new GraphQLError('patient not found', {
+        extensions: {
+          code: 404,
+        },
+      });
+    }
+    return await this.prisma.patient.update({
+      where: { id },
+      data: { ...updatePatientInput }
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} patient`;
+  async remove(id: number) {
+    return await this.prisma.patient.delete({
+      where: { id }
+    });
   }
 }

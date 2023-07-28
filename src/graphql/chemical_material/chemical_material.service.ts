@@ -6,7 +6,7 @@ import { PaginatorService } from 'src/pagination/PaginatorService';
 import { GraphQLError } from 'graphql';
 @Injectable()
 export class ChemicalMaterialService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create({ name }: CreateChemicalMaterialInput) {
     return await this.prisma.chemicalMaterial.create({ data: { name } });
@@ -23,8 +23,8 @@ export class ChemicalMaterialService {
 
   async findOne(id: number) {
     const chemicalMaterial = await this.prisma.chemicalMaterial.findUnique({
-      where: {id: id},
-    }) 
+      where: { id: id },
+    })
     if (!chemicalMaterial) {
       throw new GraphQLError('chemicalMaterial not found', {
         extensions: {
@@ -32,13 +32,13 @@ export class ChemicalMaterialService {
         },
       });
     }
-    return  chemicalMaterial;
+    return chemicalMaterial;
   }
 
   async update(id: number, updateChemicalMaterialInput: UpdateChemicalMaterialInput) {
     const chemicalMaterial = await this.prisma.chemicalMaterial.findUnique({
-      where: {id: id},
-    }) 
+      where: { id: id },
+    })
 
     if (!chemicalMaterial) {
       throw new GraphQLError('chemicalMaterial not found', {
@@ -48,14 +48,14 @@ export class ChemicalMaterialService {
       });
     }
     return await this.prisma.chemicalMaterial.update({
-      where:{id:id},
-      data:{name:updateChemicalMaterialInput.name}
+      where: { id: id },
+      data: { name: updateChemicalMaterialInput.name }
     });
   }
   async remove(id: number) {
     const chemicalMaterial = await this.prisma.chemicalMaterial.findUnique({
-      where: {id: id},
-    }) 
+      where: { id: id },
+    })
     if (!chemicalMaterial) {
       throw new GraphQLError('chemicalMaterial not found', {
         extensions: {
@@ -64,7 +64,7 @@ export class ChemicalMaterialService {
       });
     }
     return await this.prisma.chemicalMaterial.delete({
-      where:{id:id},
+      where: { id: id },
     });
   }
 }

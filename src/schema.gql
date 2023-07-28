@@ -76,8 +76,14 @@ input CreatePatientDiagnosisInput {
 }
 
 input CreatePatientInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  address: String
+  birth_date: DateTime
+  gender: String!
+  job: String
+  main_complaint: String
+  maintal_status: String
+  name: String!
+  phone: String
 }
 
 input CreatePatientMedicalImageInput {
@@ -129,9 +135,19 @@ input CreateTreatmentTypeInput {
   name: String!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Disease {
   id: Int!
   name: String!
+}
+
+enum Gender {
+  female
+  male
 }
 
 type Medicine {
@@ -215,35 +231,49 @@ type Mutation {
 
 type PaginateChemicalMaterial {
   item_per_page: Int!
-  items: [ChemicalMaterial!]!
+  items: [ChemicalMaterial!]
   page: Int!
   totalPages: Int!
 }
 
 type PaginateProblem {
   item_per_page: Int!
-  items: [Problem!]!
+  items: [Problem!]
   page: Int!
   totalPages: Int!
 }
 
 type Paginatebadhabit {
   item_per_page: Int!
-  items: [BadHabit!]!
+  items: [BadHabit!]
+  page: Int!
+  totalPages: Int!
+}
+
+type PaginatedPatient {
+  item_per_page: Int!
+  items: [Patient!]
   page: Int!
   totalPages: Int!
 }
 
 type Paginatedisease {
   item_per_page: Int!
-  items: [Disease!]!
+  items: [Disease!]
   page: Int!
   totalPages: Int!
 }
 
 type Patient {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  address: String
+  birth_date: DateTime
+  gender: Gender!
+  id: Int!
+  job: String
+  main_complaint: String
+  maintal_status: String
+  name: String!
+  phone: String
 }
 
 type PatientBadHabit {
@@ -340,6 +370,7 @@ type Query {
   patientPayments: [PatientPayment!]!
   patientTeethTreatment(id: Int!): PatientTeethTreatment!
   patientTeethTreatments: [PatientTeethTreatment!]!
+  patients(item_per_page: Float, page: Float): PaginatedPatient!
   problem(id: Int!): Problem!
   problemType(id: Int!): ProblemType!
   problemTypes: [ProblemType!]!
@@ -417,9 +448,15 @@ input UpdatePatientDiagnosisInput {
 }
 
 input UpdatePatientInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  address: String
+  birth_date: DateTime
+  gender: String
   id: Int!
+  job: String
+  main_complaint: String
+  maintal_status: String
+  name: String
+  phone: String
 }
 
 input UpdatePatientMedicalImageInput {
@@ -476,14 +513,14 @@ input UpdateTreatmentTypeInput {
 
 type paginateMedicine {
   item_per_page: Int!
-  items: [Medicine!]!
+  items: [Medicine!]
   page: Int!
   totalPages: Int!
 }
 
 type paginateTreatment {
   item_per_page: Int!
-  items: [Treatment!]!
+  items: [Treatment!]
   page: Int!
   totalPages: Int!
 }

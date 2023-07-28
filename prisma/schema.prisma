@@ -179,10 +179,11 @@ model Patient {
   name                  String
   gender                Gender
   phone                 String?
-  birthdate             DateTime?
-  Job                   String?
+  birth_date            DateTime?
+  job                   String?
   main_complaint        String?
-  main_status           String?
+  maintal_status        String?
+  address               String?
   created_at            DateTime                @default(now())
   PatientDisease        PatientDisease[]
   PatientBadHabet       PatientBadHabet[]

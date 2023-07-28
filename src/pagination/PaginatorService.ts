@@ -4,7 +4,7 @@ export async function PaginatorService(
   Modal: any,
   page: number = default_page,
   item_per_page: number = default_item_per_page,
-  relation: boolean = false,
+  relation = false,
   relations?: string,
 ): Promise<{
   data: any;
@@ -35,7 +35,7 @@ export async function PaginatorService(
   const totalPages = Math.ceil(totalItems / item_per_page);
   return {
     data,
-    totalPages: totalPages,
+    totalPages,
     page: ++page,
     item_per_page,
   };

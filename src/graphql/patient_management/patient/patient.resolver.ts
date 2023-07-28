@@ -3,23 +3,32 @@ import { PatientService } from './patient.service';
 import { Patient } from './entities/patient.entity';
 import { CreatePatientInput } from './dto/create-patient.input';
 import { UpdatePatientInput } from './dto/update-patient.input';
+import { PaginatedPatient } from './entities/PaginatedPatient';
 
 @Resolver(() => Patient)
 export class PatientResolver {
-  constructor(private readonly patientService: PatientService) {}
+  constructor(private readonly patientService: PatientService) { }
 
   @Mutation(() => Patient)
   createPatient(@Args('createPatientInput') createPatientInput: CreatePatientInput) {
     return this.patientService.create(createPatientInput);
   }
 
-  @Query(() => [Patient], { name: 'patient' })
-  findAll() {
-    return this.patientService.findAll();
+  @Query(() => PaginatedPatient, { name: 'patients' })
+  async findAll(
+    @Args('page', { nullable: true }) page?: number,
+    @Args('item_per_page', { nullable: true }) item_per_page?: number,
+  ) {
+    const data = await this.patientService.findAll(page, item_per_page)
+    return {
+      ...data,
+      items: data.data,
+    };
   }
 
   @Query(() => Patient, { name: 'patient' })
   findOne(@Args('id', { type: () => Int }) id: number) {
+
     return this.patientService.findOne(id);
   }
 
