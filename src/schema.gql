@@ -77,11 +77,14 @@ input CreatePatientDiagnosisInput {
 
 input CreatePatientInput {
   address: String
+  badHabits: [CreatePatientBadHabitInput!]
   birth_date: DateTime
+  desises: [CreatePatientDesiseInput!]
   gender: String!
   job: String
   main_complaint: String
   maintal_status: String
+  medicines: [CreatePatientMedicineInput!]
   name: String!
   phone: String
 }
@@ -449,12 +452,15 @@ input UpdatePatientDiagnosisInput {
 
 input UpdatePatientInput {
   address: String
+  badHabits: [CreatePatientBadHabitInput!]
   birth_date: DateTime
+  desises: [CreatePatientDesiseInput!]
   gender: String
   id: Int!
   job: String
   main_complaint: String
   maintal_status: String
+  medicines: [CreatePatientMedicineInput!]
   name: String
   phone: String
 }
