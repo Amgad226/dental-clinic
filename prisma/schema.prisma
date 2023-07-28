@@ -199,30 +199,42 @@ model PatientDisease {
   id         Int     @id @default(autoincrement())
   paitent_id Int
   disease_id Int
+  tight      Boolean
+  notes      String?
   paitent    Patient @relation(fields: [paitent_id], references: [id])
   disease    Disease @relation(fields: [disease_id], references: [id])
+
+  @@map("patients_diseases")
 }
 
 model PatientBadHabet {
   id           Int      @id @default(autoincrement())
   bad_habet_id Int
   paitent_id   Int
+  notes        String?
   paitent      Patient  @relation(fields: [paitent_id], references: [id])
   bad_habet    BadHabit @relation(fields: [bad_habet_id], references: [id])
+
+  @@map("patients_badHabits")
 }
 
 model PatientMedicine {
   id          Int      @id @default(autoincrement())
   medicine_id Int
   paitent_id  Int
+  notes       String?
   paitent     Patient  @relation(fields: [paitent_id], references: [id])
   bad_habet   Medicine @relation(fields: [medicine_id], references: [id])
+
+  @@map("patients_medicines")
 }
 
 model MedicalImageType {
   id           Int            @id @default(autoincrement())
   name         String
   MedicalImage MedicalImage[]
+
+  @@map("medical_images_types")
 }
 
 model MedicalImage {
@@ -231,18 +243,21 @@ model MedicalImage {
   medical_image_type_id Int
   imageType             MedicalImageType @relation(fields: [medical_image_type_id], references: [id])
   created_at            DateTime         @default(now())
+
+  @@map("medical_images")
 }
 
 model PatientCost {
-  id           Int      @id @default(autoincrement())
+  id           Int        @id @default(autoincrement())
   amount       Float
   description  String?
   treatment_id Int?
-  paitent_id   Int?
-  data         DateTime @default(now())
+  paitent_id   Int
+  data         DateTime   @default(now())
+  paitent      Patient    @relation(fields: [paitent_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  treatment    Treatment? @relation(fields: [treatment_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
-  paitent   Patient?   @relation(fields: [paitent_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  treatment Treatment? @relation(fields: [treatment_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  @@map("patients_costs")
 }
 
 model PatientPayment {
@@ -255,6 +270,8 @@ model PatientPayment {
 
   paitent   Patient    @relation(fields: [paitent_id], references: [id])
   Treatment Treatment? @relation(fields: [treatment_Id], references: [id])
+
+  @@map("patients_payments")
 }
 
 model Diagnose {
@@ -264,12 +281,16 @@ model Diagnose {
   expected_treatment String?
   paitent            Patient @relation(fields: [paitent_id], references: [id])
   problem            Problem @relation(fields: [problem_id], references: [id])
+
+  @@map("diagnoses")
 }
 
 model teeth {
   id                    Int                     @id @default(autoincrement())
   number                Int
   patientTeethTreatment patientTeethTreatment[]
+
+  @@map("teeth")
 }
 
 model patientTeethTreatment {
@@ -280,6 +301,8 @@ model patientTeethTreatment {
   paitent      Patient   @relation(fields: [paitent_id], references: [id])
   treatment    Treatment @relation(fields: [treatment_Id], references: [id])
   teeth        teeth     @relation(fields: [teeth_id], references: [id])
+
+  @@map("patients_teeth")
 }
 
 // 
