@@ -55,6 +55,12 @@ input CreateMedicineInput {
   name: String!
 }
 
+input CreatePatientBadHabitForExistingPatientInput {
+  bad_habet_id: Int!
+  notes: String
+  patient_id: Int!
+}
+
 input CreatePatientBadHabitInput {
   bad_habet_id: Int!
   notes: String
@@ -68,6 +74,13 @@ input CreatePatientCostInput {
 input CreatePatientDiagnosisInput {
   """Example field (placeholder)"""
   exampleField: Int!
+}
+
+input CreatePatientDiseaseForExistingPatientInput {
+  disease_id: Int!
+  notes: String
+  patient_id: Int!
+  tight: Boolean!
 }
 
 input CreatePatientDiseaseInput {
@@ -98,6 +111,12 @@ input CreatePatientMedicalImageInput {
 input CreatePatientMedicalImagesTypeInput {
   """Example field (placeholder)"""
   exampleField: Int!
+}
+
+input CreatePatientMedicineForExistingPatientInput {
+  medicine_id: Int!
+  notes: String
+  patient_id: Int!
 }
 
 input CreatePatientMedicineInput {
@@ -181,12 +200,13 @@ type Mutation {
   createDisease(createDiseaseInput: CreateDiseaseInput!): Disease!
   createMedicine(createMedicineInput: CreateMedicineInput!): Medicine!
   createPatient(createPatientInput: CreatePatientInput!): Patient!
-  createPatientBadHabit(createPatientBadHabitInput: CreatePatientBadHabitInput!): PatientBadHabit!
+  createPatientBadHabit(createPatientBadHabitInput: CreatePatientBadHabitForExistingPatientInput!): PatientBadHabit!
   createPatientCost(createPatientCostInput: CreatePatientCostInput!): PatientCost!
   createPatientDiagnosis(createPatientDiagnosisInput: CreatePatientDiagnosisInput!): PatientDiagnosis!
+  createPatientDisease(createPatientDiseaseInput: CreatePatientDiseaseForExistingPatientInput!): PatientDisease!
   createPatientMedicalImage(createPatientMedicalImageInput: CreatePatientMedicalImageInput!): PatientMedicalImage!
   createPatientMedicalImagesType(createPatientMedicalImagesTypeInput: CreatePatientMedicalImagesTypeInput!): PatientMedicalImagesType!
-  createPatientMedicine(createPatientMedicineInput: CreatePatientMedicineInput!): PatientMedicine!
+  createPatientMedicine(createPatientMedicineInput: CreatePatientMedicineForExistingPatientInput!): PatientMedicine!
   createPatientPayment(createPatientPaymentInput: CreatePatientPaymentInput!): PatientPayment!
   createPatientTeethTreatment(createPatientTeethTreatmentInput: CreatePatientTeethTreatmentInput!): PatientTeethTreatment!
   createProblem(createProblemInput: CreateProblemInput!): Problem!
@@ -369,20 +389,17 @@ type Query {
   medicine(id: Int!): Medicine!
   medicines(item_per_page: Float, page: Float): paginateMedicine!
   patient(id: Int!): Patient!
-  patientBadHabit(id: Int!): PatientBadHabit!
-  patientBadHabits: [PatientBadHabit!]!
+  patientBadHabits(patient_id: Int!): [PatientBadHabit!]!
   patientCost(id: Int!): PatientCost!
   patientCosts: [PatientCost!]!
   patientDiagnoses: [PatientDiagnosis!]!
   patientDiagnosis(id: Int!): PatientDiagnosis!
-  patientDisease(id: Int!): PatientDisease!
-  patientDiseases: [PatientDisease!]!
+  patientDiseases(patient_id: Int!): [PatientDisease!]!
   patientMedicalImage(id: Int!): PatientMedicalImage!
   patientMedicalImages: [PatientMedicalImage!]!
   patientMedicalImagesType(id: Int!): PatientMedicalImagesType!
   patientMedicalImagesTypes: [PatientMedicalImagesType!]!
-  patientMedicine(id: Int!): PatientMedicine!
-  patientMedicines: [PatientMedicine!]!
+  patientMedicines(patient_id: Int!): [PatientMedicine!]!
   patientPayment(id: Int!): PatientPayment!
   patientPayments: [PatientPayment!]!
   patientTeethTreatment(id: Int!): PatientTeethTreatment!
@@ -462,6 +479,7 @@ input UpdatePatientDiseaseInput {
   disease_id: Int
   id: Int!
   notes: String
+  patient_id: Int
   tight: Boolean
 }
 
@@ -493,6 +511,7 @@ input UpdatePatientMedicineInput {
   id: Int!
   medicine_id: Int
   notes: String
+  patient_id: Int
 }
 
 input UpdatePatientPaymentInput {

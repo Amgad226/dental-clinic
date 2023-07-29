@@ -3,25 +3,26 @@ import { PatientBadHabitsService } from './patient_bad-habits.service';
 import { PatientBadHabit } from './entities/patient_bad-habit.entity';
 import { CreatePatientBadHabitInput } from './dto/create-patient_bad-habit.input';
 import { UpdatePatientBadHabitInput } from './dto/update-patient_bad-habit.input';
+import { CreatePatientBadHabitForExistingPatientInput } from './dto/create-patient_bad-habit-4-existing-patient.input';
 
 @Resolver(() => PatientBadHabit)
 export class PatientBadHabitsResolver {
-  constructor(private readonly patientBadHabitsService: PatientBadHabitsService) {}
+  constructor(private readonly patientBadHabitsService: PatientBadHabitsService) { }
 
   @Mutation(() => PatientBadHabit)
-  createPatientBadHabit(@Args('createPatientBadHabitInput') createPatientBadHabitInput: CreatePatientBadHabitInput) {
+  createPatientBadHabit(@Args('createPatientBadHabitInput') createPatientBadHabitInput: CreatePatientBadHabitForExistingPatientInput) {
     return this.patientBadHabitsService.create(createPatientBadHabitInput);
   }
 
   @Query(() => [PatientBadHabit], { name: 'patientBadHabits' })
-  findAll() {
-    return this.patientBadHabitsService.findAll();
+  findAll(@Args('patient_id', { type: () => Int }) patient_id: number) {
+    return this.patientBadHabitsService.findAll(patient_id);
   }
 
-  @Query(() => PatientBadHabit, { name: 'patientBadHabit' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.patientBadHabitsService.findOne(id);
-  }
+  // @Query(() => PatientBadHabit, { name: 'patientBadHabit' })
+  // findOne(@Args('id', { type: () => Int }) id: number) {
+  //   return this.patientBadHabitsService.findOne(id);
+  // }
 
   @Mutation(() => PatientBadHabit)
   updatePatientBadHabit(@Args('updatePatientBadHabitInput') updatePatientBadHabitInput: UpdatePatientBadHabitInput) {

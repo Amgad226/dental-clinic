@@ -52,7 +52,7 @@ export class PatientService {
           }
         },
         PatientBadHabet: { take: 3, include: { bad_habet: true } },
-        patientTeethTreatment : true,
+        patientTeethTreatment: true,
         PatientMedicine: {
           take: 3, include: {
             medicine: true

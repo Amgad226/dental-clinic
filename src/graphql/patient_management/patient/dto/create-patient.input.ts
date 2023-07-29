@@ -2,7 +2,7 @@ import { InputType, Field, registerEnumType } from '@nestjs/graphql';
 import { Gender } from '@prisma/client';
 import { CreatePatientBadHabitInput } from '../../patient_bad-habits/dto/create-patient_bad-habit.input';
 import { CreatePatientMedicineInput } from '../../patient_medicines/dto/create-patient_medicine.input';
-import { CreatePatientDiseaseInput } from '../../patient_diseases/dto/create-patient_disease.input';
+import { CreatePatientDiseaseInput } from '../../patient_diseases/dto/create-patient-disease.input';
 
 
 registerEnumType(Gender, {
