@@ -9,6 +9,8 @@
     "docker:build": "docker-compose build",
     "docker:up": "docker-compose up  ",
     "db": "docker-compose --file docker-compose-DB.yaml up  ",
+    "all":" npx prisma migrate dev && npx prisma generate && npm run dev ",
+    "db:build": "docker-compose --file docker-compose-DB.yaml up --build   ",
     "docker:down": "docker compose down",
     "prebuild": "rimraf dist",
     "build": "nest build",
