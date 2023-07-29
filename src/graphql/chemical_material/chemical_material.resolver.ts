@@ -14,7 +14,7 @@ export class ChemicalMaterialResolver {
   @Mutation(() => ChemicalMaterial)
   async createChemicalMaterial(@Args('createChemicalMaterialInput') createChemicalMaterialInput: CreateChemicalMaterialInput) {
 
-    await validator(checkIfChemicalsExists)({ data: createChemicalMaterialInput, modelName: "chemicalMaterial" })
+    await validator(checkIfChemicalsExists)({ data: createChemicalMaterialInput })
 
     return this.chemicalMaterialService.create(createChemicalMaterialInput);
   }
