@@ -11,17 +11,18 @@ import { Patient } from './entities/patient.entity';
 export class PatientService {
   constructor(private prisma: PrismaService, private patientDiseasesService: PatientDiseasesService) { }
   async create(createPatientInput: CreatePatientInput): Promise<Patient> {
-    const { patient_diseases, patient_badHabits, patient_medicines, ...rest } = createPatientInput
+    const { patient_diseases, patient_badHabits, ...rest } = createPatientInput
     const new_patient = await this.prisma.patient.create({
       include: {
-        PatientDisease: true
+        PatientDisease: true,
+        PatientBadHabet: true
       },
       data: {
         ...rest,
         PatientDisease: {
           createMany: { data: [...patient_diseases] }
         },
-        // PatientBadHabet: { createMany: { data: [...patient_badHabits] } },
+        PatientBadHabet: { createMany: { data: [...patient_badHabits] } },
         // PatientMedicine  :{createMany : { data : [...patient_medicines]}}
       },
     });

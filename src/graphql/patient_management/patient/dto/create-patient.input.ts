@@ -1,4 +1,4 @@
-import { InputType, Int, Field, registerEnumType } from '@nestjs/graphql';
+import { InputType, Field, registerEnumType } from '@nestjs/graphql';
 import { Gender } from '@prisma/client';
 import { CreatePatientBadHabitInput } from '../../patient_bad-habits/dto/create-patient_bad-habit.input';
 import { CreatePatientMedicineInput } from '../../patient_medicines/dto/create-patient_medicine.input';
@@ -22,7 +22,6 @@ export class CreatePatientInput {
   //   }
   //   return value;
   // })
-
   gender: Gender
 
   @Field(() => String, { nullable: true })
@@ -49,7 +48,7 @@ export class CreatePatientInput {
   @Field(() => [CreatePatientBadHabitInput], { nullable: true })
   patient_badHabits?: CreatePatientBadHabitInput[]
 
-  @Field(() => [CreatePatientMedicineInput], { nullable: true })
-  patient_medicines?: CreatePatientMedicineInput[]
+  // @Field(() => [CreatePatientMedicineInput], { nullable: true })
+  // patient_medicines?: CreatePatientMedicineInput[]
 
 }
