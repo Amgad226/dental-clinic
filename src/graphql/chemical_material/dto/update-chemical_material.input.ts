@@ -6,4 +6,7 @@ export class UpdateChemicalMaterialInput extends PartialType(CreateChemicalMater
 
   @Field(() => String, { description: 'Chemical Material' })
   name: string;
+
+  @Field(() => [Int], { description: 'chemical_material_id field ' })
+  chemical_material_id:[number] 
 }

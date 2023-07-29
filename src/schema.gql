@@ -33,6 +33,9 @@ input CreateCategoryInput {
 }
 
 input CreateChemicalMaterialInput {
+  """chemical_material_id field """
+  chemical_material_id: [Int!]
+
   """Chemical Material Name """
   name: String!
 }
@@ -220,6 +223,9 @@ input UpdateBadHabitInput {
 }
 
 input UpdateChemicalMaterialInput {
+  """chemical_material_id field """
+  chemical_material_id: [Int!]!
+
   """Chemical Material"""
   name: String!
 }
@@ -265,12 +271,16 @@ input UpdateTreatmentTypeInput {
   name: String!
 }
 
-type paginateTreatment {
-  item_per_page: Int!
-  items: [Treatment!]!
 type paginateMedicine {
   item_per_page: Int!
   items: [Medicine!]!
+  page: Int!
+  totalPages: Int!
+}
+
+type paginateTreatment {
+  item_per_page: Int!
+  items: [Treatment!]!
   page: Int!
   totalPages: Int!
 }
