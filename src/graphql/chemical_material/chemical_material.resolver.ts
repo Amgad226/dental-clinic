@@ -7,7 +7,6 @@ import { PaginateChemicalMaterial } from './entities/PaginateChemicalMaterial';
 import { checkIfChemicalsExists, updateChemical } from './validation/chemicals.validation';
 import { checkIfExists, validator } from '../validatior/validator';
 
-
 @Resolver(() => ChemicalMaterial)
 export class ChemicalMaterialResolver {
   constructor(private readonly chemicalMaterialService: ChemicalMaterialService) { }
@@ -52,9 +51,8 @@ export class ChemicalMaterialResolver {
 
     await validator(updateChemical)({ id: id, modelName: "chemicalMaterial", data: updateChemicalMaterialInput })
 
-    throw Error('ewqqwe')
     
-    // return this.chemicalMaterialService.update(id, updateChemicalMaterialInput);
+    return this.chemicalMaterialService.update(id, updateChemicalMaterialInput);
   }
 
   @Mutation(() => ChemicalMaterial)

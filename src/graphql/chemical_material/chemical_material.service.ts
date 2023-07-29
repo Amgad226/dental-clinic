@@ -19,7 +19,9 @@ export class ChemicalMaterialService {
           chemical_material_1_id: newChemicalMaterial.id,
           chemical_material_2_id: id,
         })),
-      });
+        skipDuplicates: true
+      }
+      );
     }
     return newChemicalMaterial;
   }
@@ -34,12 +36,35 @@ export class ChemicalMaterialService {
 
 
   async findOne(id: number) {
-    return await this.prisma.chemicalMaterial.findUnique({ where: { id: id }, })
+    const data = await this.prisma.chemicalMaterial.findUnique({
+      where: { id },
+      include: {
+        chemicalChemicalMaterials1: {
+          include: {
+            chemical_material_2: {
+            },
+          },
+        },
+        chemicalChemicalMaterials2: {
+          include: {
+            chemical_material_1: {
+            },
+          },
+        },
+      },
+    });
+
+    // Extract the conflicts values from the response and add them to the array
+    const conflicts = []
+      .concat(data?.chemicalChemicalMaterials1?.map(data => data.chemical_material_2).filter(Boolean) || [])
+      .concat(data?.chemicalChemicalMaterials2?.map(data => data.chemical_material_1).filter(Boolean) || []);
+
+    return { ...data, conflicts };
   }
 
   async update(id: number, { name, chemical_material_id }: UpdateChemicalMaterialInput) {
 
-    await this.prisma.chemicalChemicalMaterial.deleteMany({ where: { chemical_material_1_id: id } })
+    await this.prisma.chemicalChemicalMaterial.deleteMany({ where: { chemical_material_1_id: id, } })
 
     const updatedChemicalMaterial = await this.prisma.chemicalMaterial.update({
       where: { id: id }, data: { name: name }
@@ -49,10 +74,13 @@ export class ChemicalMaterialService {
     if (chemical_material_id) {
       //attach data chemical_material_id and medicine_id in pivot table
       await this.prisma.chemicalChemicalMaterial.createMany({
-        data: chemical_material_id.map((id) => ({
-          chemical_material_1_id: updatedChemicalMaterial.id,
-          chemical_material_2_id: id,
-        })),
+        data:
+          chemical_material_id.map((id) => ({
+            chemical_material_1_id: updatedChemicalMaterial.id,
+            chemical_material_2_id: id,
+          })),
+        skipDuplicates: true
+
       });
     }
     return updatedChemicalMaterial;

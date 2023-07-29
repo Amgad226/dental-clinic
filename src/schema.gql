@@ -16,6 +16,9 @@ type Category {
 }
 
 type ChemicalMaterial {
+  """conflicts of ChemicalMaterial field """
+  conflicts: [ChemicalMaterial!]
+
   """Example field (placeholder)"""
   id: Int!
 
@@ -224,10 +227,10 @@ input UpdateBadHabitInput {
 
 input UpdateChemicalMaterialInput {
   """chemical_material_id field """
-  chemical_material_id: [Int!]!
+  chemical_material_id: [Int!]
 
   """Chemical Material"""
-  name: String!
+  name: String
 }
 
 input UpdateDiseaseInput {
