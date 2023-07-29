@@ -28,3 +28,20 @@ export async function checkIfExists(props: Props) {
     }
     return {fail: true,}
 }
+
+export async function checkIfChemicalsExists(chemical_material_id:number[]) {
+
+    if (chemical_material_id) {
+        // check if All sended chemical_material ids exists in chemical_materials table
+        const chemical_material_count = await prisma.chemicalMaterial.count({ where: { id: { in: chemical_material_id } } });
+        if (chemical_material_count != chemical_material_id.length)
+            return {
+                fail: false,
+                msg: `chemical_material_ids sended not found in database `,
+                status: 404
+            }
+    }
+    return {
+        fail: true,
+    }
+}
