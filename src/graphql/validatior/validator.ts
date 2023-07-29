@@ -29,12 +29,12 @@ export async function checkIfExists(props: Props) {
     return {fail: true,}
 }
 
-export async function checkIfChemicalsExists(chemical_material_id:number[]) {
+export async function checkIfChemicalsExists({data}: Props) {
 
-    if (chemical_material_id) {
+    if (data.chemical_material_id) {
         // check if All sended chemical_material ids exists in chemical_materials table
-        const chemical_material_count = await prisma.chemicalMaterial.count({ where: { id: { in: chemical_material_id } } });
-        if (chemical_material_count != chemical_material_id.length)
+        const chemical_material_count = await prisma.chemicalMaterial.count({ where: { id: { in: data.chemical_material_id } } });
+        if (chemical_material_count != data.chemical_material_id.length)
             return {
                 fail: false,
                 msg: `chemical_material_ids sended not found in database `,
