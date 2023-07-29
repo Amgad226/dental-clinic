@@ -4,8 +4,8 @@ import { ChemicalMaterial } from './entities/chemical_material.entity';
 import { CreateChemicalMaterialInput } from './dto/create-chemical_material.input';
 import { UpdateChemicalMaterialInput } from './dto/update-chemical_material.input';
 import { PaginateChemicalMaterial } from './entities/PaginateChemicalMaterial';
-import { checkIfChemicalsExists, updateChemical } from './validation/chemicals.validation';
-import { checkIfExists, validator } from '../validatior/validator';
+import {  updateChemical } from './validation/chemicals.validation';
+import { checkIfChemicalsExists, checkIfExists, validator } from '../validatior/validator';
 
 @Resolver(() => ChemicalMaterial)
 export class ChemicalMaterialResolver {
