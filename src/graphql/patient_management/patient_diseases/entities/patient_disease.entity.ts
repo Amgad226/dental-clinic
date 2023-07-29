@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Disease } from 'src/graphql/disease/entities/disease.entity';
 
 @ObjectType()
 export class PatientDisease {
@@ -16,5 +17,8 @@ export class PatientDisease {
 
   @Field(() => String, { nullable: true })
   notes?: string
+
+  @Field(() => Disease)
+  disease: Disease
 
 }

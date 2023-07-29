@@ -86,6 +86,7 @@ input CreatePatientInput {
   name: String!
   patient_badHabits: [CreatePatientBadHabitInput!]
   patient_diseases: [CreatePatientDiseaseInput!]
+  patient_medicines: [CreatePatientMedicineInput!]
   phone: String
 }
 
@@ -100,8 +101,8 @@ input CreatePatientMedicalImagesTypeInput {
 }
 
 input CreatePatientMedicineInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  medicine_id: Int!
+  notes: String
 }
 
 input CreatePatientPaymentInput {
@@ -269,6 +270,7 @@ type Paginatedisease {
 type Patient {
   PatientBadHabet: [PatientBadHabit!]
   PatientDisease: [PatientDisease!]
+  PatientMedicine: [PatientMedicine!]
   address: String
   birth_date: DateTime
   gender: Gender!
@@ -277,10 +279,12 @@ type Patient {
   main_complaint: String
   maintal_status: String
   name: String!
+  patientTeethTreatment: [PatientTeethTreatment!]
   phone: String
 }
 
 type PatientBadHabit {
+  bad_habet: BadHabit!
   bad_habet_id: Int!
   id: Int!
   notes: String
@@ -298,6 +302,7 @@ type PatientDiagnosis {
 }
 
 type PatientDisease {
+  disease: Disease!
   disease_id: Int!
   id: Int!
   notes: String
@@ -316,8 +321,11 @@ type PatientMedicalImagesType {
 }
 
 type PatientMedicine {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: Int!
+  medicine: Medicine!
+  medicine_id: Int!
+  notes: String
+  patient_id: Int!
 }
 
 type PatientPayment {
@@ -466,8 +474,6 @@ input UpdatePatientInput {
   main_complaint: String
   maintal_status: String
   name: String
-  patient_badHabits: [CreatePatientBadHabitInput!]
-  patient_diseases: [CreatePatientDiseaseInput!]
   phone: String
 }
 
@@ -484,9 +490,9 @@ input UpdatePatientMedicalImagesTypeInput {
 }
 
 input UpdatePatientMedicineInput {
-  """Example field (placeholder)"""
-  exampleField: Int
   id: Int!
+  medicine_id: Int
+  notes: String
 }
 
 input UpdatePatientPaymentInput {

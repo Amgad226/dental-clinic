@@ -9,13 +9,22 @@ import { Patient } from './entities/patient.entity';
 
 @Injectable()
 export class PatientService {
-  constructor(private prisma: PrismaService, private patientDiseasesService: PatientDiseasesService) { }
+  constructor(private prisma: PrismaService) { }
   async create(createPatientInput: CreatePatientInput): Promise<Patient> {
-    const { patient_diseases, patient_badHabits, ...rest } = createPatientInput
+    const { patient_diseases, patient_badHabits, patient_medicines, ...rest } = createPatientInput
     const new_patient = await this.prisma.patient.create({
       include: {
-        PatientDisease: true,
-        PatientBadHabet: true
+        PatientDisease: {
+          include: { disease: true }
+        },
+        PatientBadHabet: {
+          include: { bad_habet: true }
+        },
+        // PatientMedicine: {
+        //   include: {
+        //     medicine: true
+        //   }
+        // }
       },
       data: {
         ...rest,
@@ -23,24 +32,32 @@ export class PatientService {
           createMany: { data: [...patient_diseases] }
         },
         PatientBadHabet: { createMany: { data: [...patient_badHabits] } },
-        // PatientMedicine  :{createMany : { data : [...patient_medicines]}}
+        PatientMedicine: { createMany: { data: [...patient_medicines] } }
       },
     });
     return new_patient
   }
 
   async findAll(page?: number, item_per_page?: number) {
-    const data = await PaginatorService(this.prisma.patient
-      , page, item_per_page, true, 'PatientDisease')
-
-    console.log(data);
-
-    return data
+    return await PaginatorService(this.prisma.patient
+      , page, item_per_page)
   }
+
   async findOne(id: number) {
     const patient = await this.prisma.patient.findUnique({
       where: { id }, include: {
-        PatientDisease: { take: 3 }
+        PatientDisease: {
+          take: 3, include: {
+            disease: true
+          }
+        },
+        PatientBadHabet: { take: 3, include: { bad_habet: true } },
+        patientTeethTreatment : true,
+        PatientMedicine: {
+          take: 3, include: {
+            medicine: true
+          }
+        }
       }
     })
     if (!patient) {

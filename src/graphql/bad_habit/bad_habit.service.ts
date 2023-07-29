@@ -4,10 +4,11 @@ import { UpdateBadHabitInput } from './dto/update-bad_habit.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GraphQLError } from 'graphql';
 import { PaginatorService } from 'src/pagination/PaginatorService';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class BadHabitService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(createBadHabitInput: CreateBadHabitInput) {
     return await this.prisma.badHabit.create({
@@ -21,8 +22,8 @@ export class BadHabitService {
 
   async findOne(id: number) {
     const badhabit = await this.prisma.badHabit.findUnique({
-      where: {id: id},
-    }) 
+      where: { id: id },
+    })
     if (!badhabit) {
       throw new GraphQLError('bad_habit not found', {
         extensions: {
@@ -30,13 +31,13 @@ export class BadHabitService {
         },
       });
     }
-    return  badhabit;
+    return badhabit;
   }
 
   async update(id: number, updateBadHabitInput: UpdateBadHabitInput) {
     const badhabit = await this.prisma.badHabit.findUnique({
-      where: {id: id},
-    }) 
+      where: { id: id },
+    })
 
     if (!badhabit) {
       throw new GraphQLError('badhabit not found', {
@@ -46,15 +47,15 @@ export class BadHabitService {
       });
     }
     return await this.prisma.badHabit.update({
-      where:{id:id},
-      data:{name:updateBadHabitInput.name}
+      where: { id: id },
+      data: { name: updateBadHabitInput.name }
     });
   }
 
   async remove(id: number) {
     const badHabit = await this.prisma.badHabit.findUnique({
-      where: {id: id},
-    }) 
+      where: { id: id },
+    })
     if (!badHabit) {
       throw new GraphQLError('badHabit not found', {
         extensions: {
@@ -63,7 +64,7 @@ export class BadHabitService {
       });
     }
     return await this.prisma.badHabit.delete({
-      where:{id:id},
+      where: { id: id },
     });
   }
 }

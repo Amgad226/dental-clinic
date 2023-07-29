@@ -2,6 +2,8 @@ import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Gender } from '@prisma/client';
 import { PatientDisease } from '../../patient_diseases/entities/patient_disease.entity';
 import { PatientBadHabit } from '../../patient_bad-habits/entities/patient_bad-habit.entity';
+import { PatientMedicine } from '../../patient_medicines/entities/patient_medicine.entity';
+import { PatientTeethTreatment } from '../../patient_teeth_treatments/entities/patient_teeth_treatment.entity';
 
 @ObjectType()
 export class Patient {
@@ -37,4 +39,10 @@ export class Patient {
 
   @Field(() => [PatientBadHabit], { nullable: true })
   PatientBadHabet?: PatientBadHabit[]
+
+  @Field(() => [PatientMedicine], { nullable: true })
+  PatientMedicine?: PatientMedicine[]
+
+  @Field(() => [PatientTeethTreatment], { nullable: true })
+  patientTeethTreatment?: PatientTeethTreatment[]
 }

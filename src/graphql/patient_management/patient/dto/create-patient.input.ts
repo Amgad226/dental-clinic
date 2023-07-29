@@ -48,7 +48,7 @@ export class CreatePatientInput {
   @Field(() => [CreatePatientBadHabitInput], { nullable: true })
   patient_badHabits?: CreatePatientBadHabitInput[]
 
-  // @Field(() => [CreatePatientMedicineInput], { nullable: true })
-  // patient_medicines?: CreatePatientMedicineInput[]
+  @Field(() => [CreatePatientMedicineInput], { nullable: true })
+  patient_medicines?: CreatePatientMedicineInput[]
 
 }

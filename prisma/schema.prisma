@@ -225,7 +225,7 @@ model PatientMedicine {
   patient_id  Int
   notes       String?
   patient     Patient  @relation(fields: [patient_id], references: [id])
-  bad_habet   Medicine @relation(fields: [medicine_id], references: [id])
+  medicine   Medicine @relation(fields: [medicine_id], references: [id])
 
   @@map("patients_medicines")
 }
