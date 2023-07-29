@@ -1,5 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Gender } from '@prisma/client';
+import { PatientDisease } from '../../patient_diseases/entities/patient_disease.entity';
 
 @ObjectType()
 export class Patient {
@@ -29,4 +30,7 @@ export class Patient {
 
   @Field(() => String, { nullable: true })
   maintal_status?: string
+
+  @Field(() => [PatientDisease], { nullable: true })
+  PatientDisease?: PatientDisease[]
 }

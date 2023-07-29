@@ -65,27 +65,28 @@ input CreatePatientCostInput {
   exampleField: Int!
 }
 
-input CreatePatientDesiseInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
 input CreatePatientDiagnosisInput {
   """Example field (placeholder)"""
   exampleField: Int!
 }
 
+input CreatePatientDiseaseInput {
+  disease_id: Int!
+  notes: String
+  tight: Boolean!
+}
+
 input CreatePatientInput {
   address: String
-  badHabits: [CreatePatientBadHabitInput!]
   birth_date: DateTime
-  desises: [CreatePatientDesiseInput!]
   gender: String!
   job: String
   main_complaint: String
   maintal_status: String
-  medicines: [CreatePatientMedicineInput!]
   name: String!
+  patient_badHabits: [CreatePatientBadHabitInput!]
+  patient_diseases: [CreatePatientDiseaseInput!]
+  patient_medicines: [CreatePatientMedicineInput!]
   phone: String
 }
 
@@ -182,7 +183,6 @@ type Mutation {
   createPatient(createPatientInput: CreatePatientInput!): Patient!
   createPatientBadHabit(createPatientBadHabitInput: CreatePatientBadHabitInput!): PatientBadHabit!
   createPatientCost(createPatientCostInput: CreatePatientCostInput!): PatientCost!
-  createPatientDesise(createPatientDesiseInput: CreatePatientDesiseInput!): PatientDesise!
   createPatientDiagnosis(createPatientDiagnosisInput: CreatePatientDiagnosisInput!): PatientDiagnosis!
   createPatientMedicalImage(createPatientMedicalImageInput: CreatePatientMedicalImageInput!): PatientMedicalImage!
   createPatientMedicalImagesType(createPatientMedicalImagesTypeInput: CreatePatientMedicalImagesTypeInput!): PatientMedicalImagesType!
@@ -201,8 +201,8 @@ type Mutation {
   removePatient(id: Int!): Patient!
   removePatientBadHabit(id: Int!): PatientBadHabit!
   removePatientCost(id: Int!): PatientCost!
-  removePatientDesise(id: Int!): PatientDesise!
   removePatientDiagnosis(id: Int!): PatientDiagnosis!
+  removePatientDisease(id: Int!): PatientDisease!
   removePatientMedicalImage(id: Int!): PatientMedicalImage!
   removePatientMedicalImagesType(id: Int!): PatientMedicalImagesType!
   removePatientMedicine(id: Int!): PatientMedicine!
@@ -219,8 +219,8 @@ type Mutation {
   updatePatient(updatePatientInput: UpdatePatientInput!): Patient!
   updatePatientBadHabit(updatePatientBadHabitInput: UpdatePatientBadHabitInput!): PatientBadHabit!
   updatePatientCost(updatePatientCostInput: UpdatePatientCostInput!): PatientCost!
-  updatePatientDesise(updatePatientDesiseInput: UpdatePatientDesiseInput!): PatientDesise!
   updatePatientDiagnosis(updatePatientDiagnosisInput: UpdatePatientDiagnosisInput!): PatientDiagnosis!
+  updatePatientDisease(updatePatientDiseaseInput: UpdatePatientDiseaseInput!): PatientDisease!
   updatePatientMedicalImage(updatePatientMedicalImageInput: UpdatePatientMedicalImageInput!): PatientMedicalImage!
   updatePatientMedicalImagesType(updatePatientMedicalImagesTypeInput: UpdatePatientMedicalImagesTypeInput!): PatientMedicalImagesType!
   updatePatientMedicine(updatePatientMedicineInput: UpdatePatientMedicineInput!): PatientMedicine!
@@ -268,6 +268,7 @@ type Paginatedisease {
 }
 
 type Patient {
+  PatientDisease: [PatientDisease!]
   address: String
   birth_date: DateTime
   gender: Gender!
@@ -289,14 +290,17 @@ type PatientCost {
   exampleField: Int!
 }
 
-type PatientDesise {
+type PatientDiagnosis {
   """Example field (placeholder)"""
   exampleField: Int!
 }
 
-type PatientDiagnosis {
-  """Example field (placeholder)"""
-  exampleField: Int!
+type PatientDisease {
+  disease_id: Int!
+  id: Int!
+  notes: String
+  patient_id: Int!
+  tight: Boolean!
 }
 
 type PatientMedicalImage {
@@ -359,10 +363,10 @@ type Query {
   patientBadHabits: [PatientBadHabit!]!
   patientCost(id: Int!): PatientCost!
   patientCosts: [PatientCost!]!
-  patientDesise(id: Int!): PatientDesise!
-  patientDesises: [PatientDesise!]!
   patientDiagnoses: [PatientDiagnosis!]!
   patientDiagnosis(id: Int!): PatientDiagnosis!
+  patientDisease(id: Int!): PatientDisease!
+  patientDiseases: [PatientDisease!]!
   patientMedicalImage(id: Int!): PatientMedicalImage!
   patientMedicalImages: [PatientMedicalImage!]!
   patientMedicalImagesType(id: Int!): PatientMedicalImagesType!
@@ -438,30 +442,31 @@ input UpdatePatientCostInput {
   id: Int!
 }
 
-input UpdatePatientDesiseInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
 input UpdatePatientDiagnosisInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
 }
 
+input UpdatePatientDiseaseInput {
+  disease_id: Int
+  id: Int!
+  notes: String
+  tight: Boolean
+}
+
 input UpdatePatientInput {
   address: String
-  badHabits: [CreatePatientBadHabitInput!]
   birth_date: DateTime
-  desises: [CreatePatientDesiseInput!]
   gender: String
   id: Int!
   job: String
   main_complaint: String
   maintal_status: String
-  medicines: [CreatePatientMedicineInput!]
   name: String
+  patient_badHabits: [CreatePatientBadHabitInput!]
+  patient_diseases: [CreatePatientDiseaseInput!]
+  patient_medicines: [CreatePatientMedicineInput!]
   phone: String
 }
 
