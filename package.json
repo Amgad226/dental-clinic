@@ -8,6 +8,7 @@
   "scripts": {
     "docker:build": "docker-compose build",
     "docker:up": "docker-compose up  ",
+    "db": "docker-compose --file docker-compose-DB.yaml up  ",
     "docker:down": "docker compose down",
     "prebuild": "rimraf dist",
     "build": "nest build",
