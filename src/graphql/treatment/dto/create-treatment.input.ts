@@ -1,4 +1,6 @@
 import { InputType, Int, Field, Float } from '@nestjs/graphql';
+import { CreateStepInput } from './create-steps.input';
+import { CreateSubStepInput } from './create-sub-steps.input';
 
 @InputType()
 export class CreateTreatmentInput {
@@ -13,4 +15,7 @@ export class CreateTreatmentInput {
 
   @Field(()=> Int)
   treatment_type_id:number;
+
+  @Field(() => [CreateStepInput], { nullable: true })
+  steps?: CreateStepInput[];
 }
