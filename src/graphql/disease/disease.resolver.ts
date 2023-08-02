@@ -29,6 +29,21 @@ export class DiseaseResolver {
     };
   }
 
+  @Query(() => Paginatedisease, { name: 'diseases2' })
+  async findAll2(
+    @Args('page', { nullable: true }) page?: number,
+    @Args('search', { nullable: true }) serach?: string,
+    @Args('item_per_page', { nullable: true }) item_per_page?: number,
+  ) {
+    const disease = await this.diseaseService.findAll2(page, item_per_page, serach);
+    return {  
+      items: disease.data,
+      totalPages: disease.totalPages,
+      page: disease.page,
+      item_per_page: disease.item_per_page,
+    };
+  }
+
   @Query(() => Disease, { name: 'disease' })
   
   findOne(@Args('id', { type: () => Int }) id: number) {

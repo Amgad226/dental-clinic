@@ -4,6 +4,7 @@ import { UpdateDiseaseInput } from './dto/update-disease.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GraphQLError } from 'graphql';
 import { PaginatorService } from 'src/pagination/PaginatorService';
+import { PaginatorServicecopy } from 'src/pagination/PaginatorService copy';
 
 @Injectable()
 export class DiseaseService {
@@ -42,6 +43,12 @@ export class DiseaseService {
 
   async findAll(page: any, item_per_page: any) {
     return await PaginatorService(this.prisma.disease, page, item_per_page);
+  }
+  async findAll2(page: any, item_per_page: any, search?: string) {
+    return await PaginatorServicecopy({
+      Modal: this.prisma.disease,
+      item_per_page, page, search
+    });
   }
 
   async findOne(id: number) {
