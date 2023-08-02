@@ -4,6 +4,7 @@ import { UpdateTreatmentInput } from './dto/update-treatment.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GraphQLError } from 'graphql';
 import { PaginatorService } from 'src/pagination/PaginatorService';
+import { Treatment } from '@prisma/client';
 
 @Injectable()
 export class TreatmentService {
@@ -20,7 +21,7 @@ export class TreatmentService {
         },
       });
     }
-    const treatment = await this.prisma.treatment.create({
+    const treatment =await this.prisma.treatment.create({
       data: {
         name: CreateTreatmentInput.name,
         price: CreateTreatmentInput.price,
@@ -30,11 +31,11 @@ export class TreatmentService {
             id: CreateTreatmentInput.treatment_type_id,
           },
         },
-        steps: {
+        steps:{
           create:CreateTreatmentInput.steps.map((step) => ({
             name: step.name,
             subSteps: {
-              create: step.subStep.map((subStep) => ({
+              create: step.subSteps.map((subStep) => ({
                 name: subStep.name,
               })),
             },

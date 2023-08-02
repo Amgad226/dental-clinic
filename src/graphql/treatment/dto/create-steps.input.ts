@@ -8,5 +8,5 @@ export class CreateStepInput {
 
 
   @Field(() => [CreateSubStepInput], { nullable: true })
-  subStep?: CreateSubStepInput[];
+  subSteps?: CreateSubStepInput[];
 }

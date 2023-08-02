@@ -11,5 +11,5 @@ export class Steps {
   treatment_id: number;
 
   @Field(() => [SubStep],{ nullable: true })
-  SubStep?: SubStep[];
+  subSteps?: SubStep[];
 }
