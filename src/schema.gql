@@ -27,6 +27,7 @@ type ChemicalMaterial {
 }
 
 input CreateBadHabitInput {
+  chemical_material_id: [Int!]
   name: String!
 }
 
@@ -44,6 +45,7 @@ input CreateChemicalMaterialInput {
 }
 
 input CreateDiseaseInput {
+  chemical_material_id: [Int!]
   name: String!
 }
 
@@ -74,10 +76,20 @@ input CreateProblemTypeInput {
   name: String!
 }
 
+input CreateStepInput {
+  name: String!
+  subStep: [CreateSubStepInput!]
+}
+
+input CreateSubStepInput {
+  name: String!
+}
+
 input CreateTreatmentInput {
   color: String!
   name: String!
   price: Float!
+  steps: [CreateStepInput!]
   treatment_type_id: Int!
 }
 
@@ -221,11 +233,23 @@ type Query {
   treatments(item_per_page: Float, page: Float): paginateTreatment!
 }
 
+type Steps {
+  SubStep: [SubStep!]
+  name: String!
+  treatment_id: Int!
+}
+
+type SubStep {
+  name: String!
+  step_id: Int!
+}
+
 type Treatment {
   color: String!
   id: Int!
   name: String!
   price: Float!
+  steps: [Steps!]!
   treatment_type: TreatmentType!
   treatment_type_id: Int!
 }
@@ -236,6 +260,7 @@ type TreatmentType {
 }
 
 input UpdateBadHabitInput {
+  chemical_material_id: [Int!]
   name: String!
 }
 
@@ -248,7 +273,7 @@ input UpdateChemicalMaterialInput {
 }
 
 input UpdateDiseaseInput {
-  id: Int!
+  chemical_material_id: [Int!]
   name: String!
 }
 
@@ -280,6 +305,7 @@ input UpdateTreatmentInput {
   color: String!
   name: String!
   price: Float!
+  steps: [CreateStepInput!]
   treatment_type_id: Int!
 }
 
