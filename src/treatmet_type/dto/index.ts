@@ -1,1 +1,0 @@
-export * from './treatment_type.dto';

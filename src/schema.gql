@@ -1,0 +1,329 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type BadHabit {
+  id: Int!
+  name: String!
+}
+
+type Category {
+  """id field (placeholder)"""
+  id: Int!
+
+  """name field (placeholder)"""
+  name: String!
+}
+
+type ChemicalMaterial {
+  """conflicts of ChemicalMaterial field """
+  conflicts: [ChemicalMaterial!]
+
+  """Example field (placeholder)"""
+  id: Int!
+
+  """Example field (placeholder)"""
+  name: String!
+}
+
+input CreateBadHabitInput {
+  chemical_material_id: [Int!]
+  name: String!
+}
+
+input CreateCategoryInput {
+  """name field (placeholder)"""
+  name: String!
+}
+
+input CreateChemicalMaterialInput {
+  """chemical_material_id field """
+  chemical_material_id: [Int!]
+
+  """Chemical Material Name """
+  name: String!
+}
+
+input CreateDiseaseInput {
+  chemical_material_id: [Int!]
+  name: String!
+}
+
+input CreateMedicineInput {
+  """chemical_material_id field """
+  category_id: Int!
+
+  """chemical_material_id field """
+  chemical_material_id: [Int!]!
+
+  """concentration field """
+  concentration: Float!
+
+  """name field """
+  name: String!
+}
+
+input CreateProblemInput {
+  """problem name"""
+  name: String!
+
+  """problem name"""
+  problem_type_id: Int!
+}
+
+input CreateProblemTypeInput {
+  """The Name of the problem type"""
+  name: String!
+}
+
+input CreateStepInput {
+  name: String!
+  subStep: [CreateSubStepInput!]
+}
+
+input CreateSubStepInput {
+  name: String!
+}
+
+input CreateTreatmentInput {
+  color: String!
+  name: String!
+  price: Float!
+  steps: [CreateStepInput!]
+  treatment_type_id: Int!
+}
+
+input CreateTreatmentTypeInput {
+  name: String!
+}
+
+type Disease {
+  id: Int!
+  name: String!
+}
+
+type Medicine {
+  """category"""
+  category: Category!
+
+  """chemical_material_id field """
+  category_id: Int!
+
+  """concentration field """
+  concentration: Float!
+
+  """id field """
+  id: Int!
+
+  """Problem_type"""
+  medicineChemicalMaterials: [MedicineChemicalMaterials!]
+
+  """name field """
+  name: String!
+}
+
+type MedicineChemicalMaterials {
+  """chemical_material"""
+  chemical_material: ChemicalMaterial
+
+  """concentration field """
+  chemical_material_id: Int!
+
+  """id field """
+  id: Int!
+
+  """chemical_material_id field """
+  medicine_id: Int!
+}
+
+type Mutation {
+  createBadHabit(createBadHabitInput: CreateBadHabitInput!): BadHabit!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  createChemicalMaterial(createChemicalMaterialInput: CreateChemicalMaterialInput!): ChemicalMaterial!
+  createDisease(createDiseaseInput: CreateDiseaseInput!): Disease!
+  createMedicine(createMedicineInput: CreateMedicineInput!): Medicine!
+  createProblem(createProblemInput: CreateProblemInput!): Problem!
+  createProblemType(createProblemTypeInput: CreateProblemTypeInput!): ProblemType!
+  createTreatment(createTreatmentInput: CreateTreatmentInput!): Treatment!
+  createTreatmentType(createTreatmentTypeInput: CreateTreatmentTypeInput!): TreatmentType!
+  removeBadHabit(id: Int!): BadHabit!
+  removeCategory(id: Int!): Category!
+  removeChemicalMaterial(id: Int!): ChemicalMaterial!
+  removeDisease(id: Int!): Disease!
+  removeMedicine(id: Int!): Medicine!
+  removeProblem(id: Int!): Problem!
+  removeProblemType(id: Int!): ProblemType!
+  removeTreatment(id: Int!): Treatment!
+  removeTreatmentType(id: Int!): TreatmentType!
+  updateBadHabit(id: Int!, updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
+  updateChemicalMaterial(id: Int!, updateChemicalMaterialInput: UpdateChemicalMaterialInput!): ChemicalMaterial!
+  updateDisease(id: Int!, updateDiseaseInput: UpdateDiseaseInput!): Disease!
+  updateMedicine(id: Float!, updateMedicineInput: UpdateMedicineInput!): Medicine!
+  updateProblem(id: Int!, updateProblemInput: UpdateProblemInput!): Problem!
+  updateProblemType(updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
+  updateTreatment(id: Int!, updateTreatmentInput: UpdateTreatmentInput!): Treatment!
+  updateTreatmentType(id: Int!, updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
+}
+
+type PaginateChemicalMaterial {
+  item_per_page: Int!
+  items: [ChemicalMaterial!]!
+  page: Int!
+  totalPages: Int!
+}
+
+type PaginateProblem {
+  item_per_page: Int!
+  items: [Problem!]!
+  page: Int!
+  totalPages: Int!
+}
+
+type Paginatebadhabit {
+  item_per_page: Int!
+  items: [BadHabit!]!
+  page: Int!
+  totalPages: Int!
+}
+
+type Paginatedisease {
+  item_per_page: Int!
+  items: [Disease!]!
+  page: Int!
+  totalPages: Int!
+}
+
+type Problem {
+  """Problem_type"""
+  Problem_type: ProblemType!
+
+  """problem id"""
+  id: Int!
+
+  """problem name"""
+  name: String!
+
+  """problem_type_id id"""
+  problem_type_id: Int!
+}
+
+type ProblemType {
+  """Example field (placeholder)"""
+  id: Int!
+  name: String!
+}
+
+type Query {
+  badHabit(id: Int!): BadHabit!
+  badHabits(item_per_page: Float, page: Float): Paginatebadhabit!
+  categories: [Category!]!
+  chemicalMaterial(id: Int!): ChemicalMaterial!
+  chemicalMaterials(item_per_page: Float, page: Float): PaginateChemicalMaterial!
+  disease(id: Int!): Disease!
+  diseases(item_per_page: Float, page: Float): Paginatedisease!
+  medicine(id: Int!): Medicine!
+  medicines(item_per_page: Float, page: Float): paginateMedicine!
+  problem(id: Int!): Problem!
+  problemType(id: Int!): ProblemType!
+  problemTypes: [ProblemType!]!
+  problems(item_per_page: Float, page: Float): PaginateProblem!
+  treatment(id: Int!): Treatment!
+  treatmentType(id: Int!): TreatmentType!
+  treatmentTypes: [TreatmentType!]!
+  treatments(item_per_page: Float, page: Float): paginateTreatment!
+}
+
+type Steps {
+  SubStep: [SubStep!]
+  name: String!
+  treatment_id: Int!
+}
+
+type SubStep {
+  name: String!
+  step_id: Int!
+}
+
+type Treatment {
+  color: String!
+  id: Int!
+  name: String!
+  price: Float!
+  steps: [Steps!]!
+  treatment_type: TreatmentType!
+  treatment_type_id: Int!
+}
+
+type TreatmentType {
+  id: Int!
+  name: String!
+}
+
+input UpdateBadHabitInput {
+  chemical_material_id: [Int!]
+  name: String!
+}
+
+input UpdateChemicalMaterialInput {
+  """chemical_material_id field """
+  chemical_material_id: [Int!]
+
+  """Chemical Material"""
+  name: String
+}
+
+input UpdateDiseaseInput {
+  chemical_material_id: [Int!]
+  name: String!
+}
+
+input UpdateMedicineInput {
+  """chemical_material_id field """
+  category_id: Int!
+
+  """chemical_material_id field """
+  chemical_material_id: [Int!]!
+
+  """concentration field """
+  concentration: Int!
+
+  """name field """
+  name: String!
+}
+
+input UpdateProblemInput {
+  name: String!
+  problem_type_id: Int!
+}
+
+input UpdateProblemTypeInput {
+  id: Int!
+  name: String!
+}
+
+input UpdateTreatmentInput {
+  color: String!
+  name: String!
+  price: Float!
+  steps: [CreateStepInput!]
+  treatment_type_id: Int!
+}
+
+input UpdateTreatmentTypeInput {
+  id: Int!
+  name: String!
+}
+
+type paginateMedicine {
+  item_per_page: Int!
+  items: [Medicine!]!
+  page: Int!
+  totalPages: Int!
+}
+
+type paginateTreatment {
+  item_per_page: Int!
+  items: [Treatment!]!
+  page: Int!
+  totalPages: Int!
+}
