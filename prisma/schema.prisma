@@ -114,11 +114,10 @@ model Treatment {
   color             String
   treatment_type_id Int
   treatment_type    TreatmentType @relation(fields: [treatment_type_id], references: [id])
-
   steps                 Step[]
   PatientCost           PatientCost[]
   PatientPayment        PatientPayment[]
-  patientTeethTreatment patientTeethTreatment[]
+  PatientTeethTreatment PatientTeethTreatment[]
 
   @@map("treatments")
 }
@@ -191,7 +190,8 @@ model Patient {
   PatientCost           PatientCost[]
   PatientPayment        PatientPayment[]
   Diagnose              Diagnose[]
-  patientTeethTreatment patientTeethTreatment[]
+  PatientTeethTreatment PatientTeethTreatment[]
+  PatientMedicalImage          PatientMedicalImage[]
 
   @@map("patients")
 }
@@ -225,24 +225,27 @@ model PatientMedicine {
   patient_id  Int
   notes       String?
   patient     Patient  @relation(fields: [patient_id], references: [id])
-  medicine   Medicine @relation(fields: [medicine_id], references: [id])
+  medicine    Medicine @relation(fields: [medicine_id], references: [id])
 
   @@map("patients_medicines")
 }
 
-model MedicalImageType {
+model PatientMedicalImageType {
   id           Int            @id @default(autoincrement())
   name         String
-  MedicalImage MedicalImage[]
+  PatientMedicalImage PatientMedicalImage[]
 
   @@map("medical_images_types")
 }
 
-model MedicalImage {
+model PatientMedicalImage {
   id                    Int              @id @default(autoincrement())
   src                   String
+  title                 String
   medical_image_type_id Int
-  imageType             MedicalImageType @relation(fields: [medical_image_type_id], references: [id])
+  patinet_id            Int
+  imageType             PatientMedicalImageType @relation(fields: [medical_image_type_id], references: [id])
+  patient               Patient          @relation(fields: [patinet_id], references: [id])
   created_at            DateTime         @default(now())
 
   @@map("medical_images")
@@ -286,22 +289,22 @@ model Diagnose {
   @@map("diagnoses")
 }
 
-model teeth {
+model Teeth {
   id                    Int                     @id @default(autoincrement())
   number                Int
-  patientTeethTreatment patientTeethTreatment[]
+  PatientTeethTreatment PatientTeethTreatment[]
 
   @@map("teeth")
 }
 
-model patientTeethTreatment {
+model PatientTeethTreatment {
   id           Int       @id @default(autoincrement())
   patient_id   Int
   teeth_id     Int
   treatment_Id Int
   patient      Patient   @relation(fields: [patient_id], references: [id])
   treatment    Treatment @relation(fields: [treatment_Id], references: [id])
-  teeth        teeth     @relation(fields: [teeth_id], references: [id])
+  teeth        Teeth     @relation(fields: [teeth_id], references: [id])
 
   @@map("patients_teeth")
 }
