@@ -10,18 +10,6 @@ export class ProblemService {
   constructor(private prisma: PrismaService) {}
 
   async create({ name, problem_type_id }: CreateProblemInput) {
-    //check if problem_type_id is exist in problem_type table
-    const problem_type = await this.prisma.problemType.findUnique({
-      where: { id: problem_type_id },
-    });
-    if (!problem_type) {
-      throw new GraphQLError('problem type not found', {
-        extensions: {
-          code: 404,
-        },
-      });
-    }
-
     //create new problem
     return await this.prisma.problem.create({
       data: {
@@ -32,8 +20,10 @@ export class ProblemService {
           },
         },
       },
+      include:{
+        Problem_type:true
+      }
     });
-    // }
   }
 
   //need a relation with problem-type
@@ -49,48 +39,29 @@ export class ProblemService {
   async findOne(id: number) {
     const problem = await this.prisma.problem.findUnique({
       where: {id: id},
+      include:{
+        Problem_type:true,
+      }
     }) 
-    if (!problem) {
-      throw new GraphQLError('problem not found', {
-        extensions: {
-          code: 404,
-        },
-      });
-    }
     return  problem;
   }
 
   async update(id: number, updateProblemInput: UpdateProblemInput) {
-    const problem = await this.prisma.problem.findUnique({
-      where: {id: id},
-    }) 
-
-    if (!problem) {
-      throw new GraphQLError('problem not found', {
-        extensions: {
-          code: 404,
-        },
-      });
-    }
     return await this.prisma.problem.update({
       where:{id:id},
-      data:{name:updateProblemInput.name}
+      data:{
+        name:updateProblemInput.name,
+        problem_type_id:updateProblemInput.problem_type_id
+      }
     });
   }
 
   async remove(id: number) {
-    const problem = await this.prisma.problem.findUnique({
-      where: {id: id},
-    }) 
-    if (!problem) {
-      throw new GraphQLError('problem not found', {
-        extensions: {
-          code: 404,
-        },
-      });
-    }
     return await this.prisma.problem.delete({
       where:{id:id},
+      include:{
+        Problem_type:true,
+      }
     });
   }
 }
