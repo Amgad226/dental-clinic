@@ -1,26 +1,41 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePatientMedicalImagesTypeInput } from './dto/create-patient_medical_images_type.input';
 import { UpdatePatientMedicalImagesTypeInput } from './dto/update-patient_medical_images_type.input';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class PatientMedicalImagesTypesService {
-  create(createPatientMedicalImagesTypeInput: CreatePatientMedicalImagesTypeInput) {
-    return 'This action adds a new patientMedicalImagesType';
+  constructor(private prisma: PrismaService) { }
+  async create(createPatientMedicalImagesTypeInput: CreatePatientMedicalImagesTypeInput) {
+    return await this.prisma.patientMedicalImageType.create({
+      data: {
+        ...createPatientMedicalImagesTypeInput
+      }
+    });
   }
-
-  findAll() {
-    return `This action returns all patientMedicalImagesTypes`;
+  async findAll() {
+    return await this.prisma.patientMedicalImageType.findMany()
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} patientMedicalImagesType`;
+  async findOne(id: number) {
+    return await this.prisma.patientMedicalImageType.findUnique({
+      where: {
+        id
+      }
+    });
   }
-
-  update(id: number, updatePatientMedicalImagesTypeInput: UpdatePatientMedicalImagesTypeInput) {
-    return `This action updates a #${id} patientMedicalImagesType`;
+  async update(id: number, updatePatientMedicalImagesTypeInput: UpdatePatientMedicalImagesTypeInput) {
+    return await this.prisma.patientMedicalImageType.update({
+      where: { id },
+      data: {
+        ...updatePatientMedicalImagesTypeInput
+      }
+    });
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} patientMedicalImagesType`;
+  async remove(id: number) {
+    return await this.prisma.patientMedicalImageType.delete({
+      where: {
+        id
+      }
+    });
   }
 }

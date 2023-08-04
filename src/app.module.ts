@@ -27,6 +27,7 @@ import { PatientTeethTreatmentsModule } from './graphql/patient_management/patie
 import { PatientDiseasesModule } from './graphql/patient_management/patient_diseases/patient_diseases.module';
 
 
+
 const apolloDriverConfig: ApolloDriverConfig = {
   formatError: (error: any) => {
     const graphQLFormattedError = {
@@ -69,10 +70,10 @@ const graphQLModuleConfig: any = {
     PatientPaymentsModule,
     PatientCostsModule,
     PatientDiagnosesModule,
+    PatientTeethTreatmentsModule,
+    PatientDiseasesModule,
     PatientMedicalImagesModule,
     PatientMedicalImagesTypesModule,
-    PatientTeethTreatmentsModule,
-    PatientDiseasesModule
   ],
   controllers: [AppController],
   providers: [AppService],

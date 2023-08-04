@@ -109,8 +109,7 @@ input CreatePatientMedicalImageInput {
 }
 
 input CreatePatientMedicalImagesTypeInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
 }
 
 input CreatePatientMedicineForExistingPatientInput {
@@ -336,8 +335,8 @@ type PatientMedicalImage {
 }
 
 type PatientMedicalImagesType {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: Int!
+  name: String!
 }
 
 type PatientMedicine {
@@ -502,9 +501,8 @@ input UpdatePatientMedicalImageInput {
 }
 
 input UpdatePatientMedicalImagesTypeInput {
-  """Example field (placeholder)"""
-  exampleField: Int
   id: Int!
+  name: String
 }
 
 input UpdatePatientMedicineInput {

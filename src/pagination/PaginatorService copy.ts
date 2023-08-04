@@ -8,7 +8,7 @@ interface PaginatorProps<T> {
   relations?: T
 }
 
-export async function PaginatorServicecopy<T extends {}>(
+export async function PaginatorServicecopy<T>(
   {
     Modal,
     item_per_page = default_item_per_page,
