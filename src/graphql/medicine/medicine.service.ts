@@ -40,14 +40,14 @@ export class MedicineService {
     return medicine;
   }
 
-  async findAll(page?: number, item_per_page?: number) {
-    return await PaginatorService(
-      this.prisma.medicine,
-      page,
+  //need relation with category
+  async findAll(page: any, item_per_page: any, search?: string) {
+    return await PaginatorService({
+      Modal: this.prisma.medicine,
       item_per_page,
-      true,
-      'category',
-    );
+      page,
+      search,
+    });
   }
 
   async findOne(id: number) {

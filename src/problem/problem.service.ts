@@ -36,8 +36,14 @@ export class ProblemService {
     // }
   }
 
-  async findAll(page: any, item_per_page: any) {
-    return await PaginatorService(this.prisma.problem, page, item_per_page);
+  //need a relation with problem-type
+  async findAll(page: any, item_per_page: any, search?: string) {
+    return await PaginatorService({
+      Modal: this.prisma.problem,
+      item_per_page,
+      page,
+      search,
+    });
   }
 
   async findOne(id: number) {

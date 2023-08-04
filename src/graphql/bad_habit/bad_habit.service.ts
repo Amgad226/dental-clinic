@@ -40,8 +40,13 @@ export class BadHabitService {
     return bad_habit;
   }
 
-  async findAll(page: any, item_per_page: any) {
-    return await PaginatorService(this.prisma.badHabit, page, item_per_page);
+  async findAll(page: any, item_per_page: any, search?: string) {
+    return await PaginatorService({
+      Modal: this.prisma.badHabit,
+      item_per_page,
+      page,
+      search,
+    });
   }
 
   async findOne(id: number) {

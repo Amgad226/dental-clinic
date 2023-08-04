@@ -17,14 +17,19 @@ export class TreatmentResolver {
   @Query(() => paginateTreatment, { name: 'treatments' })
   async findAll(
     @Args('page', { nullable: true }) page?: number,
+    @Args('search', { nullable: true }) serach?: string,
     @Args('item_per_page', { nullable: true }) item_per_page?: number,
   ) {
-    const treatments = await this.treatmentService.findAll(page, item_per_page);
+    const treatment = await this.treatmentService.findAll(
+      page,
+      item_per_page,
+      serach,
+    );
     return {
-      items: treatments.data,
-      totalPages: treatments.totalPages,
-      page: page,
-      item_per_page: item_per_page,
+      items: treatment.data,
+      totalPages: treatment.totalPages,
+      page: treatment.page,
+      item_per_page: treatment.item_per_page,
     };
   }
 

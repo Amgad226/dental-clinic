@@ -20,18 +20,21 @@ export class ChemicalMaterialResolver {
   }
 
   @Query(() => PaginateChemicalMaterial, { name: 'chemicalMaterials' })
-  async findAll(@Args('page', { nullable: true }) page?: number, @Args('item_per_page', { nullable: true }) item_per_page?: number,) {
-
-
-    const chemicalMaterials = await this.chemicalMaterialService.findAll(
+  async findAll(
+    @Args('page', { nullable: true }) page?: number,
+    @Args('search', { nullable: true }) serach?: string,
+    @Args('item_per_page', { nullable: true }) item_per_page?: number,
+  ) {
+    const chemicalmaterial = await this.chemicalMaterialService.findAll(
       page,
       item_per_page,
+      serach,
     );
     return {
-      items: chemicalMaterials.data,
-      totalPages: chemicalMaterials.totalPages,
-      page: chemicalMaterials.page,
-      item_per_page: chemicalMaterials.item_per_page,
+      items: chemicalmaterial.data,
+      totalPages: chemicalmaterial.totalPages,
+      page: chemicalmaterial.page,
+      item_per_page: chemicalmaterial.item_per_page,
     };
   }
 

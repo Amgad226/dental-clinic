@@ -72,9 +72,14 @@ export class TreatmentService {
     return treatment;
 
   }
-
-  async findAll(page: any, item_per_page: any) {
-    return await PaginatorService(this.prisma.treatment, page, item_per_page);
+  //need arelation with treatment-type + steps + substeps
+  async findAll(page: any, item_per_page: any, search?: string) {
+    return await PaginatorService({
+      Modal: this.prisma.treatment,
+      item_per_page,
+      page,
+      search,
+    });
   }
 
   async findOne(id: number) {

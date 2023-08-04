@@ -20,14 +20,19 @@ export class ProblemResolver {
   @Query(() => PaginateProblem, { name: 'problems' })
   async findAll(
     @Args('page', { nullable: true }) page?: number,
+    @Args('search', { nullable: true }) serach?: string,
     @Args('item_per_page', { nullable: true }) item_per_page?: number,
   ) {
-    const problems = await this.problemService.findAll(page, item_per_page);
+    const problem = await this.problemService.findAll(
+      page,
+      item_per_page,
+      serach,
+    );
     return {
-      items: problems.data,
-      totalPages: problems.totalPages,
-      page: page,
-      item_per_page: item_per_page,
+      items: problem.data,
+      totalPages: problem.totalPages,
+      page: problem.page,
+      item_per_page: problem.item_per_page,
     };
   }
 

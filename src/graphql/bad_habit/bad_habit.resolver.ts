@@ -17,14 +17,19 @@ export class BadHabitResolver {
   @Query(() =>Paginatebadhabit, { name: 'badHabits' })
   async findAll(
     @Args('page', { nullable: true }) page?: number,
+    @Args('search', { nullable: true }) serach?: string,
     @Args('item_per_page', { nullable: true }) item_per_page?: number,
   ) {
-    const badHabits = await this.badHabitService.findAll(page, item_per_page);
+    const badHabit = await this.badHabitService.findAll(
+      page,
+      item_per_page,
+      serach,
+    );
     return {
-      items: badHabits.data,
-      totalPages: badHabits.totalPages,
-      page: badHabits.page,
-      item_per_page: badHabits.item_per_page,
+      items: badHabit.data,
+      totalPages: badHabit.totalPages,
+      page: badHabit.page,
+      item_per_page: badHabit.item_per_page,
     };
   }
 

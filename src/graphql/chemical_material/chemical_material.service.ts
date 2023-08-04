@@ -26,12 +26,13 @@ export class ChemicalMaterialService {
     return newChemicalMaterial;
   }
 
-  async findAll(page?: number, item_per_page?: number) {
-    return await PaginatorService(
-      this.prisma.chemicalMaterial,
-      page,
+  async findAll(page: any, item_per_page: any, search?: string) {
+    return await PaginatorService({
+      Modal: this.prisma.chemicalMaterial,
       item_per_page,
-    );
+      page,
+      search,
+    });
   }
 
 
