@@ -4,39 +4,34 @@ import { Disease } from './entities/disease.entity';
 import { CreateDiseaseInput } from './dto/create-disease.input';
 import { UpdateDiseaseInput } from './dto/update-disease.input';
 import { Paginatedisease } from './entities/Paginatedisease';
+import { checkIfExists, validator } from '../validatior/validator';
+import { createDisease, updateDisease } from './validation/disease.validation';
 
 @Resolver(() => Disease)
 export class DiseaseResolver {
   constructor(private readonly diseaseService: DiseaseService) {}
 
   @Mutation(() => Disease)
-  createDisease(@Args('createDiseaseInput') createDiseaseInput: CreateDiseaseInput) {
-    
-    return this.diseaseService.create(createDiseaseInput);
-  }
-
-  @Query(() =>Paginatedisease, { name: 'diseases' })
-  async findAll(
-    @Args('page', { nullable: true }) page?: number,
-    @Args('item_per_page', { nullable: true }) item_per_page?: number,
+  async createDisease(
+    @Args('createDiseaseInput') createDiseaseInput: CreateDiseaseInput,
   ) {
-    const disease = await this.diseaseService.findAll(page, item_per_page);
-    return {
-      items: disease.data,
-      totalPages: disease.totalPages,
-      page: page,
-      item_per_page: item_per_page,
-    };
+    await validator(createDisease)({ data: createDiseaseInput });
+
+    return await this.diseaseService.create(createDiseaseInput);
   }
 
-  @Query(() => Paginatedisease, { name: 'diseases2' })
-  async findAll2(
+  @Query(() => Paginatedisease, { name: 'diseases' })
+  async findAll(
     @Args('page', { nullable: true }) page?: number,
     @Args('search', { nullable: true }) serach?: string,
     @Args('item_per_page', { nullable: true }) item_per_page?: number,
   ) {
-    const disease = await this.diseaseService.findAll2(page, item_per_page, serach);
-    return {  
+    const disease = await this.diseaseService.findAll(
+      page,
+      item_per_page,
+      serach,
+    );
+    return {
       items: disease.data,
       totalPages: disease.totalPages,
       page: disease.page,
@@ -45,22 +40,27 @@ export class DiseaseResolver {
   }
 
   @Query(() => Disease, { name: 'disease' })
-  
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  async findOne(@Args('id', { type: () => Int }) id: number) {
+    await validator(checkIfExists)({ id, modelName: 'disease' });
     return this.diseaseService.findOne(id);
   }
 
   @Mutation(() => Disease)
-  updateDisease(
+  async updateDisease(
     @Args('id', { type: () => Int }) id: number,
-    @Args('updateDiseaseInput') updateDiseaseInput: UpdateDiseaseInput) {
-    return this.diseaseService.update(id,updateDiseaseInput);
+    @Args('updateDiseaseInput') updateDiseaseInput: UpdateDiseaseInput,
+  ) {
+    await validator(updateDisease)({
+      data: updateDiseaseInput,
+      modelName: 'disease',
+      id: id,
+    });
+    return this.diseaseService.update(id, updateDiseaseInput);
   }
 
-
-
   @Mutation(() => Disease)
-  removeDisease(@Args('id', { type: () => Int }) id: number) {
+  async removeDisease(@Args('id', { type: () => Int }) id: number) {
+    await validator(checkIfExists)({ id, modelName: 'disease' });
     return this.diseaseService.remove(id);
   }
 }
