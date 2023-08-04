@@ -4,7 +4,6 @@ import { ProblemType } from './entities/problem_type.entity';
 import { CreateProblemTypeInput } from './dto/create-problem_type.input';
 import { UpdateProblemTypeInput } from './dto/update-problem_type.input';
 import { checkIfExists, validator } from '../validatior/validator';
-import { updateProblemType } from './validation/problemtype.validation';
 
 @Resolver(() => ProblemType)
 export class ProblemTypeResolver {
@@ -34,11 +33,7 @@ export class ProblemTypeResolver {
     @Args('id', { type: () => Int }) id: number,
     @Args('updateProblemTypeInput')updateProblemTypeInput: UpdateProblemTypeInput,
   ) {
-    await validator(updateProblemType)({
-      data: updateProblemTypeInput,
-      modelName:'problemType',
-      id:id,
-    });
+    await validator(checkIfExists)({ id, modelName: 'problemType' });
     return this.problemTypeService.update(id,updateProblemTypeInput)
   }
 
