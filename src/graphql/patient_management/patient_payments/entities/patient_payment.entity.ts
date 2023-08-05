@@ -12,7 +12,7 @@ export class PatientPayment {
   @Field(() => Date)
   date: Date
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   description?: string
 
   @Field(() => Int)

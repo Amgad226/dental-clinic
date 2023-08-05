@@ -1,26 +1,57 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePatientCostInput } from './dto/create-patient_cost.input';
 import { UpdatePatientCostInput } from './dto/update-patient_cost.input';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { PaginatorService } from 'src/pagination/PaginatorService';
+import { Prisma } from '@prisma/client';
+import { PatientCostSortInput } from './dto/sort-input';
 
 @Injectable()
 export class PatientCostsService {
-  create(createPatientCostInput: CreatePatientCostInput) {
-    return 'This action adds a new patientCost';
+  constructor(private prisma: PrismaService) { }
+
+  async create(createPatientCostInput: CreatePatientCostInput) {
+    return this.prisma.patientCost.create({
+      data: { ...createPatientCostInput },
+      include: { treatment: true }
+    });
   }
 
-  findAll() {
-    return `This action returns all patientCosts`;
+  async findAll({ patient_id, sort, item_per_page, page }: {
+    patient_id?: number, sort?: PatientCostSortInput, page?: number, item_per_page?: number
+  }) {
+    const { field, order } = sort ?? {}
+    return await PaginatorService<Prisma.PatientCostFindManyArgs>({
+      Modal: this.prisma.patientCost
+      , page, item_per_page,
+      relations: {
+        where: {
+          patient_id
+        },
+        orderBy: {
+          [field]: order
+        },
+        include: { treatment: true }
+      }
+    })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} patientCost`;
-  }
+  // findOne(id: number) {
+  //   return `This action returns a #${id} patientCost`;
+  // }
 
-  update(id: number, updatePatientCostInput: UpdatePatientCostInput) {
-    return `This action updates a #${id} patientCost`;
+  async update(id: number, updatePatientCostInput: UpdatePatientCostInput) {
+    return this.prisma.patientCost.update({
+      where: { id },
+      data: { ...updatePatientCostInput },
+      include: { treatment: true }
+
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} patientCost`;
+    return this.prisma.patientCost.delete({
+      where: { id }
+    });
   }
 }

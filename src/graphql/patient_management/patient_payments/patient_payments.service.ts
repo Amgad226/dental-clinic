@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreatePatientPaymentInput } from './dto/create-patient_payment.input';
 import { UpdatePatientPaymentInput } from './dto/update-patient_payment.input';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { SortInput } from './dto/sort-input';
+import { PateintPaymentSortInput } from './dto/sort-input';
 import { PaginatorService } from 'src/pagination/PaginatorService';
 import { Prisma } from '@prisma/client'
 @Injectable()
@@ -15,7 +15,7 @@ export class PatientPaymentsService {
   }
 
   async findAll({ patient_id, sort, item_per_page, page }: {
-    patient_id?: number, sort?: SortInput, page?: number, item_per_page?: number
+    patient_id?: number, sort?: PateintPaymentSortInput, page?: number, item_per_page?: number
   }) {
     const { field, order } = sort ?? {}
     return await PaginatorService<Prisma.PatientPaymentFindManyArgs>({

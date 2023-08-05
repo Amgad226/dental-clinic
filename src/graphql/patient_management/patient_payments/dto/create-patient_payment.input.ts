@@ -1,4 +1,4 @@
-import { InputType, Field, Float , Int} from '@nestjs/graphql';
+import { InputType, Field, Float, Int } from '@nestjs/graphql';
 
 @InputType()
 export class CreatePatientPaymentInput {
@@ -8,7 +8,7 @@ export class CreatePatientPaymentInput {
   @Field(() => Date)
   date: Date
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   description?: string
 
   @Field(() => Int)

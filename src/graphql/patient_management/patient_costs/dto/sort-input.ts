@@ -10,7 +10,7 @@ import { Field, InputType, registerEnumType } from "@nestjs/graphql";
 // });
 
 @InputType()
-export class PateintPaymentSortInput {
+export class PatientCostSortInput {
     @Field()
     field: 'amount' | 'date';
 
