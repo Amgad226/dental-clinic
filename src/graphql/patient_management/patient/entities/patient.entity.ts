@@ -4,6 +4,8 @@ import { PatientDisease } from '../../patient_diseases/entities/patient_disease.
 import { PatientBadHabit } from '../../patient_bad-habits/entities/patient_bad-habit.entity';
 import { PatientMedicine } from '../../patient_medicines/entities/patient_medicine.entity';
 import { PatientTeethTreatment } from '../../patient_teeth_treatments/entities/patient_teeth_treatment.entity';
+import { PatientPayment } from '../../patient_payments/entities/patient_payment.entity';
+import { PatientCost } from '../../patient_costs/entities/patient_cost.entity';
 
 @ObjectType()
 export class Patient {
@@ -45,4 +47,10 @@ export class Patient {
 
   @Field(() => [PatientTeethTreatment], { nullable: true })
   PatientTeethTreatment?: PatientTeethTreatment[]
+
+  @Field(() => [PatientPayment], { nullable: true })
+  PatientPayment?: PatientPayment[]
+
+  @Field(() => [PatientCost], { nullable: true })
+  PatientCost?: PatientCost[]
 }

@@ -3,10 +3,11 @@ import { PatientPaymentsService } from './patient_payments.service';
 import { PatientPayment } from './entities/patient_payment.entity';
 import { CreatePatientPaymentInput } from './dto/create-patient_payment.input';
 import { UpdatePatientPaymentInput } from './dto/update-patient_payment.input';
+import { SortInput } from './dto/sort-input';
 
 @Resolver(() => PatientPayment)
 export class PatientPaymentsResolver {
-  constructor(private readonly patientPaymentsService: PatientPaymentsService) {}
+  constructor(private readonly patientPaymentsService: PatientPaymentsService) { }
 
   @Mutation(() => PatientPayment)
   createPatientPayment(@Args('createPatientPaymentInput') createPatientPaymentInput: CreatePatientPaymentInput) {
@@ -14,14 +15,17 @@ export class PatientPaymentsResolver {
   }
 
   @Query(() => [PatientPayment], { name: 'patientPayments' })
-  findAll() {
-    return this.patientPaymentsService.findAll();
+  findAll(
+    @Args('patient_id', { type: () => Int, nullable: true }) patient_id?: number,
+    @Args('sort', { type: () => SortInput, nullable: true }) sort?: SortInput
+  ) {
+    return this.patientPaymentsService.findAll({ patient_id, sort });
   }
 
-  @Query(() => PatientPayment, { name: 'patientPayment' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.patientPaymentsService.findOne(id);
-  }
+  // @Query(() => PatientPayment, { name: 'patientPayment' })
+  // findOne(@Args('id', { type: () => Int }) id: number) {
+  //   return this.patientPaymentsService.findOne(id);
+  // }
 
   @Mutation(() => PatientPayment)
   updatePatientPayment(@Args('updatePatientPaymentInput') updatePatientPaymentInput: UpdatePatientPaymentInput) {
