@@ -157,7 +157,7 @@ input CreateProblemTypeInput {
 
 input CreateStepInput {
   name: String!
-  subStep: [CreateSubStepInput!]
+  subSteps: [CreateSubStepInput!]
 }
 
 input CreateSubStepInput {
@@ -279,7 +279,7 @@ type Mutation {
   updatePatientPayment(updatePatientPaymentInput: UpdatePatientPaymentInput!): PatientPayment!
   updatePatientTeethTreatment(updatePatientTeethTreatmentInput: UpdatePatientTeethTreatmentInput!): PatientTeethTreatment!
   updateProblem(id: Int!, updateProblemInput: UpdateProblemInput!): Problem!
-  updateProblemType(updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
+  updateProblemType(id: Int!, updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
   updateTreatment(id: Int!, updateTreatmentInput: UpdateTreatmentInput!): Treatment!
   updateTreatmentType(id: Int!, updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
 }
@@ -425,14 +425,14 @@ type ProblemType {
 
 type Query {
   badHabit(id: Int!): BadHabit!
-  badHabits(item_per_page: Float, page: Float): Paginatebadhabit!
+  badHabits(item_per_page: Float, page: Float, search: String): Paginatebadhabit!
   categories: [Category!]!
   chemicalMaterial(id: Int!): ChemicalMaterial!
-  chemicalMaterials(item_per_page: Float, page: Float): PaginateChemicalMaterial!
+  chemicalMaterials(item_per_page: Float, page: Float, search: String): PaginateChemicalMaterial!
   disease(id: Int!): Disease!
-  diseases(item_per_page: Float, page: Float): Paginatedisease!
+  diseases(item_per_page: Float, page: Float, search: String): Paginatedisease!
   medicine(id: Int!): Medicine!
-  medicines(item_per_page: Float, page: Float): paginateMedicine!
+  medicines(item_per_page: Float, page: Float, search: String): paginateMedicine!
   patient(id: Int!): Patient!
   patientBadHabits(patient_id: Int!): [PatientBadHabit!]!
   patientCost(id: Int!): PatientCost!
@@ -451,19 +451,21 @@ type Query {
   problem(id: Int!): Problem!
   problemType(id: Int!): ProblemType!
   problemTypes: [ProblemType!]!
-  problems(item_per_page: Float, page: Float): PaginateProblem!
+  problems(item_per_page: Float, page: Float, search: String): PaginateProblem!
   treatment(id: Int!): Treatment!
   treatmentType(id: Int!): TreatmentType!
   treatmentTypes: [TreatmentType!]!
-  treatments(item_per_page: Float, page: Float): paginateTreatment!
+  treatments(item_per_page: Float, page: Float, search: String): paginateTreatment!
 }
 
 input SortInput {
   field: String!
-  order: String!}
+  order: String!
+}
+
 type Steps {
-  SubStep: [SubStep!]
   name: String!
+  subSteps: [SubStep!]
   treatment_id: Int!
 }
 
@@ -477,7 +479,7 @@ type Treatment {
   id: Int!
   name: String!
   price: Float!
-  steps: [Steps!]!
+  steps: [Steps!]
   treatment_type: TreatmentType!
   treatment_type_id: Int!
 }
@@ -597,20 +599,27 @@ input UpdateProblemInput {
 }
 
 input UpdateProblemTypeInput {
-  id: Int!
+  name: String!
+}
+
+input UpdateStepInput {
+  name: String!
+  subSteps: [UpdateSubStepInput!]
+}
+
+input UpdateSubStepInput {
   name: String!
 }
 
 input UpdateTreatmentInput {
-  color: String!
+  color: String
   name: String!
   price: Float!
-  steps: [CreateStepInput!]
+  steps: [UpdateStepInput!]
   treatment_type_id: Int!
 }
 
 input UpdateTreatmentTypeInput {
-  id: Int!
   name: String!
 }
 
@@ -627,13 +636,6 @@ type paginateMedicine {
 type paginateTreatment {
   item_per_page: Int!
   items: [Treatment!]
-  page: Int!
-  totalPages: Int!
-}
-
-type paginateTreatment {
-  item_per_page: Int!
-  items: [Treatment!]!
   page: Int!
   totalPages: Int!
 }
