@@ -258,7 +258,7 @@ model PatientCost {
   description  String?
   treatment_id Int?
   patient_id   Int
-  data         DateTime   @default(now())
+  date         DateTime   @default(now())
   patient      Patient    @relation(fields: [patient_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
   treatment    Treatment? @relation(fields: [treatment_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
 

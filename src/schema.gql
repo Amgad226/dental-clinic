@@ -75,8 +75,11 @@ input CreatePatientBadHabitInput {
 }
 
 input CreatePatientCostInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  amount: Float!
+  date: DateTime!
+  description: String
+  patient_id: Int!
+  treatment_id: Int
 }
 
 input CreatePatientDiagnosisInput {
@@ -136,7 +139,7 @@ input CreatePatientMedicineInput {
 input CreatePatientPaymentInput {
   amount: Float!
   date: DateTime!
-  description: String!
+  description: String
   patient_id: Int!
 }
 
@@ -312,6 +315,13 @@ type PaginatedPatient {
   totalPages: Int!
 }
 
+type PaginatedPatientCost {
+  item_per_page: Int!
+  items: [PatientCost!]
+  page: Int!
+  totalPages: Int!
+}
+
 type PaginatedPatientPayment {
   item_per_page: Int!
   items: [PatientPayment!]
@@ -324,6 +334,11 @@ type Paginatedisease {
   items: [Disease!]
   page: Int!
   totalPages: Int!
+}
+
+input PateintPaymentSortInput {
+  field: String!
+  order: String!
 }
 
 type Patient {
@@ -353,8 +368,19 @@ type PatientBadHabit {
 }
 
 type PatientCost {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  amount: Float!
+  date: DateTime!
+  description: String
+  id: Int!
+  patient: Patient!
+  patient_id: Int!
+  treatment: Treatment
+  treatment_id: Int
+}
+
+input PatientCostSortInput {
+  field: String!
+  order: String!
 }
 
 type PatientDiagnosis {
@@ -400,7 +426,7 @@ type PatientPayment {
   Patient: Patient!
   amount: Float!
   date: DateTime!
-  description: String!
+  description: String
   id: Int!
   patient_id: Int!
 }
@@ -442,8 +468,7 @@ type Query {
   medicines(item_per_page: Float, page: Float, search: String): paginateMedicine!
   patient(id: Int!): Patient!
   patientBadHabits(patient_id: Int!): [PatientBadHabit!]!
-  patientCost(id: Int!): PatientCost!
-  patientCosts: [PatientCost!]!
+  patientCosts(item_per_page: Float, page: Float, patient_id: Int, sort: PatientCostSortInput): PaginatedPatientCost!
   patientDiagnoses: [PatientDiagnosis!]!
   patientDiagnosis(id: Int!): PatientDiagnosis!
   patientDiseases(patient_id: Int!): [PatientDisease!]!
@@ -451,7 +476,7 @@ type Query {
   patientMedicalImagesType(id: Int!): PatientMedicalImagesType!
   patientMedicalImagesTypes: [PatientMedicalImagesType!]!
   patientMedicines(patient_id: Int!): [PatientMedicine!]!
-  patientPayments(item_per_page: Float, page: Float, patient_id: Int, sort: SortInput): PaginatedPatientPayment!
+  patientPayments(item_per_page: Float, page: Float, patient_id: Int, sort: PateintPaymentSortInput): PaginatedPatientPayment!
   patientTeethTreatment(id: Int!): PatientTeethTreatment!
   patientTeethTreatments: [PatientTeethTreatment!]!
   patients(item_per_page: Float, page: Float): PaginatedPatient!
@@ -463,11 +488,6 @@ type Query {
   treatmentType(id: Int!): TreatmentType!
   treatmentTypes: [TreatmentType!]!
   treatments(item_per_page: Float, page: Float, search: String): paginateTreatment!
-}
-
-input SortInput {
-  field: String!
-  order: String!
 }
 
 type Steps {
@@ -535,9 +555,12 @@ input UpdatePatientBadHabitInput {
 }
 
 input UpdatePatientCostInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  amount: Float
+  date: DateTime
+  description: String
   id: Int!
+  patient_id: Int
+  treatment_id: Int
 }
 
 input UpdatePatientDiagnosisInput {
