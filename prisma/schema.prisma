@@ -108,12 +108,12 @@ model TreatmentType {
 }
 
 model Treatment {
-  id                Int           @id @default(autoincrement())
-  name              String
-  price             Float
-  color             String
-  treatment_type_id Int
-  treatment_type    TreatmentType @relation(fields: [treatment_type_id], references: [id])
+  id                    Int                     @id @default(autoincrement())
+  name                  String
+  price                 Float
+  color                 String
+  treatment_type_id     Int
+  treatment_type        TreatmentType           @relation(fields: [treatment_type_id], references: [id])
   steps                 Step[]
   PatientCost           PatientCost[]
   PatientPayment        PatientPayment[]
@@ -191,7 +191,7 @@ model Patient {
   PatientPayment        PatientPayment[]
   Diagnose              Diagnose[]
   PatientTeethTreatment PatientTeethTreatment[]
-  PatientMedicalImage          PatientMedicalImage[]
+  PatientMedicalImage   PatientMedicalImage[]
 
   @@map("patients")
 }
@@ -231,22 +231,22 @@ model PatientMedicine {
 }
 
 model PatientMedicalImageType {
-  id           Int            @id @default(autoincrement())
-  name         String
+  id                  Int                   @id @default(autoincrement())
+  name                String
   PatientMedicalImage PatientMedicalImage[]
 
   @@map("medical_images_types")
 }
 
 model PatientMedicalImage {
-  id                    Int              @id @default(autoincrement())
+  id                    Int                     @id @default(autoincrement())
   src                   String
   title                 String
   medical_image_type_id Int
-  patinet_id            Int
+  patient_id            Int
   imageType             PatientMedicalImageType @relation(fields: [medical_image_type_id], references: [id])
-  patient               Patient          @relation(fields: [patinet_id], references: [id])
-  created_at            DateTime         @default(now())
+  patient               Patient                 @relation(fields: [patient_id], references: [id])
+  created_at            DateTime                @default(now())
 
   @@map("medical_images")
 }

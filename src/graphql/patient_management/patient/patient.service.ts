@@ -28,11 +28,11 @@ export class PatientService {
       },
       data: {
         ...rest,
-        PatientDisease: {
+        PatientDisease: patient_diseases && {
           createMany: { data: [...patient_diseases] }
         },
-        PatientBadHabet: { createMany: { data: [...patient_badHabits] } },
-        PatientMedicine: { createMany: { data: [...patient_medicines] } }
+        PatientBadHabet: patient_badHabits && { createMany: { data: [...patient_badHabits] } },
+        PatientMedicine: patient_medicines && { createMany: { data: [...patient_medicines] } }
       },
     });
     return new_patient

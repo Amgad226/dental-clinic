@@ -104,8 +104,10 @@ input CreatePatientInput {
 }
 
 input CreatePatientMedicalImageInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  medical_image_type_id: Int!
+  patient_id: Int!
+  src: String!
+  title: String!
 }
 
 input CreatePatientMedicalImagesTypeInput {
@@ -134,10 +136,7 @@ input CreatePatientTeethTreatmentInput {
 }
 
 input CreateProblemInput {
-  """problem name"""
   name: String!
-
-  """problem name"""
   problem_type_id: Int!
 }
 
@@ -290,6 +289,7 @@ type Patient {
   PatientBadHabet: [PatientBadHabit!]
   PatientDisease: [PatientDisease!]
   PatientMedicine: [PatientMedicine!]
+  PatientTeethTreatment: [PatientTeethTreatment!]
   address: String
   birth_date: DateTime
   gender: Gender!
@@ -298,7 +298,6 @@ type Patient {
   main_complaint: String
   maintal_status: String
   name: String!
-  patientTeethTreatment: [PatientTeethTreatment!]
   phone: String
 }
 
@@ -330,11 +329,18 @@ type PatientDisease {
 }
 
 type PatientMedicalImage {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  created_at: DateTime!
+  id: Int!
+  imageType: PatientMedicalImagesType
+  medical_image_type_id: Int!
+  patient: Patient!
+  patient_id: Int!
+  src: String!
+  title: String!
 }
 
 type PatientMedicalImagesType {
+  PatientMedicalImage: [PatientMedicalImage!]
   id: Int!
   name: String!
 }
@@ -394,8 +400,7 @@ type Query {
   patientDiagnoses: [PatientDiagnosis!]!
   patientDiagnosis(id: Int!): PatientDiagnosis!
   patientDiseases(patient_id: Int!): [PatientDisease!]!
-  patientMedicalImage(id: Int!): PatientMedicalImage!
-  patientMedicalImages: [PatientMedicalImage!]!
+  patientMedicalImages(medical_image_type_id: Int, patient_id: Int): [PatientMedicalImage!]!
   patientMedicalImagesType(id: Int!): PatientMedicalImagesType!
   patientMedicalImagesTypes: [PatientMedicalImagesType!]!
   patientMedicines(patient_id: Int!): [PatientMedicine!]!
@@ -495,9 +500,11 @@ input UpdatePatientInput {
 }
 
 input UpdatePatientMedicalImageInput {
-  """Example field (placeholder)"""
-  exampleField: Int
   id: Int!
+  medical_image_type_id: Int
+  patient_id: Int
+  src: String
+  title: String
 }
 
 input UpdatePatientMedicalImagesTypeInput {

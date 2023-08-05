@@ -44,5 +44,5 @@ export class Patient {
   PatientMedicine?: PatientMedicine[]
 
   @Field(() => [PatientTeethTreatment], { nullable: true })
-  patientTeethTreatment?: PatientTeethTreatment[]
+  PatientTeethTreatment?: PatientTeethTreatment[]
 }
