@@ -6,7 +6,7 @@ import { UpdatePatientMedicalImageInput } from './dto/update-patient_medical_ima
 
 @Resolver(() => PatientMedicalImage)
 export class PatientMedicalImagesResolver {
-  constructor(private readonly patientMedicalImagesService: PatientMedicalImagesService) {}
+  constructor(private readonly patientMedicalImagesService: PatientMedicalImagesService) { }
 
   @Mutation(() => PatientMedicalImage)
   createPatientMedicalImage(@Args('createPatientMedicalImageInput') createPatientMedicalImageInput: CreatePatientMedicalImageInput) {
@@ -14,13 +14,9 @@ export class PatientMedicalImagesResolver {
   }
 
   @Query(() => [PatientMedicalImage], { name: 'patientMedicalImages' })
-  findAll() {
-    return this.patientMedicalImagesService.findAll();
-  }
-
-  @Query(() => PatientMedicalImage, { name: 'patientMedicalImage' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.patientMedicalImagesService.findOne(id);
+  findAll(@Args('patient_id', { type: () => Int, nullable: true }) patient_id?: number,
+          @Args('medical_image_type_id', { type: () => Int, nullable: true }) medical_image_type_id?: number) {
+    return this.patientMedicalImagesService.findAll(patient_id, medical_image_type_id);
   }
 
   @Mutation(() => PatientMedicalImage)
