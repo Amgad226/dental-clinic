@@ -4,6 +4,7 @@ import { PatientPayment } from './entities/patient_payment.entity';
 import { CreatePatientPaymentInput } from './dto/create-patient_payment.input';
 import { UpdatePatientPaymentInput } from './dto/update-patient_payment.input';
 import { SortInput } from './dto/sort-input';
+import { PaginatedPatientPayment } from './entities/paginated_patient_payments';
 
 @Resolver(() => PatientPayment)
 export class PatientPaymentsResolver {
@@ -14,12 +15,19 @@ export class PatientPaymentsResolver {
     return this.patientPaymentsService.create(createPatientPaymentInput);
   }
 
-  @Query(() => [PatientPayment], { name: 'patientPayments' })
-  findAll(
+  @Query(() => PaginatedPatientPayment, { name: 'patientPayments' })
+  async findAll(
+    @Args('page', { nullable: true }) page?: number,
+    @Args('item_per_page', { nullable: true }) item_per_page?: number,
     @Args('patient_id', { type: () => Int, nullable: true }) patient_id?: number,
     @Args('sort', { type: () => SortInput, nullable: true }) sort?: SortInput
   ) {
-    return this.patientPaymentsService.findAll({ patient_id, sort });
+    const data = await this.patientPaymentsService.findAll({ patient_id, sort, item_per_page, page });
+
+    return {
+      ...data,
+      items: data.data
+    }
   }
 
   // @Query(() => PatientPayment, { name: 'patientPayment' })

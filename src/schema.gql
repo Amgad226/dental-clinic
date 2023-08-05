@@ -312,6 +312,13 @@ type PaginatedPatient {
   totalPages: Int!
 }
 
+type PaginatedPatientPayment {
+  item_per_page: Int!
+  items: [PatientPayment!]
+  page: Int!
+  totalPages: Int!
+}
+
 type Paginatedisease {
   item_per_page: Int!
   items: [Disease!]
@@ -395,7 +402,7 @@ type PatientPayment {
   date: DateTime!
   description: String!
   id: Int!
-  patient_id: String!
+  patient_id: Int!
 }
 
 type PatientTeethTreatment {
@@ -444,7 +451,7 @@ type Query {
   patientMedicalImagesType(id: Int!): PatientMedicalImagesType!
   patientMedicalImagesTypes: [PatientMedicalImagesType!]!
   patientMedicines(patient_id: Int!): [PatientMedicine!]!
-  patientPayments(patient_id: Int, sort: SortInput): [PatientPayment!]!
+  patientPayments(item_per_page: Float, page: Float, patient_id: Int, sort: SortInput): PaginatedPatientPayment!
   patientTeethTreatment(id: Int!): PatientTeethTreatment!
   patientTeethTreatments: [PatientTeethTreatment!]!
   patients(item_per_page: Float, page: Float): PaginatedPatient!

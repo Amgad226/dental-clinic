@@ -41,7 +41,7 @@ export class PatientService {
   async findAll(page?: number, item_per_page?: number) {
     return await PaginatorService({
       Modal: this.prisma.patient
-      , page, item_per_page
+      , page, item_per_page,
     })
   }
 

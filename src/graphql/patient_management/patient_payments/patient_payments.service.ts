@@ -3,7 +3,8 @@ import { CreatePatientPaymentInput } from './dto/create-patient_payment.input';
 import { UpdatePatientPaymentInput } from './dto/update-patient_payment.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SortInput } from './dto/sort-input';
-
+import { PaginatorService } from 'src/pagination/PaginatorService';
+import { Prisma } from '@prisma/client'
 @Injectable()
 export class PatientPaymentsService {
   constructor(private prisma: PrismaService) { }
@@ -13,18 +14,22 @@ export class PatientPaymentsService {
     });
   }
 
-  async findAll({ patient_id, sort }: {
-    patient_id?: number, sort?: SortInput
+  async findAll({ patient_id, sort, item_per_page, page }: {
+    patient_id?: number, sort?: SortInput, page?: number, item_per_page?: number
   }) {
     const { field, order } = sort ?? {}
-    return this.prisma.patientPayment.findMany({
-      where: {
-        patient_id
-      },
-      orderBy: {
-        [field]: order
+    return await PaginatorService<Prisma.PatientPaymentFindManyArgs>({
+      Modal: this.prisma.patientPayment
+      , page, item_per_page,
+      relations: {
+        where: {
+          patient_id
+        },
+        orderBy: {
+          [field]: order
+        }
       }
-    });
+    })
   }
 
   // async findOne(id: number) {

@@ -15,8 +15,8 @@ export class PatientPayment {
   @Field(() => String)
   description?: string
 
-  @Field(() => String)
-  patient_id: string
+  @Field(() => Int)
+  patient_id: number
 
   @Field(() => Patient)
   Patient: Patient
