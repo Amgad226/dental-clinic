@@ -25,8 +25,8 @@ import { PatientMedicalImagesModule } from './graphql/patient_management/images/
 import { PatientMedicalImagesTypesModule } from './graphql/patient_management/images/patient_medical_images_types/patient_medical_images_types.module';
 import { PatientTeethTreatmentsModule } from './graphql/patient_management/patient_teeth_treatments/patient_teeth_treatments.module';
 import { PatientDiseasesModule } from './graphql/patient_management/patient_diseases/patient_diseases.module';
-
-
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { ImagesUploaderService } from './images_uploader/images_uploader.service';
 
 const apolloDriverConfig: ApolloDriverConfig = {
   formatError: (error: any) => {
@@ -49,12 +49,20 @@ const apolloDriverConfig: ApolloDriverConfig = {
 const graphQLModuleConfig: any = {
   ...apolloDriverConfig,
 };
+
+const serveStaticImagesConfig = {
+  rootPath: join(__dirname, '..', 'public'), // Specify the root path of your image directory
+  serveRoot: '/public',
+}
+
+
 @Module({
 
   imports: [
     ConfigModule.forRoot(),
-    PrismaModule,
+    ServeStaticModule.forRoot(serveStaticImagesConfig),
     GraphQLModule.forRoot<ApolloDriverConfig>(graphQLModuleConfig),
+    PrismaModule,
     DiseaseModule,
     BadHabitModule,
     TreatmentTypeModule,
@@ -76,6 +84,6 @@ const graphQLModuleConfig: any = {
     PatientMedicalImagesTypesModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ImagesUploaderService],
 })
 export class AppModule { }

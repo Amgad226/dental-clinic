@@ -2,17 +2,28 @@ import { Injectable } from '@nestjs/common';
 import { CreatePatientMedicalImageInput } from './dto/create-patient_medical_image.input';
 import { UpdatePatientMedicalImageInput } from './dto/update-patient_medical_image.input';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ImagesUploaderService } from 'src/images_uploader/images_uploader.service';
 
 @Injectable()
 export class PatientMedicalImagesService {
-  constructor(private prisma: PrismaService) { }
-  async create(createPatientMedicalImageInput: CreatePatientMedicalImageInput) {
+  constructor(private prisma: PrismaService, private imageUploaderService: ImagesUploaderService) { }
+  async create({ medical_image_type_id, patient_id, title, image }: CreatePatientMedicalImageInput) {
+    const { src } = await this.imageUploaderService.store({
+      image,
+      title,
+      patient_id
+    })
+
     return await this.prisma.patientMedicalImage.create({
       data: {
-        ...createPatientMedicalImageInput
+        src,
+        title,
+        created_at: new Date(Date.now()),
+        medical_image_type_id,
+        patient_id
       },
-      include : {
-        imageType : true
+      include: {
+        imageType: true
       }
     });
   }

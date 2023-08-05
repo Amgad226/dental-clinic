@@ -104,9 +104,9 @@ input CreatePatientInput {
 }
 
 input CreatePatientMedicalImageInput {
+  image: Upload!
   medical_image_type_id: Int!
   patient_id: Int!
-  src: String!
   title: String!
 }
 
@@ -330,7 +330,7 @@ type PatientDisease {
 
 type PatientMedicalImage {
   created_at: DateTime!
-  id: Int!
+  id: Int
   imageType: PatientMedicalImagesType
   medical_image_type_id: Int!
   patient: Patient!
@@ -501,9 +501,9 @@ input UpdatePatientInput {
 
 input UpdatePatientMedicalImageInput {
   id: Int!
+  image: Upload
   medical_image_type_id: Int
   patient_id: Int
-  src: String
   title: String
 }
 
@@ -552,6 +552,9 @@ input UpdateTreatmentTypeInput {
   id: Int!
   name: String!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 type paginateMedicine {
   item_per_page: Int!

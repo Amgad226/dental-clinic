@@ -4,8 +4,8 @@ import { PatientMedicalImagesType } from '../../patient_medical_images_types/ent
 
 @ObjectType()
 export class PatientMedicalImage {
-  @Field(() => Int)
-  id: number;
+  @Field(() => Int, { nullable: true })
+  id?: number;
 
   @Field(() => String)
   src: string;
