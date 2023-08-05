@@ -40,7 +40,9 @@ export async function PaginatorService<T>(
     }
   }
   const modelKeys = await Modal.findFirst().then(data => {
-    return Object.keys(data).filter(key => typeof data[key] === 'string' && key !== 'gender');
+    if (data)
+      return Object.keys(data).filter(key => typeof data[key] === 'string' && key !== 'gender');
+    else return []
   })
   const serchObject = search ? {
     OR: modelKeys.map((key: string) => {
