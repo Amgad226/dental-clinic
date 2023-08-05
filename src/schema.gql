@@ -16,6 +16,9 @@ type Category {
 }
 
 type ChemicalMaterial {
+  """conflicts of ChemicalMaterial field """
+  conflicts: [ChemicalMaterial!]
+
   """Example field (placeholder)"""
   id: Int!
 
@@ -24,6 +27,7 @@ type ChemicalMaterial {
 }
 
 input CreateBadHabitInput {
+  chemical_material_id: [Int!]
   name: String!
 }
 
@@ -33,11 +37,15 @@ input CreateCategoryInput {
 }
 
 input CreateChemicalMaterialInput {
+  """chemical_material_id field """
+  chemical_material_id: [Int!]
+
   """Chemical Material Name """
   name: String!
 }
 
 input CreateDiseaseInput {
+  chemical_material_id: [Int!]
   name: String!
 }
 
@@ -147,10 +155,20 @@ input CreateProblemTypeInput {
   name: String!
 }
 
+input CreateStepInput {
+  name: String!
+  subStep: [CreateSubStepInput!]
+}
+
+input CreateSubStepInput {
+  name: String!
+}
+
 input CreateTreatmentInput {
   color: String!
   name: String!
   price: Float!
+  steps: [CreateStepInput!]
   treatment_type_id: Int!
 }
 
@@ -174,14 +192,11 @@ enum Gender {
 }
 
 type Medicine {
-  """Problem_type"""
+  """category"""
   category: Category!
 
   """chemical_material_id field """
   category_id: Int!
-
-  """chemical_material_id field """
-  chemical_material_id: [Int!]!
 
   """concentration field """
   concentration: Float!
@@ -189,8 +204,25 @@ type Medicine {
   """id field """
   id: Int!
 
+  """Problem_type"""
+  medicineChemicalMaterials: [MedicineChemicalMaterials!]
+
   """name field """
   name: String!
+}
+
+type MedicineChemicalMaterials {
+  """chemical_material"""
+  chemical_material: ChemicalMaterial
+
+  """concentration field """
+  chemical_material_id: Int!
+
+  """id field """
+  id: Int!
+
+  """chemical_material_id field """
+  medicine_id: Int!
 }
 
 type Mutation {
@@ -428,7 +460,16 @@ type Query {
 
 input SortInput {
   field: String!
-  order: String!
+  order: String!}
+type Steps {
+  SubStep: [SubStep!]
+  name: String!
+  treatment_id: Int!
+}
+
+type SubStep {
+  name: String!
+  step_id: Int!
 }
 
 type Treatment {
@@ -436,6 +477,7 @@ type Treatment {
   id: Int!
   name: String!
   price: Float!
+  steps: [Steps!]!
   treatment_type: TreatmentType!
   treatment_type_id: Int!
 }
@@ -446,16 +488,20 @@ type TreatmentType {
 }
 
 input UpdateBadHabitInput {
+  chemical_material_id: [Int!]
   name: String!
 }
 
 input UpdateChemicalMaterialInput {
+  """chemical_material_id field """
+  chemical_material_id: [Int!]
+
   """Chemical Material"""
-  name: String!
+  name: String
 }
 
 input UpdateDiseaseInput {
-  id: Int!
+  chemical_material_id: [Int!]
   name: String!
 }
 
@@ -559,6 +605,7 @@ input UpdateTreatmentInput {
   color: String!
   name: String!
   price: Float!
+  steps: [CreateStepInput!]
   treatment_type_id: Int!
 }
 
@@ -580,6 +627,13 @@ type paginateMedicine {
 type paginateTreatment {
   item_per_page: Int!
   items: [Treatment!]
+  page: Int!
+  totalPages: Int!
+}
+
+type paginateTreatment {
+  item_per_page: Int!
+  items: [Treatment!]!
   page: Int!
   totalPages: Int!
 }

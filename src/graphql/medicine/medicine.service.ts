@@ -7,30 +7,11 @@ import { PaginatorService } from 'src/pagination/PaginatorService';
 
 @Injectable()
 export class MedicineService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(createMedicineInput: CreateMedicineInput) {
-    const { name, concentration, category_id, chemical_material_id } =
-      createMedicineInput;
-
-    // check if sended category id exists in categories table
-    const category = await this.prisma.category.findUnique({
-      where: { id: category_id },
-    });
-    if (!category)
-      throw new GraphQLError(`Category ${category_id} not found`, {
-        extensions: { code: 404 },
-      });
-
-    // check if All sended chemical_material ids exists in chemical_materials table
-    const chemical_material_count = await this.prisma.chemicalMaterial.count({
-      where: { id: { in: chemical_material_id } },
-    });
-    if (chemical_material_count != chemical_material_id.length)
-      throw new GraphQLError(
-        `chemical_material_ids sended not found in database `,
-        { extensions: { code: 404 } },
-      );
+    const { name, concentration, category_id, chemical_material_id } = createMedicineInput;
+    console.log('from sercive');
 
     //create new medicine
     const medicine = await this.prisma.medicine.create({
@@ -43,6 +24,9 @@ export class MedicineService {
           },
         },
       },
+      include: {
+        category: true
+      }
     });
 
     //attach data chemical_material_id and medicine_id in pivot table
@@ -56,14 +40,14 @@ export class MedicineService {
     return medicine;
   }
 
-  async findAll(page?: number, item_per_page?: number) {
-    return await PaginatorService(
-      this.prisma.medicine,
-      page,
+  //need relation with category
+  async findAll(page: any, item_per_page: any, search?: string) {
+    return await PaginatorService({
+      Modal: this.prisma.medicine,
       item_per_page,
-      true,
-      'category',
-    );
+      page,
+      search,
+    });
   }
 
   async findOne(id: number) {
@@ -71,40 +55,40 @@ export class MedicineService {
       where: { id },
       include: {
         category: true,
+        medicineChemicalMaterials: {
+          include: {
+            chemical_material: true
+          }
+        }
+      },
+    });
+
+  }
+
+  async update(id: number, { category_id, chemical_material_id, concentration, name }: UpdateMedicineInput) {
+
+    await this.prisma.medicineChemicalMaterial.deleteMany({ where: { id, } })
+
+     //attach data chemical_material_id and medicine_id in pivot table
+     await this.prisma.medicineChemicalMaterial.createMany({
+      data: chemical_material_id.map((chemical_id) => ({
+        chemical_material_id: chemical_id,
+        medicine_id: id,
+      })),
+    });
+
+
+    return await this.prisma.medicine.update({
+      where: { id },
+      data: {
+        category_id, concentration, name,
       },
     });
   }
 
-  async update(id: number, updateMedicineInput: UpdateMedicineInput) {
-    const medicine = await this.prisma.medicine.findUnique({
-      where: { id: id },
-    });
-    if (!medicine) {
-      throw new GraphQLError(`medicine ${id} not found`, {
-        extensions: {
-          code: 404,
-        },
-      });
-    }
-
-    return await this.prisma.medicine.update({
-      where: { id },
-      data: { ...updateMedicineInput },
-    });
-  }
-
   async remove(id: number) {
-    const medicine = await this.prisma.medicine.findUnique({
-      where: { id: id },
-    });
-    if (!medicine) {
-      throw new GraphQLError(`medicine ${id} not found`, {
-        extensions: {
-          code: 404,
-        },
-      });
-    }
+  
     return await this.prisma.medicine.delete({ where: { id } });
-    
+
   }
 }

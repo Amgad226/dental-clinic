@@ -48,8 +48,8 @@ model DiseaseChemicalMaterial {
   id                   Int              @id @default(autoincrement())
   chemical_material_id Int
   disease_id           Int
-  disease              Disease          @relation(fields: [disease_id], references: [id])
-  chemical_material    ChemicalMaterial @relation(fields: [chemical_material_id], references: [id])
+  disease              Disease          @relation(fields: [disease_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  chemical_material    ChemicalMaterial @relation(fields: [chemical_material_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("diseases_chemical_materials")
 }
@@ -58,8 +58,8 @@ model BadHabitChemicalMaterial {
   id                   Int              @id @default(autoincrement())
   chemical_material_id Int
   bad_habit_id         Int
-  disease              BadHabit         @relation(fields: [bad_habit_id], references: [id])
-  chemical_material    ChemicalMaterial @relation(fields: [chemical_material_id], references: [id])
+  disease              BadHabit         @relation(fields: [bad_habit_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  chemical_material    ChemicalMaterial @relation(fields: [chemical_material_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("bad_habits_chemical_materials")
 }
@@ -68,8 +68,8 @@ model ChemicalChemicalMaterial {
   id                     Int              @id @default(autoincrement())
   chemical_material_1_id Int
   chemical_material_2_id Int
-  chemical_material_1    ChemicalMaterial @relation("ChemicalMaterial1", fields: [chemical_material_1_id], references: [id])
-  chemical_material_2    ChemicalMaterial @relation("ChemicalMaterial2", fields: [chemical_material_2_id], references: [id])
+  chemical_material_1    ChemicalMaterial @relation("ChemicalMaterial1", fields: [chemical_material_1_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  chemical_material_2    ChemicalMaterial @relation("ChemicalMaterial2", fields: [chemical_material_2_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("chemical_materials_chemical_materials")
 }
@@ -80,7 +80,7 @@ model Medicine {
   category_id   Int
   concentration Float
 
-  category                  Category                   @relation("category", fields: [category_id], references: [id])
+  category                  Category                   @relation("category", fields: [category_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   medicineChemicalMaterials MedicineChemicalMaterial[]
   PatientMedicine           PatientMedicine[]
 
@@ -92,8 +92,8 @@ model MedicineChemicalMaterial {
   chemical_material_id Int
   medicine_id          Int
 
-  medicine          Medicine         @relation(fields: [medicine_id], references: [id])
-  chemical_material ChemicalMaterial @relation(fields: [chemical_material_id], references: [id])
+  medicine          Medicine         @relation(fields: [medicine_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  chemical_material ChemicalMaterial @relation(fields: [chemical_material_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("medicines_chemical_materials")
 }
@@ -113,7 +113,7 @@ model Treatment {
   price                 Float
   color                 String
   treatment_type_id     Int
-  treatment_type        TreatmentType           @relation(fields: [treatment_type_id], references: [id])
+  treatment_type        TreatmentType           @relation(fields: [treatment_type_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   steps                 Step[]
   PatientCost           PatientCost[]
   PatientTeethTreatment PatientTeethTreatment[]
@@ -125,7 +125,7 @@ model Step {
   id           Int       @id @default(autoincrement())
   name         String
   treatment_id Int
-  treatment    Treatment @relation(fields: [treatment_id], references: [id])
+  treatment    Treatment @relation(fields: [treatment_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   subSteps SubStep[]
 
@@ -136,7 +136,7 @@ model SubStep {
   id      Int    @id @default(autoincrement())
   name    String
   step_id Int
-  step    Step   @relation(fields: [step_id], references: [id])
+  step    Step   @relation(fields: [step_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("subs_step")
 }
@@ -154,7 +154,7 @@ model Problem {
   id              Int         @id @default(autoincrement())
   name            String
   problem_type_id Int
-  Problem_type    ProblemType @relation(fields: [problem_type_id], references: [id])
+  Problem_type    ProblemType @relation(fields: [problem_type_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   Diagnose        Diagnose[]
 
   @@map("problems")
@@ -165,6 +165,8 @@ model Category {
   name String
 
   medicines Medicine[] @relation("category")
+
+  @@map("categories")
 }
 
 enum Gender {
@@ -264,13 +266,13 @@ model PatientCost {
 }
 
 model PatientPayment {
-  id           Int      @id @default(autoincrement())
-  amount       Float
-  description  String?
-  date         DateTime @default(now())
-  patient_id   Int
+  id          Int      @id @default(autoincrement())
+  amount      Float
+  description String?
+  date        DateTime @default(now())
+  patient_id  Int
 
-  patient   Patient    @relation(fields: [patient_id], references: [id])
+  patient Patient @relation(fields: [patient_id], references: [id])
 
   @@map("patients_payments")
 }

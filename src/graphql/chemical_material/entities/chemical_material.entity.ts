@@ -7,5 +7,8 @@ export class ChemicalMaterial {
 
   @Field(() => String, { description: 'Example field (placeholder)' })
   name: string;
+
   
+  @Field(() => [ChemicalMaterial], { description: 'conflicts of ChemicalMaterial field ' ,nullable:true })
+  conflicts?: ChemicalMaterial;
 }

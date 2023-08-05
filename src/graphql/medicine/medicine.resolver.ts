@@ -4,29 +4,37 @@ import { Medicine } from './entities/medicine.entity';
 import { CreateMedicineInput } from './dto/create-medicine.input';
 import { UpdateMedicineInput } from './dto/update-medicine.input';
 import { paginateMedicine } from './entities/paginateMedicine';
+import { checkIfExists, validator } from '../validatior/validator';
+import { createMedicine, updateMedicine } from './validation/medicine.validation';
 
 @Resolver(() => Medicine)
 export class MedicineResolver {
-  constructor(private readonly medicineService: MedicineService) {}
+  constructor(private readonly medicineService: MedicineService) { }
 
   @Mutation(() => Medicine)
-  createMedicine(
-    @Args('createMedicineInput') createMedicineInput: CreateMedicineInput,
-  ) {
-    return this.medicineService.create(createMedicineInput);
+  async createMedicine(@Args('createMedicineInput') createMedicineInput: CreateMedicineInput,) {
+
+    await validator(createMedicine)({ data: createMedicineInput })
+
+    return await this.medicineService.create(createMedicineInput);
   }
 
   @Query(() => paginateMedicine, { name: 'medicines' })
   async findAll(
     @Args('page', { nullable: true }) page?: number,
+    @Args('search', { nullable: true }) serach?: string,
     @Args('item_per_page', { nullable: true }) item_per_page?: number,
   ) {
-    const medicines= await this.medicineService.findAll(page,item_per_page);
+    const medicine = await this.medicineService.findAll(
+      page,
+      item_per_page,
+      serach,
+    );
     return {
-      items: medicines.data,
-      totalPages: medicines.totalPages,
-      page: medicines.page,
-      item_per_page: medicines.item_per_page,
+      items: medicine.data,
+      totalPages: medicine.totalPages,
+      page: medicine.page,
+      item_per_page: medicine.item_per_page,
     };
   }
 
@@ -36,15 +44,20 @@ export class MedicineResolver {
   }
 
   @Mutation(() => Medicine)
-  updateMedicine(
+  async updateMedicine(
     @Args('id') id: number,
     @Args('updateMedicineInput') updateMedicineInput: UpdateMedicineInput,
   ) {
+
+    await validator(updateMedicine)({ data: updateMedicineInput, modelName: "medicine", id: id })
+
     return this.medicineService.update(id, updateMedicineInput);
   }
 
   @Mutation(() => Medicine)
-  removeMedicine(@Args('id', { type: () => Int }) id: number) {
+  async removeMedicine(@Args('id', { type: () => Int }) id: number) {
+    await validator(checkIfExists)({ id, modelName:"medicine" })
+
     return this.medicineService.remove(id);
   }
 }

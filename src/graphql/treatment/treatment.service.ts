@@ -7,86 +7,118 @@ import { PaginatorService } from 'src/pagination/PaginatorService';
 
 @Injectable()
 export class TreatmentService {
-  constructor(private prisma: PrismaService){}
+  constructor(private prisma: PrismaService) {}
 
   async create(CreateTreatmentInput: CreateTreatmentInput) {
-    const treatment_type = await this.prisma.treatmentType.findUnique({
-      where: { id: CreateTreatmentInput.treatment_type_id },
-    });
-    if (!treatment_type) {
-      throw new GraphQLError('treatment_type not found', {
-        extensions: {
-          code: 404,
-        },
-      });
-    }
-
-    //create new problem
-    return await this.prisma.treatment.create({
+    const treatment = await this.prisma.treatment.create({
       data: {
         name: CreateTreatmentInput.name,
-        price:CreateTreatmentInput.price,
-        color:CreateTreatmentInput.color,
+        price: CreateTreatmentInput.price,
+        color: CreateTreatmentInput.color,
         treatment_type: {
           connect: {
             id: CreateTreatmentInput.treatment_type_id,
           },
         },
+        steps: CreateTreatmentInput.steps
+          ? {
+              create: CreateTreatmentInput.steps.map((step) => ({
+                name: step.name,
+                subSteps: step.subSteps
+                  ? {
+                      create: step.subSteps.map((subStep) => ({
+                        name: subStep.name,
+                      })),
+                    }
+                  : undefined, // Set to undefined if subSteps array is not provided
+              })),
+            }
+          : undefined, // Set to undefined if steps array is not provided
+      },
+      include: {
+        steps: {
+          include: {
+            subSteps: true,
+          },
+        },
+        treatment_type: true,
       },
     });
-    // }
+    return treatment;
   }
 
-  async findAll(page: any, item_per_page: any) {
-    return await PaginatorService(this.prisma.treatment, page, item_per_page);
+  //need arelation with treatment-type + steps + substeps
+  async findAll(page: any, item_per_page: any, search?: string) {
+    return await PaginatorService({
+      Modal: this.prisma.treatment,
+      item_per_page,
+      page,
+      search,
+    });
   }
 
   async findOne(id: number) {
     const treatment = await this.prisma.treatment.findUnique({
-      where: {id: id},
-    }) 
-    if (!treatment) {
-      throw new GraphQLError('treatment not found', {
-        extensions: {
-          code: 404,
+      where: { id: id },
+      include: {
+        steps: {
+          include: {
+            subSteps: true,
+          },
         },
-      });
-    }
-    return  treatment;
+        treatment_type: true,
+      },
+    });
+    
+    console.dir(treatment, { depth: null });
+    
+    return treatment;
   }
 
   async update(id: number, updateTreatmentInput: UpdateTreatmentInput) {
-    const treatment = await this.prisma.treatment.findUnique({
-      where: {id: id},
-    }) 
+    await this.prisma.step.deleteMany({ where: { treatment_id:id } })
 
-    if (!treatment) {
-      throw new GraphQLError('treatment not found', {
-        extensions: {
-          code: 404,
-        },
-      });
-    }
     return await this.prisma.treatment.update({
-      where:{id:id},
-      data:{name:updateTreatmentInput.name}
+      where: { id: id },
+      data: {
+        name: updateTreatmentInput.name,
+        price: updateTreatmentInput.price,
+        color: updateTreatmentInput.color,
+        treatment_type: {
+          connect: {
+            id: updateTreatmentInput.treatment_type_id,
+          },
+        },
+        steps: updateTreatmentInput.steps
+          ? {
+              create: updateTreatmentInput.steps.map((step) => ({
+                name: step.name,
+                subSteps: step.subSteps
+                  ? {
+                      create: step.subSteps.map((subStep) => ({
+                        name: subStep.name,
+                      })),
+                    }
+                  : undefined, // Set to undefined if subSteps array is not provided
+              })),
+            }
+          : undefined, // Set to undefined if steps array is not provided
+      },
+      include: {
+        steps: {
+          include: {
+            subSteps: true,
+          },
+        },
+        treatment_type: true,
+      },
+
     });
   }
 
-
   async remove(id: number) {
-    const treatment = await this.prisma.treatment.findUnique({
-      where: {id: id},
-    }) 
-    if (!treatment) {
-      throw new GraphQLError('treatment not found', {
-        extensions: {
-          code: 404,
-        },
-      });
-    }
     return await this.prisma.treatment.delete({
-      where:{id:id},
+      where: { id: id },
     });
   }
 }
