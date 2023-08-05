@@ -1,5 +1,4 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { Steps } from "./step.entity";
 
 @ObjectType()
 export class SubStep {

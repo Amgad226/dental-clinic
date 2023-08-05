@@ -4,13 +4,16 @@ import { Treatment } from './entities/treatment.entity';
 import { CreateTreatmentInput } from './dto/create-treatment.input';
 import { UpdateTreatmentInput } from './dto/update-treatment.input';
 import { paginateTreatment } from './entities/paginateTreatment';
+import { checkIfExists, validator } from '../validatior/validator';
+import { createTreatment, updateTreatment } from './validation/treatment.validation';
 
 @Resolver(() => Treatment)
 export class TreatmentResolver {
   constructor(private readonly treatmentService: TreatmentService) {}
 
   @Mutation(() => Treatment)
-  createTreatment(@Args('createTreatmentInput') createTreatmentInput: CreateTreatmentInput) {
+  async createTreatment(@Args('createTreatmentInput') createTreatmentInput: CreateTreatmentInput) {
+    await validator(createTreatment)({ data: createTreatmentInput })
     return this.treatmentService.create(createTreatmentInput);
   }
 
@@ -34,19 +37,22 @@ export class TreatmentResolver {
   }
 
   @Query(() => Treatment, { name: 'treatment' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  async findOne(@Args('id', { type: () => Int }) id: number) {
+    await validator(checkIfExists)({ id, modelName: 'treatment' });
     return this.treatmentService.findOne(id);
   }
 
   @Mutation(() => Treatment)
-  updateTreatment(
+  async updateTreatment(
   @Args('id', { type: () => Int }) id: number,
   @Args('updateTreatmentInput') updateTreatmentInput: UpdateTreatmentInput) {
+    await validator(updateTreatment)({ data: updateTreatmentInput, modelName: "treatment", id: id })
     return this.treatmentService.update(id, updateTreatmentInput);
   }
 
   @Mutation(() => Treatment)
-  removeTreatment(@Args('id', { type: () => Int }) id: number) {
+  async removeTreatment(@Args('id', { type: () => Int }) id: number) {
+    await validator(checkIfExists)({ id, modelName: 'treatment' });
     return this.treatmentService.remove(id);
   }
 }

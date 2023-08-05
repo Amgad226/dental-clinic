@@ -1,6 +1,5 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { SubStep } from "./sub_step.entity";
-import { Treatment } from "../entities/treatment.entity";
 
 @ObjectType()
 export class Steps {
@@ -12,5 +11,4 @@ export class Steps {
 
   @Field(() => [SubStep],{ nullable: true })
   subSteps?: SubStep[];
-  //ghdgfhewf
 }
