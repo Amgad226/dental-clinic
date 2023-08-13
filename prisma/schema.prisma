@@ -308,4 +308,50 @@ model PatientTeethTreatment {
   @@map("patients_teeth")
 }
 
+model Product {
+  id   Int    @id @default(autoincrement())
+  name String
+  bookins  BookIn[]
+  storedproducts StoredProduct[]
+  bookouts  BookOut[]
+
+  @@map("products")
+}
+
+model BookIn {
+  id          Int       @id @default(autoincrement())
+  product_id  Int
+  quantity    Int
+  price       Int
+  total_price Int
+  created_at  DateTime  @default(now())
+  product    Product    @relation(fields: [product_id],references: [id])
+
+  @@map("book_ins")
+}
+
+model StoredProduct {
+  id              Int    @id @default(autoincrement())
+  product_id      Int
+  expiration_date DateTime
+  quantity        Int
+  price           Int
+  total_quantity  Int
+  product    Product     @relation(fields: [product_id],references: [id])
+
+@@map("stored_products")
+}
+
+model BookOut {
+  id          Int      @id @default(autoincrement())
+  product_id  Int
+  quantity    Int
+  price       Int
+  total_price Int
+  created_at DateTime  @default(now())
+  product    Product   @relation(fields: [product_id],references: [id])
+ 
+  @@map("book_outs")
+}
+
 // 
