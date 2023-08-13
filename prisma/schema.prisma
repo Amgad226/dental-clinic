@@ -151,11 +151,11 @@ model ProblemType {
 }
 
 model Problem {
-  id              Int         @id @default(autoincrement())
+  id              Int               @id @default(autoincrement())
   name            String
   problem_type_id Int
-  Problem_type    ProblemType @relation(fields: [problem_type_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  Diagnose        Diagnose[]
+  Problem_type    ProblemType       @relation(fields: [problem_type_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  PatientDiagnose PatientDiagnose[]
 
   @@map("problems")
 }
@@ -190,7 +190,7 @@ model Patient {
   PatientMedicine       PatientMedicine[]
   PatientCost           PatientCost[]
   PatientPayment        PatientPayment[]
-  Diagnose              Diagnose[]
+  PatientDiagnose       PatientDiagnose[]
   PatientTeethTreatment PatientTeethTreatment[]
   PatientMedicalImage   PatientMedicalImage[]
 
@@ -271,17 +271,17 @@ model PatientPayment {
   description String?
   date        DateTime @default(now())
   patient_id  Int
-
-  patient Patient @relation(fields: [patient_id], references: [id])
+  patient     Patient  @relation(fields: [patient_id], references: [id])
 
   @@map("patients_payments")
 }
 
-model Diagnose {
+model PatientDiagnose {
   id                 Int     @id @default(autoincrement())
+  place              String
+  expected_treatment String?
   patient_id         Int
   problem_id         Int
-  expected_treatment String?
   patient            Patient @relation(fields: [patient_id], references: [id])
   problem            Problem @relation(fields: [problem_id], references: [id])
 

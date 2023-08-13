@@ -83,8 +83,10 @@ input CreatePatientCostInput {
 }
 
 input CreatePatientDiagnosisInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  expected_treatment: String
+  patient_id: Int!
+  place: String!
+  problem_id: Int!
 }
 
 input CreatePatientDiseaseForExistingPatientInput {
@@ -274,7 +276,7 @@ type Mutation {
   updatePatient(updatePatientInput: UpdatePatientInput!): Patient!
   updatePatientBadHabit(updatePatientBadHabitInput: UpdatePatientBadHabitInput!): PatientBadHabit!
   updatePatientCost(updatePatientCostInput: UpdatePatientCostInput!): PatientCost!
-  updatePatientDiagnosis(updatePatientDiagnosisInput: UpdatePatientDiagnosisInput!): PatientDiagnosis!
+  updatePatientDiagnosis(updatePatientDiagnoseInput: UpdatePatientDiagnosisInput!): PatientDiagnosis!
   updatePatientDisease(updatePatientDiseaseInput: UpdatePatientDiseaseInput!): PatientDisease!
   updatePatientMedicalImage(updatePatientMedicalImageInput: UpdatePatientMedicalImageInput!): PatientMedicalImage!
   updatePatientMedicalImagesType(updatePatientMedicalImagesTypeInput: UpdatePatientMedicalImagesTypeInput!): PatientMedicalImagesType!
@@ -322,6 +324,13 @@ type PaginatedPatientCost {
   totalPages: Int!
 }
 
+type PaginatedPatientDiagnosis {
+  item_per_page: Int!
+  items: [PatientDiagnosis!]
+  page: Int!
+  totalPages: Int!
+}
+
 type PaginatedPatientPayment {
   item_per_page: Int!
   items: [PatientPayment!]
@@ -344,6 +353,7 @@ input PateintPaymentSortInput {
 type Patient {
   PatientBadHabet: [PatientBadHabit!]
   PatientCost: [PatientCost!]
+  PatientDiagnose: [PatientDiagnosis!]
   PatientDisease: [PatientDisease!]
   PatientMedicine: [PatientMedicine!]
   PatientPayment: [PatientPayment!]
@@ -384,8 +394,12 @@ input PatientCostSortInput {
 }
 
 type PatientDiagnosis {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  expected_treatment: String
+  id: Int!
+  patient_id: Int!
+  place: String!
+  problem: Problem!
+  problem_id: Int!
 }
 
 type PatientDisease {
@@ -469,8 +483,8 @@ type Query {
   patient(id: Int!): Patient!
   patientBadHabits(patient_id: Int!): [PatientBadHabit!]!
   patientCosts(item_per_page: Float, page: Float, patient_id: Int, sort: PatientCostSortInput): PaginatedPatientCost!
-  patientDiagnoses: [PatientDiagnosis!]!
-  patientDiagnosis(id: Int!): PatientDiagnosis!
+  patientDiagnose(id: Int!): PatientDiagnosis!
+  patientDiagnoses(item_per_page: Float, page: Float, patient_id: Float, problem_type_id: Float): PaginatedPatientDiagnosis!
   patientDiseases(patient_id: Int!): [PatientDisease!]!
   patientMedicalImages(medical_image_type_id: Int, patient_id: Int): [PatientMedicalImage!]!
   patientMedicalImagesType(id: Int!): PatientMedicalImagesType!
@@ -564,9 +578,11 @@ input UpdatePatientCostInput {
 }
 
 input UpdatePatientDiagnosisInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  expected_treatment: String
   id: Int!
+  patient_id: Int
+  place: String
+  problem_id: Int
 }
 
 input UpdatePatientDiseaseInput {

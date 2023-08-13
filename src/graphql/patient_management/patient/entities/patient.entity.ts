@@ -6,6 +6,7 @@ import { PatientMedicine } from '../../patient_medicines/entities/patient_medici
 import { PatientTeethTreatment } from '../../patient_teeth_treatments/entities/patient_teeth_treatment.entity';
 import { PatientPayment } from '../../patient_payments/entities/patient_payment.entity';
 import { PatientCost } from '../../patient_costs/entities/patient_cost.entity';
+import { PatientDiagnosis } from '../../patient_diagnoses/entities/patient_diagnosis.entity';
 
 @ObjectType()
 export class Patient {
@@ -53,4 +54,7 @@ export class Patient {
 
   @Field(() => [PatientCost], { nullable: true })
   PatientCost?: PatientCost[]
+
+  @Field(() => [PatientDiagnosis], { nullable: true })
+  PatientDiagnose?: PatientDiagnosis[]
 }

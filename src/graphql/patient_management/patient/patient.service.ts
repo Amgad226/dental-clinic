@@ -10,6 +10,7 @@ import { Patient } from './entities/patient.entity';
 @Injectable()
 export class PatientService {
   constructor(private prisma: PrismaService) { }
+  
   async create(createPatientInput: CreatePatientInput): Promise<Patient> {
     const { patient_diseases, patient_badHabits, patient_medicines, ...rest } = createPatientInput
     const new_patient = await this.prisma.patient.create({
