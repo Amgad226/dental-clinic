@@ -27,6 +27,7 @@ import { PatientTeethTreatmentsModule } from './graphql/patient_management/patie
 import { PatientDiseasesModule } from './graphql/patient_management/patient_diseases/patient_diseases.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ImagesUploaderService } from './images_uploader/images_uploader.service';
+import { ProductModule } from './graphql/product/product.module';
 
 const apolloDriverConfig: ApolloDriverConfig = {
   formatError: (error: any) => {
@@ -82,6 +83,7 @@ const serveStaticImagesConfig = {
     PatientDiseasesModule,
     PatientMedicalImagesModule,
     PatientMedicalImagesTypesModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService, ImagesUploaderService],
