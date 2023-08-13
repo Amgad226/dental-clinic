@@ -203,6 +203,7 @@ model PatientDisease {
   disease_id Int
   tight      Boolean
   notes      String?
+  start_date DateTime?
   patient    Patient @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   disease    Disease @relation(fields: [disease_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -214,6 +215,7 @@ model PatientBadHabet {
   bad_habet_id Int
   patient_id   Int
   notes        String?
+  start_date   DateTime?
   patient      Patient  @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   bad_habet    BadHabit @relation(fields: [bad_habet_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -221,12 +223,13 @@ model PatientBadHabet {
 }
 
 model PatientMedicine {
-  id          Int      @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   medicine_id Int
   patient_id  Int
   notes       String?
-  patient     Patient  @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  medicine    Medicine @relation(fields: [medicine_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  start_date  DateTime?
+  patient  Patient  @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  medicine Medicine @relation(fields: [medicine_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("patients_medicines")
 }

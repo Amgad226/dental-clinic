@@ -15,6 +15,9 @@ export class PatientMedicine {
   @Field(() => String, { nullable: true })
   notes?: string
 
+  @Field(() => Date, { nullable: true })
+  start_date?: Date
+
   @Field(() => Medicine)
   medicine: Medicine
 }

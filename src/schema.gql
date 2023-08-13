@@ -67,11 +67,13 @@ input CreatePatientBadHabitForExistingPatientInput {
   bad_habet_id: Int!
   notes: String
   patient_id: Int!
+  start_date: DateTime
 }
 
 input CreatePatientBadHabitInput {
   bad_habet_id: Int!
   notes: String
+  start_date: DateTime
 }
 
 input CreatePatientCostInput {
@@ -93,12 +95,14 @@ input CreatePatientDiseaseForExistingPatientInput {
   disease_id: Int!
   notes: String
   patient_id: Int!
+  start_date: DateTime
   tight: Boolean!
 }
 
 input CreatePatientDiseaseInput {
   disease_id: Int!
   notes: String
+  start_date: DateTime
   tight: Boolean!
 }
 
@@ -131,11 +135,13 @@ input CreatePatientMedicineForExistingPatientInput {
   medicine_id: Int!
   notes: String
   patient_id: Int!
+  start_date: DateTime
 }
 
 input CreatePatientMedicineInput {
   medicine_id: Int!
   notes: String
+  start_date: DateTime
 }
 
 input CreatePatientPaymentInput {
@@ -375,6 +381,7 @@ type PatientBadHabit {
   id: Int!
   notes: String
   patient_id: Int!
+  start_date: DateTime
 }
 
 type PatientCost {
@@ -408,6 +415,7 @@ type PatientDisease {
   id: Int!
   notes: String
   patient_id: Int!
+  start_date: DateTime
   tight: Boolean!
 }
 
@@ -434,6 +442,7 @@ type PatientMedicine {
   medicine_id: Int!
   notes: String
   patient_id: Int!
+  start_date: DateTime
 }
 
 type PatientPayment {
@@ -566,6 +575,7 @@ input UpdatePatientBadHabitInput {
   bad_habet_id: Int
   id: Int!
   notes: String
+  start_date: DateTime
 }
 
 input UpdatePatientCostInput {
@@ -590,6 +600,7 @@ input UpdatePatientDiseaseInput {
   id: Int!
   notes: String
   patient_id: Int
+  start_date: DateTime
   tight: Boolean
 }
 
@@ -623,6 +634,7 @@ input UpdatePatientMedicineInput {
   medicine_id: Int
   notes: String
   patient_id: Int
+  start_date: DateTime
 }
 
 input UpdatePatientPaymentInput {
