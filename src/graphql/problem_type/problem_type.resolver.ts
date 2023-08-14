@@ -3,6 +3,7 @@ import { ProblemTypeService } from './problem_type.service';
 import { ProblemType } from './entities/problem_type.entity';
 import { CreateProblemTypeInput } from './dto/create-problem_type.input';
 import { UpdateProblemTypeInput } from './dto/update-problem_type.input';
+import { checkIfExists, validator } from '../validatior/validator';
 
 @Resolver(() => ProblemType)
 export class ProblemTypeResolver {
@@ -22,23 +23,23 @@ export class ProblemTypeResolver {
   }
 
   @Query(() => ProblemType, { name: 'problemType' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  async findOne(@Args('id', { type: () => Int }) id: number) {
+    await validator(checkIfExists)({ id, modelName: 'problemType' });
     return this.problemTypeService.findOne(id);
   }
 
   @Mutation(() => ProblemType)
-  updateProblemType(
-    @Args('updateProblemTypeInput')
-    updateProblemTypeInput: UpdateProblemTypeInput,
+  async updateProblemType(
+    @Args('id', { type: () => Int }) id: number,
+    @Args('updateProblemTypeInput')updateProblemTypeInput: UpdateProblemTypeInput,
   ) {
-    return this.problemTypeService.update(
-      updateProblemTypeInput.id,
-      updateProblemTypeInput,
-    );
+    await validator(checkIfExists)({ id, modelName: 'problemType' });
+    return this.problemTypeService.update(id,updateProblemTypeInput)
   }
 
   @Mutation(() => ProblemType)
-  removeProblemType(@Args('id', { type: () => Int }) id: number) {
+  async removeProblemType(@Args('id', { type: () => Int }) id: number) {
+    await validator(checkIfExists)({ id, modelName: 'problemType' });
     return this.problemTypeService.remove(id);
   }
 }

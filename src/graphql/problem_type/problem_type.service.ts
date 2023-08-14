@@ -24,29 +24,11 @@ export class ProblemTypeService {
     const problemType = await this.prisma.problemType.findUnique({
       where: {id: id},
     }) 
-    if (!problemType) {
-      throw new GraphQLError('problemType not found', {
-        extensions: {
-          code: 404,
-        },
-      });
-    }
     return  problemType;
   }
 
 
   async update(id: number, updateProblemTypeInput: UpdateProblemTypeInput) {
-    const problemType = await this.prisma.problemType.findUnique({
-      where: {id: id},
-    }) 
-
-    if (!problemType) {
-      throw new GraphQLError('problemType not found', {
-        extensions: {
-          code: 404,
-        },
-      });
-    }
     return await this.prisma.problemType.update({
       where:{id:id},
       data:{name:updateProblemTypeInput.name}
@@ -54,16 +36,6 @@ export class ProblemTypeService {
   }
 
   async remove(id: number) {
-    const problemType = await this.prisma.problemType.findUnique({
-      where: {id: id},
-    }) 
-    if (!problemType) {
-      throw new GraphQLError('problemType not found', {
-        extensions: {
-          code: 404,
-        },
-      });
-    }
     return await this.prisma.problemType.delete({
       where:{id:id},
     });

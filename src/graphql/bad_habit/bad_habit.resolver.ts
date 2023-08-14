@@ -4,44 +4,62 @@ import { BadHabit } from './entities/bad_habit.entity';
 import { CreateBadHabitInput } from './dto/create-bad_habit.input';
 import { UpdateBadHabitInput } from './dto/update-bad_habit.input';
 import { Paginatebadhabit } from './entities/PAginatebadhabit';
+import { checkIfExists, validator } from '../validatior/validator';
+import { createBadHabit, updateBadHabit } from './validation/badhabit.validation';
+import { error } from 'console';
 
 @Resolver(() => BadHabit)
 export class BadHabitResolver {
   constructor(private readonly badHabitService: BadHabitService) {}
 
   @Mutation(() => BadHabit)
-  createBadHabit(@Args('createBadHabitInput') createBadHabitInput: CreateBadHabitInput) {
+  async createBadHabit(@Args('createBadHabitInput') createBadHabitInput: CreateBadHabitInput
+  ){
+    await validator(createBadHabit)({ data: createBadHabitInput });
     return this.badHabitService.create(createBadHabitInput);
   }
 
   @Query(() =>Paginatebadhabit, { name: 'badHabits' })
   async findAll(
     @Args('page', { nullable: true }) page?: number,
+    @Args('search', { nullable: true }) serach?: string,
     @Args('item_per_page', { nullable: true }) item_per_page?: number,
   ) {
-    const badHabits = await this.badHabitService.findAll(page, item_per_page);
+    const badHabit = await this.badHabitService.findAll(
+      page,
+      item_per_page,
+      serach,
+    );
     return {
-      items: badHabits.data,
-      totalPages: badHabits.totalPages,
-      page: badHabits.page,
-      item_per_page: badHabits.item_per_page,
+      items: badHabit.data,
+      totalPages: badHabit.totalPages,
+      page: badHabit.page,
+      item_per_page: badHabit.item_per_page,
     };
   }
 
   @Query(() => BadHabit, { name: 'badHabit' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  async findOne(@Args('id', { type: () => Int }) id: number) {
+    await validator(checkIfExists)({ id, modelName: 'badHabit' });
     return this.badHabitService.findOne(id);
   }
 
   @Mutation(() => BadHabit)
-  updateBadHabit(
+  async updateBadHabit(
     @Args('id', { type: () => Int }) id: number,
-    @Args('updateBadHabitInput') updateBadHabitInput: UpdateBadHabitInput) {
+    @Args('updateBadHabitInput') updateBadHabitInput: UpdateBadHabitInput,
+    ) {
+      await validator(updateBadHabit)({
+        data: updateBadHabitInput,
+        modelName: 'badHabit',
+        id: id,
+      });
     return this.badHabitService.update(id,updateBadHabitInput);
   }
 
   @Mutation(() => BadHabit)
-  removeBadHabit(@Args('id', { type: () => Int }) id: number) {
+  async removeBadHabit(@Args('id', { type: () => Int }) id: number) {
+    await validator(checkIfExists)({ id, modelName: 'badHabit' });
     return this.badHabitService.remove(id);
   }
 }

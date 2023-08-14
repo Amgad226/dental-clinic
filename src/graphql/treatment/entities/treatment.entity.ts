@@ -1,5 +1,6 @@
 import { ObjectType, Field, Int, Float } from '@nestjs/graphql';
 import { TreatmentType } from 'src/graphql/treatment_type/entities/treatment_type.entity';
+import { Steps } from './step.entity';
 
 @ObjectType()
 export class Treatment {
@@ -21,4 +22,7 @@ export class Treatment {
   @Field(() => TreatmentType)
   treatment_type: TreatmentType;
 
+  
+  @Field(() => [Steps] ,{ nullable: true })
+  steps?: Steps[];
 }

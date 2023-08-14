@@ -22,14 +22,19 @@ export class MedicineResolver {
   @Query(() => paginateMedicine, { name: 'medicines' })
   async findAll(
     @Args('page', { nullable: true }) page?: number,
+    @Args('search', { nullable: true }) serach?: string,
     @Args('item_per_page', { nullable: true }) item_per_page?: number,
   ) {
-    const medicines = await this.medicineService.findAll(page, item_per_page);
+    const medicine = await this.medicineService.findAll(
+      page,
+      item_per_page,
+      serach,
+    );
     return {
-      items: medicines.data,
-      totalPages: medicines.totalPages,
-      page: medicines.page,
-      item_per_page: medicines.item_per_page,
+      items: medicine.data,
+      totalPages: medicine.totalPages,
+      page: medicine.page,
+      item_per_page: medicine.item_per_page,
     };
   }
 

@@ -5,8 +5,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { PaginatorService } from 'src/pagination/PaginatorService';
 @Injectable()
 export class ChemicalMaterialService {
-
   constructor(private prisma: PrismaService) { }
+
 
   async create({ name, chemical_material_id }: CreateChemicalMaterialInput) {
 
@@ -26,12 +26,13 @@ export class ChemicalMaterialService {
     return newChemicalMaterial;
   }
 
-  async findAll(page?: number, item_per_page?: number) {
-    return await PaginatorService(
-      this.prisma.chemicalMaterial,
-      page,
+  async findAll(page: any, item_per_page: any, search?: string) {
+    return await PaginatorService({
+      Modal: this.prisma.chemicalMaterial,
       item_per_page,
-    );
+      page,
+      search,
+    });
   }
 
 

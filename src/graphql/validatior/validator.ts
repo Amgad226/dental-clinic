@@ -16,10 +16,11 @@ export const validator = ((func) => {
 });
 
 
+
 export async function checkIfExists(props: Props) {
 
-    const chemicalMaterial = await prisma[props.modelName].findFirst({ where: { id: props.id }, })
-    if (!chemicalMaterial) {
+    const model = await prisma[props.modelName].findFirst({ where: { id: props.id }, })
+    if (!model) {
         return {
             fail: false,
             msg: `${props.modelName} not found`,

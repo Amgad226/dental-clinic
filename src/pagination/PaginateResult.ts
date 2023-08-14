@@ -3,8 +3,8 @@ import { Type } from '@nestjs/common';
 
 export function PaginateResult<T>(ItemType: Type<T>): any {
   @ObjectType()
-   class PageClass {
-    @Field(() => [ItemType])
+  class PageClass {
+    @Field(() => [ItemType], { nullable: true })
     items: T[];
 
     @Field(() => Int)

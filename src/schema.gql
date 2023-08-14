@@ -27,6 +27,7 @@ type ChemicalMaterial {
 }
 
 input CreateBadHabitInput {
+  chemical_material_id: [Int!]
   name: String!
 }
 
@@ -44,11 +45,11 @@ input CreateChemicalMaterialInput {
 }
 
 input CreateDiseaseInput {
+  chemical_material_id: [Int!]
   name: String!
 }
 
 input CreateMedicineInput {
-  """chemical_material_id field """
   category_id: Int!
 
   """chemical_material_id field """
@@ -61,11 +62,101 @@ input CreateMedicineInput {
   name: String!
 }
 
-input CreateProblemInput {
-  """problem name"""
-  name: String!
+input CreatePatientBadHabitForExistingPatientInput {
+  bad_habet_id: Int!
+  notes: String
+  patient_id: Int!
+  start_date: DateTime
+}
 
-  """problem name"""
+input CreatePatientBadHabitInput {
+  bad_habet_id: Int!
+  notes: String
+  start_date: DateTime
+}
+
+input CreatePatientCostInput {
+  amount: Float!
+  date: DateTime!
+  description: String
+  patient_id: Int!
+  treatment_id: Int
+}
+
+input CreatePatientDiagnosisInput {
+  expected_treatment: String
+  patient_id: Int!
+  place: String!
+  problem_id: Int!
+}
+
+input CreatePatientDiseaseForExistingPatientInput {
+  disease_id: Int!
+  notes: String
+  patient_id: Int!
+  start_date: DateTime
+  tight: Boolean!
+}
+
+input CreatePatientDiseaseInput {
+  disease_id: Int!
+  notes: String
+  start_date: DateTime
+  tight: Boolean!
+}
+
+input CreatePatientInput {
+  address: String
+  birth_date: DateTime
+  gender: String!
+  job: String
+  main_complaint: String
+  maintal_status: String
+  name: String!
+  patient_badHabits: [CreatePatientBadHabitInput!]
+  patient_diseases: [CreatePatientDiseaseInput!]
+  patient_medicines: [CreatePatientMedicineInput!]
+  phone: String
+}
+
+input CreatePatientMedicalImageInput {
+  image: Upload!
+  medical_image_type_id: Int!
+  patient_id: Int!
+  title: String!
+}
+
+input CreatePatientMedicalImagesTypeInput {
+  name: String!
+}
+
+input CreatePatientMedicineForExistingPatientInput {
+  medicine_id: Int!
+  notes: String
+  patient_id: Int!
+  start_date: DateTime
+}
+
+input CreatePatientMedicineInput {
+  medicine_id: Int!
+  notes: String
+  start_date: DateTime
+}
+
+input CreatePatientPaymentInput {
+  amount: Float!
+  date: DateTime!
+  description: String
+  patient_id: Int!
+}
+
+input CreatePatientTeethTreatmentInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateProblemInput {
+  name: String!
   problem_type_id: Int!
 }
 
@@ -74,10 +165,20 @@ input CreateProblemTypeInput {
   name: String!
 }
 
+input CreateStepInput {
+  name: String!
+  subSteps: [CreateSubStepInput!]
+}
+
+input CreateSubStepInput {
+  name: String!
+}
+
 input CreateTreatmentInput {
   color: String!
   name: String!
   price: Float!
+  steps: [CreateStepInput!]
   treatment_type_id: Int!
 }
 
@@ -85,14 +186,24 @@ input CreateTreatmentTypeInput {
   name: String!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Disease {
   id: Int!
   name: String!
 }
 
+enum Gender {
+  female
+  male
+}
+
 type Medicine {
   """category"""
-  category: Category!
+  category: Category
 
   """chemical_material_id field """
   category_id: Int!
@@ -130,6 +241,16 @@ type Mutation {
   createChemicalMaterial(createChemicalMaterialInput: CreateChemicalMaterialInput!): ChemicalMaterial!
   createDisease(createDiseaseInput: CreateDiseaseInput!): Disease!
   createMedicine(createMedicineInput: CreateMedicineInput!): Medicine!
+  createPatient(createPatientInput: CreatePatientInput!): Patient!
+  createPatientBadHabit(createPatientBadHabitInput: CreatePatientBadHabitForExistingPatientInput!): PatientBadHabit!
+  createPatientCost(createPatientCostInput: CreatePatientCostInput!): PatientCost!
+  createPatientDiagnosis(createPatientDiagnosisInput: CreatePatientDiagnosisInput!): PatientDiagnosis!
+  createPatientDisease(createPatientDiseaseInput: CreatePatientDiseaseForExistingPatientInput!): PatientDisease!
+  createPatientMedicalImage(createPatientMedicalImageInput: CreatePatientMedicalImageInput!): PatientMedicalImage!
+  createPatientMedicalImagesType(createPatientMedicalImagesTypeInput: CreatePatientMedicalImagesTypeInput!): PatientMedicalImagesType!
+  createPatientMedicine(createPatientMedicineInput: CreatePatientMedicineForExistingPatientInput!): PatientMedicine!
+  createPatientPayment(createPatientPaymentInput: CreatePatientPaymentInput!): PatientPayment!
+  createPatientTeethTreatment(createPatientTeethTreatmentInput: CreatePatientTeethTreatmentInput!): PatientTeethTreatment!
   createProblem(createProblemInput: CreateProblemInput!): Problem!
   createProblemType(createProblemTypeInput: CreateProblemTypeInput!): ProblemType!
   createTreatment(createTreatmentInput: CreateTreatmentInput!): Treatment!
@@ -139,6 +260,16 @@ type Mutation {
   removeChemicalMaterial(id: Int!): ChemicalMaterial!
   removeDisease(id: Int!): Disease!
   removeMedicine(id: Int!): Medicine!
+  removePatient(id: Int!): Patient!
+  removePatientBadHabit(id: Int!): PatientBadHabit!
+  removePatientCost(id: Int!): PatientCost!
+  removePatientDiagnosis(id: Int!): PatientDiagnosis!
+  removePatientDisease(id: Int!): PatientDisease!
+  removePatientMedicalImage(id: Int!): PatientMedicalImage!
+  removePatientMedicalImagesType(id: Int!): PatientMedicalImagesType!
+  removePatientMedicine(id: Int!): PatientMedicine!
+  removePatientPayment(id: Int!): PatientPayment!
+  removePatientTeethTreatment(id: Int!): PatientTeethTreatment!
   removeProblem(id: Int!): Problem!
   removeProblemType(id: Int!): ProblemType!
   removeTreatment(id: Int!): Treatment!
@@ -147,38 +278,184 @@ type Mutation {
   updateChemicalMaterial(id: Int!, updateChemicalMaterialInput: UpdateChemicalMaterialInput!): ChemicalMaterial!
   updateDisease(id: Int!, updateDiseaseInput: UpdateDiseaseInput!): Disease!
   updateMedicine(id: Float!, updateMedicineInput: UpdateMedicineInput!): Medicine!
+  updatePatient(updatePatientInput: UpdatePatientInput!): Patient!
+  updatePatientBadHabit(updatePatientBadHabitInput: UpdatePatientBadHabitInput!): PatientBadHabit!
+  updatePatientCost(updatePatientCostInput: UpdatePatientCostInput!): PatientCost!
+  updatePatientDiagnosis(updatePatientDiagnoseInput: UpdatePatientDiagnosisInput!): PatientDiagnosis!
+  updatePatientDisease(updatePatientDiseaseInput: UpdatePatientDiseaseInput!): PatientDisease!
+  updatePatientMedicalImage(updatePatientMedicalImageInput: UpdatePatientMedicalImageInput!): PatientMedicalImage!
+  updatePatientMedicalImagesType(updatePatientMedicalImagesTypeInput: UpdatePatientMedicalImagesTypeInput!): PatientMedicalImagesType!
+  updatePatientMedicine(updatePatientMedicineInput: UpdatePatientMedicineInput!): PatientMedicine!
+  updatePatientPayment(updatePatientPaymentInput: UpdatePatientPaymentInput!): PatientPayment!
+  updatePatientTeethTreatment(updatePatientTeethTreatmentInput: UpdatePatientTeethTreatmentInput!): PatientTeethTreatment!
   updateProblem(id: Int!, updateProblemInput: UpdateProblemInput!): Problem!
-  updateProblemType(updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
+  updateProblemType(id: Int!, updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
   updateTreatment(id: Int!, updateTreatmentInput: UpdateTreatmentInput!): Treatment!
   updateTreatmentType(id: Int!, updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
 }
 
 type PaginateChemicalMaterial {
   item_per_page: Int!
-  items: [ChemicalMaterial!]!
+  items: [ChemicalMaterial!]
   page: Int!
   totalPages: Int!
 }
 
 type PaginateProblem {
   item_per_page: Int!
-  items: [Problem!]!
+  items: [Problem!]
   page: Int!
   totalPages: Int!
 }
 
 type Paginatebadhabit {
   item_per_page: Int!
-  items: [BadHabit!]!
+  items: [BadHabit!]
+  page: Int!
+  totalPages: Int!
+}
+
+type PaginatedPatient {
+  item_per_page: Int!
+  items: [Patient!]
+  page: Int!
+  totalPages: Int!
+}
+
+type PaginatedPatientCost {
+  item_per_page: Int!
+  items: [PatientCost!]
+  page: Int!
+  totalPages: Int!
+}
+
+type PaginatedPatientDiagnosis {
+  item_per_page: Int!
+  items: [PatientDiagnosis!]
+  page: Int!
+  totalPages: Int!
+}
+
+type PaginatedPatientPayment {
+  item_per_page: Int!
+  items: [PatientPayment!]
   page: Int!
   totalPages: Int!
 }
 
 type Paginatedisease {
   item_per_page: Int!
-  items: [Disease!]!
+  items: [Disease!]
   page: Int!
   totalPages: Int!
+}
+
+input PateintPaymentSortInput {
+  field: String!
+  order: String!
+}
+
+type Patient {
+  PatientBadHabet: [PatientBadHabit!]
+  PatientCost: [PatientCost!]
+  PatientDiagnose: [PatientDiagnosis!]
+  PatientDisease: [PatientDisease!]
+  PatientMedicine: [PatientMedicine!]
+  PatientPayment: [PatientPayment!]
+  PatientTeethTreatment: [PatientTeethTreatment!]
+  address: String
+  birth_date: DateTime
+  gender: Gender!
+  id: Int!
+  job: String
+  main_complaint: String
+  maintal_status: String
+  name: String!
+  phone: String
+}
+
+type PatientBadHabit {
+  bad_habet: BadHabit!
+  bad_habet_id: Int!
+  id: Int!
+  notes: String
+  patient_id: Int!
+  start_date: DateTime
+}
+
+type PatientCost {
+  amount: Float!
+  date: DateTime!
+  description: String
+  id: Int!
+  patient: Patient!
+  patient_id: Int!
+  treatment: Treatment
+  treatment_id: Int
+}
+
+input PatientCostSortInput {
+  field: String!
+  order: String!
+}
+
+type PatientDiagnosis {
+  expected_treatment: String
+  id: Int!
+  patient_id: Int!
+  place: String!
+  problem: Problem!
+  problem_id: Int!
+}
+
+type PatientDisease {
+  disease: Disease!
+  disease_id: Int!
+  id: Int!
+  notes: String
+  patient_id: Int!
+  start_date: DateTime
+  tight: Boolean!
+}
+
+type PatientMedicalImage {
+  created_at: DateTime!
+  id: Int
+  imageType: PatientMedicalImagesType
+  medical_image_type_id: Int!
+  patient: Patient!
+  patient_id: Int!
+  src: String!
+  title: String!
+}
+
+type PatientMedicalImagesType {
+  PatientMedicalImage: [PatientMedicalImage!]
+  id: Int!
+  name: String!
+}
+
+type PatientMedicine {
+  id: Int!
+  medicine: Medicine!
+  medicine_id: Int!
+  notes: String
+  patient_id: Int!
+  start_date: DateTime
+}
+
+type PatientPayment {
+  Patient: Patient!
+  amount: Float!
+  date: DateTime!
+  description: String
+  id: Int!
+  patient_id: Int!
+}
+
+type PatientTeethTreatment {
+  """Example field (placeholder)"""
+  exampleField: Int!
 }
 
 type Problem {
@@ -203,22 +480,47 @@ type ProblemType {
 
 type Query {
   badHabit(id: Int!): BadHabit!
-  badHabits(item_per_page: Float, page: Float): Paginatebadhabit!
+  badHabits(item_per_page: Float, page: Float, search: String): Paginatebadhabit!
   categories: [Category!]!
   chemicalMaterial(id: Int!): ChemicalMaterial!
-  chemicalMaterials(item_per_page: Float, page: Float): PaginateChemicalMaterial!
+  chemicalMaterials(item_per_page: Float, page: Float, search: String): PaginateChemicalMaterial!
   disease(id: Int!): Disease!
-  diseases(item_per_page: Float, page: Float): Paginatedisease!
+  diseases(item_per_page: Float, page: Float, search: String): Paginatedisease!
   medicine(id: Int!): Medicine!
-  medicines(item_per_page: Float, page: Float): paginateMedicine!
+  medicines(item_per_page: Float, page: Float, search: String): paginateMedicine!
+  patient(id: Int!): Patient!
+  patientBadHabits(patient_id: Int!): [PatientBadHabit!]!
+  patientCosts(item_per_page: Float, page: Float, patient_id: Int, sort: PatientCostSortInput): PaginatedPatientCost!
+  patientDiagnose(id: Int!): PatientDiagnosis!
+  patientDiagnoses(item_per_page: Float, page: Float, patient_id: Float, problem_type_id: Float): PaginatedPatientDiagnosis!
+  patientDiseases(patient_id: Int!): [PatientDisease!]!
+  patientMedicalImages(medical_image_type_id: Int, patient_id: Int): [PatientMedicalImage!]!
+  patientMedicalImagesType(id: Int!): PatientMedicalImagesType!
+  patientMedicalImagesTypes: [PatientMedicalImagesType!]!
+  patientMedicines(patient_id: Int!): [PatientMedicine!]!
+  patientPayments(item_per_page: Float, page: Float, patient_id: Int, sort: PateintPaymentSortInput): PaginatedPatientPayment!
+  patientTeethTreatment(id: Int!): PatientTeethTreatment!
+  patientTeethTreatments: [PatientTeethTreatment!]!
+  patients(item_per_page: Float, page: Float): PaginatedPatient!
   problem(id: Int!): Problem!
   problemType(id: Int!): ProblemType!
   problemTypes: [ProblemType!]!
-  problems(item_per_page: Float, page: Float): PaginateProblem!
+  problems(item_per_page: Float, page: Float, search: String): PaginateProblem!
   treatment(id: Int!): Treatment!
   treatmentType(id: Int!): TreatmentType!
   treatmentTypes: [TreatmentType!]!
-  treatments(item_per_page: Float, page: Float): paginateTreatment!
+  treatments(item_per_page: Float, page: Float, search: String): paginateTreatment!
+}
+
+type Steps {
+  name: String!
+  subSteps: [SubStep!]
+  treatment_id: Int!
+}
+
+type SubStep {
+  name: String!
+  step_id: Int!
 }
 
 type Treatment {
@@ -226,6 +528,7 @@ type Treatment {
   id: Int!
   name: String!
   price: Float!
+  steps: [Steps!]
   treatment_type: TreatmentType!
   treatment_type_id: Int!
 }
@@ -236,6 +539,7 @@ type TreatmentType {
 }
 
 input UpdateBadHabitInput {
+  chemical_material_id: [Int!]
   name: String!
 }
 
@@ -248,7 +552,7 @@ input UpdateChemicalMaterialInput {
 }
 
 input UpdateDiseaseInput {
-  id: Int!
+  chemical_material_id: [Int!]
   name: String!
 }
 
@@ -266,38 +570,129 @@ input UpdateMedicineInput {
   name: String!
 }
 
+input UpdatePatientBadHabitInput {
+  bad_habet_id: Int
+  id: Int!
+  notes: String
+  start_date: DateTime
+}
+
+input UpdatePatientCostInput {
+  amount: Float
+  date: DateTime
+  description: String
+  id: Int!
+  patient_id: Int
+  treatment_id: Int
+}
+
+input UpdatePatientDiagnosisInput {
+  expected_treatment: String
+  id: Int!
+  patient_id: Int
+  place: String
+  problem_id: Int
+}
+
+input UpdatePatientDiseaseInput {
+  disease_id: Int
+  id: Int!
+  notes: String
+  patient_id: Int
+  start_date: DateTime
+  tight: Boolean
+}
+
+input UpdatePatientInput {
+  address: String
+  birth_date: DateTime
+  gender: String
+  id: Int!
+  job: String
+  main_complaint: String
+  maintal_status: String
+  name: String
+  phone: String
+}
+
+input UpdatePatientMedicalImageInput {
+  id: Int!
+  image: Upload
+  medical_image_type_id: Int
+  patient_id: Int
+  title: String
+}
+
+input UpdatePatientMedicalImagesTypeInput {
+  id: Int!
+  name: String
+}
+
+input UpdatePatientMedicineInput {
+  id: Int!
+  medicine_id: Int
+  notes: String
+  patient_id: Int
+  start_date: DateTime
+}
+
+input UpdatePatientPaymentInput {
+  amount: Float
+  date: DateTime
+  description: String
+  id: Int!
+  patient_id: Int
+}
+
+input UpdatePatientTeethTreatmentInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
 input UpdateProblemInput {
   name: String!
   problem_type_id: Int!
 }
 
 input UpdateProblemTypeInput {
-  id: Int!
+  name: String!
+}
+
+input UpdateStepInput {
+  name: String!
+  subSteps: [UpdateSubStepInput!]
+}
+
+input UpdateSubStepInput {
   name: String!
 }
 
 input UpdateTreatmentInput {
-  color: String!
+  color: String
   name: String!
   price: Float!
+  steps: [UpdateStepInput!]
   treatment_type_id: Int!
 }
 
 input UpdateTreatmentTypeInput {
-  id: Int!
   name: String!
 }
 
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
 type paginateMedicine {
   item_per_page: Int!
-  items: [Medicine!]!
+  items: [Medicine!]
   page: Int!
   totalPages: Int!
 }
 
 type paginateTreatment {
   item_per_page: Int!
-  items: [Treatment!]!
+  items: [Treatment!]
   page: Int!
   totalPages: Int!
 }

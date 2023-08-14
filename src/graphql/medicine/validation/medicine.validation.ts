@@ -41,7 +41,7 @@ export async function checkConflicts({ data }: Props) {
 
   const realData = results.filter((d) => d !== null).flat();
 
-  const newArray = realData.map((item) => `${item.chemical_material_1.name} have conflict with ${item.chemical_material_2.name}`);
+  const newString = realData.map((item) => `${item.chemical_material_1.name} have conflict with ${item.chemical_material_2.name}`);
 
 
 
@@ -49,7 +49,7 @@ export async function checkConflicts({ data }: Props) {
   if ((realData.length > 0)) {
     return {
       fail: false,
-      msg: newArray,
+      msg: newString,
       status: 400
     }
   }
