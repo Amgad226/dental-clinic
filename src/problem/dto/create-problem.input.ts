@@ -1,10 +1,10 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { InputType, Field, Int } from '@nestjs/graphql';
 
 @InputType()
 export class CreateProblemInput {
-  @Field(() => String, { description: 'problem name' })
+  @Field(() => String)
   name: string;
 
-  @Field(() => String, { description: 'problem name' })
+  @Field(() => Int)
   problem_type_id: number;
 }

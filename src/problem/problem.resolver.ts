@@ -5,47 +5,62 @@ import { UpdateProblemInput } from './dto/update-problem.input';
 
 import { Problem } from './entities/problem.entity';
 import { PaginateProblem } from './entities/PaginateProblem';
+import { checkIfExists, validator } from 'src/graphql/validatior/validator';
+import { createProblem, updateProblem } from './validation/problem.validation';
 
 @Resolver(() => Problem)
 export class ProblemResolver {
   constructor(private readonly problemService: ProblemService) {}
 
   @Mutation(() => Problem)
-  createProblem(
+  async createProblem(
     @Args('createProblemInput') createProblemInput: CreateProblemInput,
   ) {
+    await validator(createProblem)({ data: createProblemInput });
     return this.problemService.create(createProblemInput);
   }
 
   @Query(() => PaginateProblem, { name: 'problems' })
   async findAll(
     @Args('page', { nullable: true }) page?: number,
+    @Args('search', { nullable: true }) serach?: string,
     @Args('item_per_page', { nullable: true }) item_per_page?: number,
   ) {
-    const problems = await this.problemService.findAll(page, item_per_page);
+    const problem = await this.problemService.findAll(
+      page,
+      item_per_page,
+      serach,
+    );
     return {
-      items: problems.data,
-      totalPages: problems.totalPages,
-      page: page,
-      item_per_page: item_per_page,
+      items: problem.data,
+      totalPages: problem.totalPages,
+      page: problem.page,
+      item_per_page: problem.item_per_page,
     };
   }
 
   @Query(() => Problem, { name: 'problem' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  async findOne(@Args('id', { type: () => Int }) id: number) {
+    await validator(checkIfExists)({ id, modelName: 'problem' });
     return this.problemService.findOne(id);
   }
 
   @Mutation(() => Problem)
-  updateProblem(
+  async updateProblem(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateProblemInput') updateProblemInput: UpdateProblemInput,
   ) {
+    await validator(updateProblem)({
+      data: updateProblemInput,
+      modelName: 'problem',
+      id: id,
+    });
     return this.problemService.update(id, updateProblemInput);
   }
 
   @Mutation(() => Problem)
-  removeProblem(@Args('id', { type: () => Int }) id: number) {
+  async removeProblem(@Args('id', { type: () => Int }) id: number) {
+    await validator(checkIfExists)({ id, modelName: 'problem' });
     return this.problemService.remove(id);
   }
 }

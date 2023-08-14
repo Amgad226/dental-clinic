@@ -2,65 +2,64 @@ import { Injectable } from '@nestjs/common';
 import { CreateDiseaseInput } from './dto/create-disease.input';
 import { UpdateDiseaseInput } from './dto/update-disease.input';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PaginatorService } from 'src/pagination/PaginatorService';
 
 @Injectable()
 export class DiseaseService {
-  constructor(private prisma:PrismaService){}
+  constructor(private prisma: PrismaService) {}
 
-  async create(createDiseaseInput: CreateDiseaseInput) {
-    return await this.prisma.disease.create({data:{name:createDiseaseInput.name}})
+  async create({ name, chemical_material_id }: CreateDiseaseInput) {
+    const disease = await this.prisma.disease.create({
+      data: { name: name },
+    });
+    //attach data chemical_material_id and disease id in pivot table
+    await this.prisma.diseaseChemicalMaterial.createMany({
+      data: chemical_material_id.map((id) => ({
+        disease_id: disease.id,
+        chemical_material_id: id,
+      })),
+    });
+    return disease;
   }
 
-  async findAll() {
-    return await this.prisma.disease.findMany();
-  }
-
-  async findOne(id: number) {    
-    const disease = await this.checkDiseaseExist(id)
-
-    return await this.prisma.disease.findUnique({
-      where:{id:id}
+  async findAll(page: any, item_per_page: any, search?: string) {
+    return await PaginatorService({
+      Modal: this.prisma.disease,
+      item_per_page,
+      page,
+      search,
     });
   }
 
-  async update(id: number, updateDiseaseInput: UpdateDiseaseInput) {
-    const disease = await this.checkDiseaseExist(id)
-    return await this.prisma.disease.update({
-      where :{id},
-      data:{name:updateDiseaseInput.name}
-  })
+  async findOne(id: number) {
+    const disease = await this.prisma.disease.findUnique({
+      where: { id: id },
+    });
+    return disease;
+  }
+
+  async update(id: number, { name, chemical_material_id }: UpdateDiseaseInput) {
+    await this.prisma.diseaseChemicalMaterial.deleteMany({
+      where: { disease_id: id },
+    });
+
+    const updatedisease = await this.prisma.disease.update({
+      where: { id: id },
+      data: { name: name },
+    });
+    //attach data chemical_material_id and badhabit id in pivot table
+    await this.prisma.diseaseChemicalMaterial.createMany({
+      data: chemical_material_id.map((id) => ({
+        disease_id: updatedisease.id,
+        chemical_material_id: id,
+      })),
+    });
+    return updatedisease;
   }
 
   async remove(id: number) {
-    
-    const disease = await this.checkDiseaseExist(id)
-
-    const deletedDisease = await this.prisma.disease.delete({
-      where: { id: id}, 
+    return await this.prisma.disease.delete({
+      where: { id: id },
     });
-    return deletedDisease;
-  }
-
-
-  /** 
-   * i create this private function because if the client make query on dieses=4 to (delete , update , get)
-   * and dieses not exists in DB don't have error when make query to update it or delete it   
-  */ 
-   private async checkDiseaseExist(id:number) {
-    
-    const diseaseExists = await this.prisma.disease.findFirst({
-      where: { id: id }, 
-      select: { id: true }, // Select only the "id" field
-    });
-    
-    if(diseaseExists== null){
-      //catch it by  graphQlWrapper in resolver
-      throw { 
-        message: 'disease not found ',
-        code:404,
-       }; 
-      }
-      return diseaseExists
-    
   }
 }
