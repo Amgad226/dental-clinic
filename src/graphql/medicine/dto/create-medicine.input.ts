@@ -6,13 +6,13 @@ export class CreateMedicineInput {
   name: string;
 
   @Field(() => Float, { description: 'concentration field ' })
-  concentration: number ;
+  concentration: number;
 
   @Field(() => [Int], { description: 'chemical_material_id field ' })
-  chemical_material_id:[number] 
+  chemical_material_id: [number];
 
-  @Field(() => Int, { description: 'chemical_material_id field ' })
-  category_id:number 
+  @Field(() => Int)
+  category_id: number;
 
-  
+
 }

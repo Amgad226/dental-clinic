@@ -50,7 +50,6 @@ input CreateDiseaseInput {
 }
 
 input CreateMedicineInput {
-  """chemical_material_id field """
   category_id: Int!
 
   """chemical_material_id field """
