@@ -20,11 +20,11 @@ export class PatientService {
         PatientBadHabet: {
           include: { bad_habet: true }
         },
-        // PatientMedicine: {
-        //   include: {
-        //     medicine: true
-        //   }
-        // }
+        PatientMedicine: {
+          include: {
+            medicine: true
+          }
+        }
       },
       data: {
         ...rest,

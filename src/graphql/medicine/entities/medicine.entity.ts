@@ -13,12 +13,12 @@ export class Medicine {
   @Field(() => Float, { description: 'concentration field ' })
   concentration: number;
 
-  @Field(() => [MedicineChemicalMaterials], { description: 'Problem_type' ,nullable:true})
+  @Field(() => [MedicineChemicalMaterials], { description: 'Problem_type', nullable: true })
   medicineChemicalMaterials?: MedicineChemicalMaterials[];
 
   @Field(() => Int, { description: 'chemical_material_id field ' })
-  category_id:number 
+  category_id: number
 
-  @Field( ()=>Category,{ description: 'category' })
-  category: Category;
+  @Field(() => Category, { description: 'category', nullable: true })
+  category?: Category;
 }

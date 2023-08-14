@@ -203,7 +203,7 @@ enum Gender {
 
 type Medicine {
   """category"""
-  category: Category!
+  category: Category
 
   """chemical_material_id field """
   category_id: Int!
