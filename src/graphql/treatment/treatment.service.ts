@@ -48,13 +48,22 @@ export class TreatmentService {
     return treatment;
   }
 
-  //need arelation with treatment-type + steps + substeps
   async findAll(page: any, item_per_page: any, search?: string) {
-    return await PaginatorService({
+    return await PaginatorService<Prisma.TreatmentFindManyArgs>({
       Modal: this.prisma.treatment,
       item_per_page,
       page,
       search,
+      relations: {
+        include: {
+          steps: {
+            include: {
+              subSteps: true
+            }
+          },
+          treatment_type: true
+        }
+      }
     });
   }
 
@@ -77,7 +86,7 @@ export class TreatmentService {
   }
 
   async update(id: number, updateTreatmentInput: UpdateTreatmentInput) {
-    await this.prisma.step.deleteMany({ where: { treatment_id:id } })
+    await this.prisma.step.deleteMany({ where: { treatment_id: id } })
 
     return await this.prisma.treatment.update({
       where: { id: id },
@@ -92,17 +101,17 @@ export class TreatmentService {
         },
         steps: updateTreatmentInput.steps
           ? {
-              create: updateTreatmentInput.steps.map((step) => ({
-                name: step.name,
-                subSteps: step.subSteps
-                  ? {
-                      create: step.subSteps.map((subStep) => ({
-                        name: subStep.name,
-                      })),
-                    }
-                  : undefined, // Set to undefined if subSteps array is not provided
-              })),
-            }
+            create: updateTreatmentInput.steps.map((step) => ({
+              name: step.name,
+              subSteps: step.subSteps
+                ? {
+                  create: step.subSteps.map((subStep) => ({
+                    name: subStep.name,
+                  })),
+                }
+                : undefined, // Set to undefined if subSteps array is not provided
+            })),
+          }
           : undefined, // Set to undefined if steps array is not provided
       },
       include: {
