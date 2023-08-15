@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { Props } from 'src/graphql/interfaces/props.interface';
+import { ValidatorProps } from 'src/validatior/interfaces/props.interface';
 import { checkIfChemicalsExists, checkIfExists } from 'src/validatior/validator';
 
 const prisma = new PrismaClient();
@@ -14,7 +14,7 @@ function getAllPossiblePairs(arr) {
   return pairs;
 }
 
-export async function checkConflicts({ data }: Props) {
+export async function checkConflicts({ data }: ValidatorProps) {
 
   const ids = data.chemical_material_id;
   const pairs = getAllPossiblePairs(ids);
@@ -59,7 +59,7 @@ export async function checkConflicts({ data }: Props) {
   }
 }
 
-export async function createMedicine({ id, data, modelName }: Props) {
+export async function createMedicine({ id, data, modelName }: ValidatorProps) {
 
   const checkIfExist = await checkIfExists({ id: data.category_id, modelName: "category" });
   if (checkIfExist.fail == false) {
@@ -80,7 +80,7 @@ export async function createMedicine({ id, data, modelName }: Props) {
 }
 
 
-export async function updateMedicine({ id, data, modelName }: Props) {
+export async function updateMedicine({ id, data, modelName }: ValidatorProps) {
 
 
   const medicineIfExist = await (checkIfExists)({ id, modelName })
