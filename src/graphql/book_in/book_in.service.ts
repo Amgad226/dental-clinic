@@ -3,6 +3,7 @@ import { CreateBookInInput } from './dto/create-book_in.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PaginatorService } from 'src/pagination/PaginatorService';
 import { StoredProductService } from '../stored_product/stored_product.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class BookInService {
@@ -50,11 +51,16 @@ export class BookInService {
 }
 
   async findAll(page: any, item_per_page: any, search?: string) {
-    return await PaginatorService({
+    return await PaginatorService<Prisma.BookInFindManyArgs>({
       Modal: this.prisma.bookIn,
       item_per_page,
       page,
       search,
+      relations:{
+        include:{
+          product:true
+        }
+      }
     });
   }
 
