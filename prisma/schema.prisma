@@ -151,11 +151,11 @@ model ProblemType {
 }
 
 model Problem {
-  id              Int         @id @default(autoincrement())
+  id              Int               @id @default(autoincrement())
   name            String
   problem_type_id Int
-  Problem_type    ProblemType @relation(fields: [problem_type_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  Diagnose        Diagnose[]
+  Problem_type    ProblemType       @relation(fields: [problem_type_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  PatientDiagnose PatientDiagnose[]
 
   @@map("problems")
 }
@@ -204,7 +204,7 @@ model Patient {
   PatientMedicine       PatientMedicine[]
   PatientCost           PatientCost[]
   PatientPayment        PatientPayment[]
-  Diagnose              Diagnose[]
+  PatientDiagnose       PatientDiagnose[]
   PatientTeethTreatment PatientTeethTreatment[]
   PatientMedicalImage   PatientMedicalImage[]
   User                  User[]
@@ -218,8 +218,9 @@ model PatientDisease {
   disease_id Int
   tight      Boolean
   notes      String?
-  patient    Patient @relation(fields: [patient_id], references: [id])
-  disease    Disease @relation(fields: [disease_id], references: [id])
+  start_date DateTime?
+  patient    Patient @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  disease    Disease @relation(fields: [disease_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("patients_diseases")
 }
@@ -229,19 +230,21 @@ model PatientBadHabet {
   bad_habet_id Int
   patient_id   Int
   notes        String?
-  patient      Patient  @relation(fields: [patient_id], references: [id])
-  bad_habet    BadHabit @relation(fields: [bad_habet_id], references: [id])
+  start_date   DateTime?
+  patient      Patient  @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bad_habet    BadHabit @relation(fields: [bad_habet_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("patients_badHabits")
 }
 
 model PatientMedicine {
-  id          Int      @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   medicine_id Int
   patient_id  Int
   notes       String?
-  patient     Patient  @relation(fields: [patient_id], references: [id])
-  medicine    Medicine @relation(fields: [medicine_id], references: [id])
+  start_date  DateTime?
+  patient  Patient  @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  medicine Medicine @relation(fields: [medicine_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("patients_medicines")
 }
@@ -260,8 +263,8 @@ model PatientMedicalImage {
   title                 String
   medical_image_type_id Int
   patient_id            Int
-  imageType             PatientMedicalImageType @relation(fields: [medical_image_type_id], references: [id])
-  patient               Patient                 @relation(fields: [patient_id], references: [id])
+  imageType             PatientMedicalImageType @relation(fields: [medical_image_type_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  patient               Patient                 @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   created_at            DateTime                @default(now())
 
   @@map("medical_images")
@@ -286,19 +289,19 @@ model PatientPayment {
   description String?
   date        DateTime @default(now())
   patient_id  Int
-
-  patient Patient @relation(fields: [patient_id], references: [id])
+  patient     Patient  @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("patients_payments")
 }
 
-model Diagnose {
+model PatientDiagnose {
   id                 Int     @id @default(autoincrement())
+  place              String
+  expected_treatment String?
   patient_id         Int
   problem_id         Int
-  expected_treatment String?
-  patient            Patient @relation(fields: [patient_id], references: [id])
-  problem            Problem @relation(fields: [problem_id], references: [id])
+  patient            Patient @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  problem            Problem @relation(fields: [problem_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("diagnoses")
 }
@@ -316,11 +319,56 @@ model PatientTeethTreatment {
   patient_id   Int
   teeth_id     Int
   treatment_Id Int
-  patient      Patient   @relation(fields: [patient_id], references: [id])
-  treatment    Treatment @relation(fields: [treatment_Id], references: [id])
-  teeth        Teeth     @relation(fields: [teeth_id], references: [id])
+  patient      Patient   @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  treatment    Treatment @relation(fields: [treatment_Id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  teeth        Teeth     @relation(fields: [teeth_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("patients_teeth")
+}
+
+model Product {
+  id   Int    @id @default(autoincrement())
+  name String
+  bookins  BookIn[]
+  storedproducts StoredProduct[]
+  bookouts  BookOut[]
+
+  @@map("products")
+}
+
+model BookIn {
+  id          Int       @id @default(autoincrement())
+  product_id  Int
+  quantity    Int
+  price       Int
+  total_price Int
+  created_at  DateTime  @default(now())
+  product    Product    @relation(fields: [product_id],references: [id])
+
+  @@map("book_ins")
+}
+
+model StoredProduct {
+  id              Int    @id @default(autoincrement())
+  product_id      Int
+  expiration_date DateTime
+  quantity        Int
+  price           Int
+  total_quantity  Int
+  product    Product     @relation(fields: [product_id],references: [id])
+
+@@map("stored_products")
+}
+
+model BookOut {
+  id          Int      @id @default(autoincrement())
+  product_id  Int
+  quantity    Int
+  total_price Int
+  created_at DateTime  @default(now())
+  product    Product   @relation(fields: [product_id],references: [id])
+ 
+  @@map("book_outs")
 }
 
 // 

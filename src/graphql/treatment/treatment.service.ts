@@ -4,10 +4,11 @@ import { UpdateTreatmentInput } from './dto/update-treatment.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GraphQLError } from 'graphql';
 import { PaginatorService } from 'src/pagination/PaginatorService';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class TreatmentService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(CreateTreatmentInput: CreateTreatmentInput) {
     const treatment = await this.prisma.treatment.create({
@@ -22,17 +23,17 @@ export class TreatmentService {
         },
         steps: CreateTreatmentInput.steps
           ? {
-              create: CreateTreatmentInput.steps.map((step) => ({
-                name: step.name,
-                subSteps: step.subSteps
-                  ? {
-                      create: step.subSteps.map((subStep) => ({
-                        name: subStep.name,
-                      })),
-                    }
-                  : undefined, // Set to undefined if subSteps array is not provided
-              })),
-            }
+            create: CreateTreatmentInput.steps.map((step) => ({
+              name: step.name,
+              subSteps: step.subSteps
+                ? {
+                  create: step.subSteps.map((subStep) => ({
+                    name: subStep.name,
+                  })),
+                }
+                : undefined, // Set to undefined if subSteps array is not provided
+            })),
+          }
           : undefined, // Set to undefined if steps array is not provided
       },
       include: {
@@ -47,13 +48,22 @@ export class TreatmentService {
     return treatment;
   }
 
-  //need arelation with treatment-type + steps + substeps
   async findAll(page: any, item_per_page: any, search?: string) {
-    return await PaginatorService({
+    return await PaginatorService<Prisma.TreatmentFindManyArgs>({
       Modal: this.prisma.treatment,
       item_per_page,
       page,
       search,
+      relations: {
+        include: {
+          steps: {
+            include: {
+              subSteps: true
+            }
+          },
+          treatment_type: true
+        }
+      }
     });
   }
 
@@ -69,14 +79,14 @@ export class TreatmentService {
         treatment_type: true,
       },
     });
-    
+
     console.dir(treatment, { depth: null });
-    
+
     return treatment;
   }
 
   async update(id: number, updateTreatmentInput: UpdateTreatmentInput) {
-    await this.prisma.step.deleteMany({ where: { treatment_id:id } })
+    await this.prisma.step.deleteMany({ where: { treatment_id: id } })
 
     return await this.prisma.treatment.update({
       where: { id: id },
@@ -91,17 +101,17 @@ export class TreatmentService {
         },
         steps: updateTreatmentInput.steps
           ? {
-              create: updateTreatmentInput.steps.map((step) => ({
-                name: step.name,
-                subSteps: step.subSteps
-                  ? {
-                      create: step.subSteps.map((subStep) => ({
-                        name: subStep.name,
-                      })),
-                    }
-                  : undefined, // Set to undefined if subSteps array is not provided
-              })),
-            }
+            create: updateTreatmentInput.steps.map((step) => ({
+              name: step.name,
+              subSteps: step.subSteps
+                ? {
+                  create: step.subSteps.map((subStep) => ({
+                    name: subStep.name,
+                  })),
+                }
+                : undefined, // Set to undefined if subSteps array is not provided
+            })),
+          }
           : undefined, // Set to undefined if steps array is not provided
       },
       include: {

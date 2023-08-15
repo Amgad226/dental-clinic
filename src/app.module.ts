@@ -11,7 +11,6 @@ import { TreatmentTypeModule } from './graphql/treatment_type/treatment_type.mod
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ProblemTypeModule } from './graphql/problem_type/problem_type.module';
-import { ProblemModule } from './problem/problem.module';
 import { ChemicalMaterialModule } from './graphql/chemical_material/chemical_material.module';
 import { ConfigModule } from '@nestjs/config';
 import { TreatmentModule } from './graphql/treatment/treatment.module';
@@ -33,6 +32,11 @@ import { AccessTokenGuard } from './auth/guards/accessToken.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { CustomGqlExceptionFilter } from './middlewares/GraphqlErrorMiddleware';
 import { AuthResolver } from './auth/auth.resolver';
+import { ProblemModule } from './problem/problem.module';
+import { ProductModule } from './graphql/product/product.module';
+import { StoredProductModule } from './graphql/stored_product/stored_product.module';
+import { BookInModule } from './graphql/book_in/book_in.module';
+import { BookOutModule } from './graphql/book_out/book_out.module';
 
 const apolloDriverConfig: ApolloDriverConfig = {
   formatError: (error: any) => {
@@ -87,6 +91,10 @@ const serveStaticImagesConfig = {
     PatientDiseasesModule,
     PatientMedicalImagesModule,
     PatientMedicalImagesTypesModule,
+    ProductModule,
+    StoredProductModule,
+    BookInModule,
+    BookOutModule,
   ],
   controllers: [AppController],
   providers: [

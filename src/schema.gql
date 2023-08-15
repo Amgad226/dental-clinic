@@ -12,6 +12,25 @@ type BadHabit {
   name: String!
 }
 
+type BookIn {
+  created_at: DateTime!
+  id: Int!
+  price: Int!
+  product: Product!
+  product_id: Int!
+  quantity: Int!
+  total_price: Int!
+}
+
+type BookOut {
+  created_at: DateTime!
+  id: Int!
+  product: Product!
+  product_id: Int!
+  quantity: Int!
+  total_price: Int!
+}
+
 type Category {
   """id field (placeholder)"""
   id: Int!
@@ -44,6 +63,21 @@ input CreateBadHabitInput {
   name: String!
 }
 
+input CreateBookInInput {
+  created_at: DateTime
+  expiration_date: DateTime!
+  price: Int!
+  product_id: Int!
+  quantity: Int!
+}
+
+input CreateBookOutInput {
+  created_at: DateTime
+  product_id: Int!
+  quantity: Int!
+  stored_prduct_id: [Int!]!
+}
+
 input CreateCategoryInput {
   """name field (placeholder)"""
   name: String!
@@ -63,7 +97,6 @@ input CreateDiseaseInput {
 }
 
 input CreateMedicineInput {
-  """chemical_material_id field """
   category_id: Int!
 
   """chemical_material_id field """
@@ -80,11 +113,13 @@ input CreatePatientBadHabitForExistingPatientInput {
   bad_habet_id: Int!
   notes: String
   patient_id: Int!
+  start_date: DateTime
 }
 
 input CreatePatientBadHabitInput {
   bad_habet_id: Int!
   notes: String
+  start_date: DateTime
 }
 
 input CreatePatientCostInput {
@@ -96,20 +131,24 @@ input CreatePatientCostInput {
 }
 
 input CreatePatientDiagnosisInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  expected_treatment: String
+  patient_id: Int!
+  place: String!
+  problem_id: Int!
 }
 
 input CreatePatientDiseaseForExistingPatientInput {
   disease_id: Int!
   notes: String
   patient_id: Int!
+  start_date: DateTime
   tight: Boolean!
 }
 
 input CreatePatientDiseaseInput {
   disease_id: Int!
   notes: String
+  start_date: DateTime
   tight: Boolean!
 }
 
@@ -142,11 +181,13 @@ input CreatePatientMedicineForExistingPatientInput {
   medicine_id: Int!
   notes: String
   patient_id: Int!
+  start_date: DateTime
 }
 
 input CreatePatientMedicineInput {
   medicine_id: Int!
   notes: String
+  start_date: DateTime
 }
 
 input CreatePatientPaymentInput {
@@ -168,6 +209,10 @@ input CreateProblemInput {
 
 input CreateProblemTypeInput {
   """The Name of the problem type"""
+  name: String!
+}
+
+input CreateProductInput {
   name: String!
 }
 
@@ -213,7 +258,7 @@ type LogoutResponse {
 
 type Medicine {
   """category"""
-  category: Category!
+  category: Category
 
   """chemical_material_id field """
   category_id: Int!
@@ -249,6 +294,8 @@ type Mutation {
   CheckPhone(checkPhoneInput: PhoneInput!): ResponseCheckPhone!
   SendOtp(checkPhoneInput: PhoneInput!): ResponseSendOtp!
   createBadHabit(createBadHabitInput: CreateBadHabitInput!): BadHabit!
+  createBookIn(createBookInInput: CreateBookInInput!): BookIn!
+  createBookOut(createBookOutInput: CreateBookOutInput!): BookOut!
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   createChemicalMaterial(createChemicalMaterialInput: CreateChemicalMaterialInput!): ChemicalMaterial!
   createDisease(createDiseaseInput: CreateDiseaseInput!): Disease!
@@ -265,6 +312,7 @@ type Mutation {
   createPatientTeethTreatment(createPatientTeethTreatmentInput: CreatePatientTeethTreatmentInput!): PatientTeethTreatment!
   createProblem(createProblemInput: CreateProblemInput!): Problem!
   createProblemType(createProblemTypeInput: CreateProblemTypeInput!): ProblemType!
+  createProduct(createProductInput: CreateProductInput!): Product!
   createTreatment(createTreatmentInput: CreateTreatmentInput!): Treatment!
   createTreatmentType(createTreatmentTypeInput: CreateTreatmentTypeInput!): TreatmentType!
   geNewTokens: NewTokenResponse!
@@ -286,6 +334,8 @@ type Mutation {
   removePatientTeethTreatment(id: Int!): PatientTeethTreatment!
   removeProblem(id: Int!): Problem!
   removeProblemType(id: Int!): ProblemType!
+  removeProduct(id: Int!): Product!
+  removeStoredProduct(id: Int!): StoredProduct!
   removeTreatment(id: Int!): Treatment!
   removeTreatmentType(id: Int!): TreatmentType!
   reomveUser(id: Int!): Auth!
@@ -298,7 +348,7 @@ type Mutation {
   updatePatient(updatePatientInput: UpdatePatientInput!): Patient!
   updatePatientBadHabit(updatePatientBadHabitInput: UpdatePatientBadHabitInput!): PatientBadHabit!
   updatePatientCost(updatePatientCostInput: UpdatePatientCostInput!): PatientCost!
-  updatePatientDiagnosis(updatePatientDiagnosisInput: UpdatePatientDiagnosisInput!): PatientDiagnosis!
+  updatePatientDiagnosis(updatePatientDiagnoseInput: UpdatePatientDiagnosisInput!): PatientDiagnosis!
   updatePatientDisease(updatePatientDiseaseInput: UpdatePatientDiseaseInput!): PatientDisease!
   updatePatientMedicalImage(updatePatientMedicalImageInput: UpdatePatientMedicalImageInput!): PatientMedicalImage!
   updatePatientMedicalImagesType(updatePatientMedicalImagesTypeInput: UpdatePatientMedicalImagesTypeInput!): PatientMedicalImagesType!
@@ -307,6 +357,7 @@ type Mutation {
   updatePatientTeethTreatment(updatePatientTeethTreatmentInput: UpdatePatientTeethTreatmentInput!): PatientTeethTreatment!
   updateProblem(id: Int!, updateProblemInput: UpdateProblemInput!): Problem!
   updateProblemType(id: Int!, updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
+  updateProduct(id: Int!, updateProductInput: UpdateProductInput!): Product!
   updateTreatment(id: Int!, updateTreatmentInput: UpdateTreatmentInput!): Treatment!
   updateTreatmentType(id: Int!, updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
 }
@@ -337,6 +388,13 @@ type Paginatebadhabit {
   totalPages: Int!
 }
 
+type Paginatebookin {
+  item_per_page: Int!
+  items: [BookIn!]
+  page: Int!
+  totalPages: Int!
+}
+
 type PaginatedPatient {
   item_per_page: Int!
   items: [Patient!]
@@ -347,6 +405,13 @@ type PaginatedPatient {
 type PaginatedPatientCost {
   item_per_page: Int!
   items: [PatientCost!]
+  page: Int!
+  totalPages: Int!
+}
+
+type PaginatedPatientDiagnosis {
+  item_per_page: Int!
+  items: [PatientDiagnosis!]
   page: Int!
   totalPages: Int!
 }
@@ -365,6 +430,13 @@ type Paginatedisease {
   totalPages: Int!
 }
 
+type Paginateproduct {
+  item_per_page: Int!
+  items: [Product!]
+  page: Int!
+  totalPages: Int!
+}
+
 input PateintPaymentSortInput {
   field: String!
   order: String!
@@ -373,6 +445,7 @@ input PateintPaymentSortInput {
 type Patient {
   PatientBadHabet: [PatientBadHabit!]
   PatientCost: [PatientCost!]
+  PatientDiagnose: [PatientDiagnosis!]
   PatientDisease: [PatientDisease!]
   PatientMedicine: [PatientMedicine!]
   PatientPayment: [PatientPayment!]
@@ -394,6 +467,7 @@ type PatientBadHabit {
   id: Int!
   notes: String
   patient_id: Int!
+  start_date: DateTime
 }
 
 type PatientCost {
@@ -413,8 +487,12 @@ input PatientCostSortInput {
 }
 
 type PatientDiagnosis {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  expected_treatment: String
+  id: Int!
+  patient_id: Int!
+  place: String!
+  problem: Problem!
+  problem_id: Int!
 }
 
 type PatientDisease {
@@ -423,6 +501,7 @@ type PatientDisease {
   id: Int!
   notes: String
   patient_id: Int!
+  start_date: DateTime
   tight: Boolean!
 }
 
@@ -449,6 +528,7 @@ type PatientMedicine {
   medicine_id: Int!
   notes: String
   patient_id: Int!
+  start_date: DateTime
 }
 
 type PatientPayment {
@@ -489,9 +569,17 @@ type ProblemType {
   name: String!
 }
 
+type Product {
+  id: Int!
+  name: String!
+}
+
 type Query {
   badHabit(id: Int!): BadHabit!
   badHabits(item_per_page: Float, page: Float, search: String): Paginatebadhabit!
+  bookIn(id: Int!): BookIn!
+  bookIns(item_per_page: Float, page: Float, search: String): Paginatebookin!
+  bookOut(id: Int!): BookOut!
   categories: [Category!]!
   chemicalMaterial(id: Int!): ChemicalMaterial!
   chemicalMaterials(item_per_page: Float, page: Float, search: String): PaginateChemicalMaterial!
@@ -502,8 +590,8 @@ type Query {
   patient(id: Int!): Patient!
   patientBadHabits(patient_id: Int!): [PatientBadHabit!]!
   patientCosts(item_per_page: Float, page: Float, patient_id: Int, sort: PatientCostSortInput): PaginatedPatientCost!
-  patientDiagnoses: [PatientDiagnosis!]!
-  patientDiagnosis(id: Int!): PatientDiagnosis!
+  patientDiagnose(id: Int!): PatientDiagnosis!
+  patientDiagnoses(item_per_page: Float, page: Float, patient_id: Float, problem_type_id: Float): PaginatedPatientDiagnosis!
   patientDiseases(patient_id: Int!): [PatientDisease!]!
   patientMedicalImages(medical_image_type_id: Int, patient_id: Int): [PatientMedicalImage!]!
   patientMedicalImagesType(id: Int!): PatientMedicalImagesType!
@@ -517,6 +605,10 @@ type Query {
   problemType(id: Int!): ProblemType!
   problemTypes: [ProblemType!]!
   problems(item_per_page: Float, page: Float, search: String): PaginateProblem!
+  product(id: Int!): Product!
+  products(item_per_page: Float, page: Float, search: String): Paginateproduct!
+  selectStoredProduct(id: Int!): [StoredProduct!]!
+  storedProducts: [StoredProduct!]!
   treatment(id: Int!): Treatment!
   treatmentType(id: Int!): TreatmentType!
   treatmentTypes: [TreatmentType!]!
@@ -562,6 +654,16 @@ type Steps {
   name: String!
   subSteps: [SubStep!]
   treatment_id: Int!
+}
+
+type StoredProduct {
+  expiration_date: DateTime!
+  id: Int!
+  price: Int!
+  product: Product!
+  product_id: Int!
+  quantity: Int!
+  total_quantity: Int!
 }
 
 type SubStep {
@@ -620,6 +722,7 @@ input UpdatePatientBadHabitInput {
   bad_habet_id: Int
   id: Int!
   notes: String
+  start_date: DateTime
 }
 
 input UpdatePatientCostInput {
@@ -632,9 +735,11 @@ input UpdatePatientCostInput {
 }
 
 input UpdatePatientDiagnosisInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  expected_treatment: String
   id: Int!
+  patient_id: Int
+  place: String
+  problem_id: Int
 }
 
 input UpdatePatientDiseaseInput {
@@ -642,6 +747,7 @@ input UpdatePatientDiseaseInput {
   id: Int!
   notes: String
   patient_id: Int
+  start_date: DateTime
   tight: Boolean
 }
 
@@ -675,6 +781,7 @@ input UpdatePatientMedicineInput {
   medicine_id: Int
   notes: String
   patient_id: Int
+  start_date: DateTime
 }
 
 input UpdatePatientPaymentInput {
@@ -697,6 +804,10 @@ input UpdateProblemInput {
 }
 
 input UpdateProblemTypeInput {
+  name: String!
+}
+
+input UpdateProductInput {
   name: String!
 }
 
