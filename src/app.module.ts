@@ -32,6 +32,7 @@ import { ImagesUploaderService } from './images_uploader/images_uploader.service
 import { AccessTokenGuard } from './auth/guards/accessToken.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { CustomGqlExceptionFilter } from './middlewares/GraphqlErrorMiddleware';
+import { AuthResolver } from './auth/auth.resolver';
 
 const apolloDriverConfig: ApolloDriverConfig = {
   formatError: (error: any) => {

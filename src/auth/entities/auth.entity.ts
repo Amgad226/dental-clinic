@@ -2,6 +2,6 @@ import { ObjectType, Field, Int } from '@nestjs/graphql';
 
 @ObjectType()
 export class Auth {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @Field(() => Boolean, { description: 'this field for check if this phone number exists in users ' })
+  phoneExists: boolean;
 }

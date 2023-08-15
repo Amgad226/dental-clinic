@@ -6,7 +6,8 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { AccessTokenStrategy } from './strategies/accessToken.strategy';
 import { RefreshTokenStrategy } from './strategies/refreshToken.strategy';
+import { OtpService } from './otp.service';
 @Module({
-  providers: [AuthResolver, AuthService, JwtService, AccessTokenStrategy, RefreshTokenStrategy]
+  providers: [OtpService,ConfigService,AuthResolver, AuthService, JwtService, AccessTokenStrategy, RefreshTokenStrategy]
 })
 export class AuthModule { } 

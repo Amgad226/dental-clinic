@@ -3,8 +3,8 @@
 # ------------------------------------------------------
 
 type Auth {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """this field for check if this phone number exists in users """
+  phoneExists: Boolean!
 }
 
 type BadHabit {
@@ -20,6 +20,14 @@ type Category {
   name: String!
 }
 
+type CheckPhone {
+  """Example field (placeholder)"""
+  phoneExistsInPatients: Boolean!
+
+  """Example field (placeholder)"""
+  phoneExistsInUsers: Boolean!
+}
+
 type ChemicalMaterial {
   """conflicts of ChemicalMaterial field """
   conflicts: [ChemicalMaterial!]
@@ -31,8 +39,6 @@ type ChemicalMaterial {
   name: String!
 }
 
-type LogoutResponse {
-  loggedOut: Boolean!
 input CreateBadHabitInput {
   chemical_material_id: [Int!]
   name: String!
@@ -201,6 +207,10 @@ enum Gender {
   male
 }
 
+type LogoutResponse {
+  loggedOut: Boolean!
+}
+
 type Medicine {
   """category"""
   category: Category!
@@ -236,6 +246,8 @@ type MedicineChemicalMaterials {
 }
 
 type Mutation {
+  CheckPhone(checkPhoneInput: PhoneInput!): ResponseCheckPhone!
+  SendOtp(checkPhoneInput: PhoneInput!): ResponseSendOtp!
   createBadHabit(createBadHabitInput: CreateBadHabitInput!): BadHabit!
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   createChemicalMaterial(createChemicalMaterialInput: CreateChemicalMaterialInput!): ChemicalMaterial!
@@ -279,8 +291,6 @@ type Mutation {
   reomveUser(id: Int!): Auth!
   signup(signUpInput: SignUpInput!): SignResponse!
   singin(signInInput: SignInInput!): SignResponse!
-  updateBadHabit(updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
-  updateDisease(updateDiseaseInput: UpdateDiseaseInput!): Disease!
   updateBadHabit(id: Int!, updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
   updateChemicalMaterial(id: Int!, updateChemicalMaterialInput: UpdateChemicalMaterialInput!): ChemicalMaterial!
   updateDisease(id: Int!, updateDiseaseInput: UpdateDiseaseInput!): Disease!
@@ -301,16 +311,16 @@ type Mutation {
   updateTreatmentType(id: Int!, updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
 }
 
+type NewTokenResponse {
+  accessToken: String!
+  refreshToken: String!
+}
+
 type PaginateChemicalMaterial {
   item_per_page: Int!
   items: [ChemicalMaterial!]
   page: Int!
   totalPages: Int!
-}
-
-type NewTokenResponse {
-  accessToken: String!
-  refreshToken: String!
 }
 
 type PaginateProblem {
@@ -455,6 +465,10 @@ type PatientTeethTreatment {
   exampleField: Int!
 }
 
+input PhoneInput {
+  phone: String!
+}
+
 type Problem {
   """Problem_type"""
   Problem_type: ProblemType!
@@ -509,6 +523,41 @@ type Query {
   treatments(item_per_page: Float, page: Float, search: String): paginateTreatment!
 }
 
+type ResponseCheckPhone {
+  data: CheckPhone
+  message: String
+  status: Int
+}
+
+type ResponseSendOtp {
+  data: SendOtp
+  message: String
+  status: Int
+}
+
+type SendOtp {
+  """Example field (placeholder)"""
+  otp: Int!
+}
+
+input SignInInput {
+  password: String!
+  phone: String!
+}
+
+type SignResponse {
+  accessToken: String!
+  refreshToken: String!
+  user: User!
+}
+
+input SignUpInput {
+  password: String!
+  patientId: Float!
+  phone: String!
+  userName: String!
+}
+
 type Steps {
   name: String!
   subSteps: [SubStep!]
@@ -528,23 +577,6 @@ type Treatment {
   steps: [Steps!]
   treatment_type: TreatmentType!
   treatment_type_id: Int!
-}
-
-input SignInInput {
-  email: String!
-  password: String!
-}
-
-type SignResponse {
-  accessToken: String!
-  refreshToken: String!
-  user: User!
-}
-
-input SignUpInput {
-  email: String!
-  password: String!
-  userName: String!
 }
 
 type TreatmentType {
@@ -670,12 +702,6 @@ input UpdateProblemTypeInput {
 
 input UpdateStepInput {
   name: String!
-}
-
-type User {
-  email: String!
-  id: Int!
-  userName: String!
   subSteps: [UpdateSubStepInput!]
 }
 
@@ -697,6 +723,12 @@ input UpdateTreatmentTypeInput {
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
+
+type User {
+  id: Int!
+  phone: String!
+  userName: String!
+}
 
 type paginateMedicine {
   item_per_page: Int!

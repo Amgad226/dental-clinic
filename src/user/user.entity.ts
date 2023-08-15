@@ -10,5 +10,5 @@ export class User {
     userName: string;
 
     @Field()
-    email: string;
+    phone: string;
 }

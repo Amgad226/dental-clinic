@@ -95,8 +95,6 @@ model MedicineChemicalMaterial {
   medicine          Medicine         @relation(fields: [medicine_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   chemical_material ChemicalMaterial @relation(fields: [chemical_material_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-
-
   @@map("medicines_chemical_materials")
 }
 
@@ -163,14 +161,19 @@ model Problem {
 }
 
 model User {
-  id                 Int      @id @default(autoincrement())
-  userName           String
-  email              String   @unique
+  id         Int     @id @default(autoincrement())
+  userName   String
+  phone      String  @unique
+  patient_id Int
+  patient    Patient @relation(fields: [patient_id], references: [id])
+
+  isVerified         Boolean
   hashedPassword     String
   hashedRefreshToken String?
   createAt           DateTime @default(now())
   updateAt           DateTime @default(now())
 }
+
 model Category {
   id   Int    @id @default(autoincrement())
   name String
@@ -204,6 +207,7 @@ model Patient {
   Diagnose              Diagnose[]
   PatientTeethTreatment PatientTeethTreatment[]
   PatientMedicalImage   PatientMedicalImage[]
+  User                  User[]
 
   @@map("patients")
 }

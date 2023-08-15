@@ -12,10 +12,31 @@ import { CurrentUserId } from './decorators/currentUserId.decorator';
 import { CurrentUser } from './decorators/currentUser.decorator';
 import { UseGuards } from '@nestjs/common';
 import { RefreshTokenGuard } from './guards/refreshToken.guard';
+import { PhoneInput } from './dto/login-input';
+import { CheckPhone } from './entities/check-phone.entity';
+import { ResponseCheckPhone } from './entities/response-check-phone.entity';
+import { Controller, Get, Res, HttpStatus } from '@nestjs/common';
+import { Response } from 'src/global/response-entity';
+import { ResponseSendOtp } from './entities/response-send-otp.entity';
 
 @Resolver(() => Auth)
 export class AuthResolver {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
+
+  @Public()
+  @Mutation(() => ResponseCheckPhone, { name: 'CheckPhone' })
+  checkPhone(@Args('checkPhoneInput') checkPhoneInput: PhoneInput) {
+    return this.authService.checkPhone(checkPhoneInput);
+  }
+
+  @Public()
+  @Mutation(() => ResponseSendOtp, { name: 'SendOtp' })
+  sendOtp(@Args('checkPhoneInput') checkPhoneInput: PhoneInput) {
+   
+    return this.authService.sendOtp(checkPhoneInput);
+  }
+
+
   @Public()
   @Mutation(() => SignResponse)
   signup(@Args('signUpInput') signUpInput: SignUpInput) {
@@ -42,9 +63,9 @@ export class AuthResolver {
   @Mutation(() => NewTokenResponse)
   geNewTokens(
     @CurrentUserId() userId: number,
-    @CurrentUser('refreshToken') refreshToken: string
+    @CurrentUser('refreshToken') refreshToken: string,
   ) {
-    return this.authService.getNewTokens(userId, refreshToken)
+    return this.authService.getNewTokens(userId, refreshToken);
   }
   // @Query(() => [Auth], { name: 'auth' })
   // findAll() {
@@ -60,5 +81,4 @@ export class AuthResolver {
   // updateAuth(@Args('updateAuthInput') updateAuthInput: UpdateAuthInput) {
   //   return this.authService.update(updateAuthInput.id, updateAuthInput);
   // }
-
 }
