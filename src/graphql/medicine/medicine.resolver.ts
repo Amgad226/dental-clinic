@@ -4,7 +4,7 @@ import { Medicine } from './entities/medicine.entity';
 import { CreateMedicineInput } from './dto/create-medicine.input';
 import { UpdateMedicineInput } from './dto/update-medicine.input';
 import { paginateMedicine } from './entities/paginateMedicine';
-import { checkIfExists, validator } from '../validatior/validator';
+import { checkIfExists, validator } from '../../validatior/validator';
 import { createMedicine, updateMedicine } from './validation/medicine.validation';
 
 @Resolver(() => Medicine)

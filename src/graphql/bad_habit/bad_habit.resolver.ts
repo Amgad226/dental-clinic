@@ -4,7 +4,7 @@ import { BadHabit } from './entities/bad_habit.entity';
 import { CreateBadHabitInput } from './dto/create-bad_habit.input';
 import { UpdateBadHabitInput } from './dto/update-bad_habit.input';
 import { Paginatebadhabit } from './entities/PAginatebadhabit';
-import { checkIfExists, validator } from '../validatior/validator';
+import { checkIfExists, validator } from '../../validatior/validator';
 import { createBadHabit, updateBadHabit } from './validation/badhabit.validation';
 import { error } from 'console';
 

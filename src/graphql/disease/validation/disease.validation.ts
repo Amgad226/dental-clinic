@@ -1,5 +1,5 @@
 import { Props } from 'src/graphql/interfaces/props.interface';
-import { checkIfChemicalsExists, checkIfExists } from 'src/graphql/validatior/validator';
+import { checkIfChemicalsExists, checkIfExists } from 'src/validatior/validator';
 
 export async function createDisease({ id, data, modelName }: Props) {
   const checkIfChemicalExist = await checkIfChemicalsExists({ data });

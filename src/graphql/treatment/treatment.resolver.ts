@@ -4,7 +4,7 @@ import { Treatment } from './entities/treatment.entity';
 import { CreateTreatmentInput } from './dto/create-treatment.input';
 import { UpdateTreatmentInput } from './dto/update-treatment.input';
 import { paginateTreatment } from './entities/paginateTreatment';
-import { checkIfExists, validator } from '../validatior/validator';
+import { checkIfExists, validator } from '../../validatior/validator';
 import { createTreatment, updateTreatment } from './validation/treatment.validation';
 
 @Resolver(() => Treatment)

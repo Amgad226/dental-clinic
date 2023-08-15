@@ -5,7 +5,7 @@ import { UpdateProblemInput } from './dto/update-problem.input';
 
 import { Problem } from './entities/problem.entity';
 import { PaginateProblem } from './entities/PaginateProblem';
-import { checkIfExists, validator } from 'src/graphql/validatior/validator';
+import { checkIfExists, validator } from 'src/validatior/validator';
 import { createProblem, updateProblem } from './validation/problem.validation';
 
 @Resolver(() => Problem)

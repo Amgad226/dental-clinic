@@ -1,5 +1,5 @@
 import { Props } from 'src/graphql/interfaces/props.interface';
-import { checkIfExists } from 'src/graphql/validatior/validator';
+import { checkIfExists } from 'src/validatior/validator';
 
 
 export async function createProblem({ id, data, modelName }: Props) {

@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { Props } from 'src/graphql/interfaces/props.interface';
-import { checkIfChemicalsExists, checkIfExists } from 'src/graphql/validatior/validator';
+import { checkIfChemicalsExists, checkIfExists } from 'src/validatior/validator';
 
 const prisma = new PrismaClient();
 function getAllPossiblePairs(arr) {
