@@ -9,4 +9,7 @@ export class CreatePatientMedicineInput {
 
   @Field(() => String, { nullable: true })
   notes?: string
+
+  @Field(() => Date, { nullable: true })
+  start_date?: Date
 }

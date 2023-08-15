@@ -3,7 +3,7 @@ import { ProblemTypeService } from './problem_type.service';
 import { ProblemType } from './entities/problem_type.entity';
 import { CreateProblemTypeInput } from './dto/create-problem_type.input';
 import { UpdateProblemTypeInput } from './dto/update-problem_type.input';
-import { checkIfExists, validator } from '../validatior/validator';
+import { checkIfExists, validator } from '../../validatior/validator';
 
 @Resolver(() => ProblemType)
 export class ProblemTypeResolver {

@@ -3,7 +3,7 @@ import { TreatmentTypeService } from './treatment_type.service';
 import { TreatmentType } from './entities/treatment_type.entity';
 import { CreateTreatmentTypeInput } from './dto/create-treatment_type.input';
 import { UpdateTreatmentTypeInput } from './dto/update-treatment_type.input';
-import { checkIfExists, validator } from '../validatior/validator';
+import { checkIfExists, validator } from '../../validatior/validator';
 
 @Resolver(() => TreatmentType)
 export class TreatmentTypeResolver {

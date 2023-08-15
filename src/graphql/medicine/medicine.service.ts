@@ -4,6 +4,7 @@ import { UpdateMedicineInput } from './dto/update-medicine.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GraphQLError } from 'graphql';
 import { PaginatorService } from 'src/pagination/PaginatorService';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class MedicineService {
@@ -42,11 +43,16 @@ export class MedicineService {
 
   //need relation with category
   async findAll(page: any, item_per_page: any, search?: string) {
-    return await PaginatorService({
+    return await PaginatorService<Prisma.MedicineFindManyArgs>({
       Modal: this.prisma.medicine,
       item_per_page,
       page,
       search,
+      relations: {
+        include: {
+          category: true
+        }
+      }
     });
   }
 
@@ -69,8 +75,8 @@ export class MedicineService {
 
     await this.prisma.medicineChemicalMaterial.deleteMany({ where: { id, } })
 
-     //attach data chemical_material_id and medicine_id in pivot table
-     await this.prisma.medicineChemicalMaterial.createMany({
+    //attach data chemical_material_id and medicine_id in pivot table
+    await this.prisma.medicineChemicalMaterial.createMany({
       data: chemical_material_id.map((chemical_id) => ({
         chemical_material_id: chemical_id,
         medicine_id: id,
@@ -87,7 +93,7 @@ export class MedicineService {
   }
 
   async remove(id: number) {
-  
+
     return await this.prisma.medicine.delete({ where: { id } });
 
   }

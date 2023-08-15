@@ -9,7 +9,6 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { BadHabitModule } from './graphql/bad_habit/bad_habit.module';
 import { TreatmentTypeModule } from './graphql/treatment_type/treatment_type.module';
 import { ProblemTypeModule } from './graphql/problem_type/problem_type.module';
-import { ProblemModule } from './problem/problem.module';
 import { ChemicalMaterialModule } from './graphql/chemical_material/chemical_material.module';
 import { ConfigModule } from '@nestjs/config';
 import { TreatmentModule } from './graphql/treatment/treatment.module';
@@ -27,10 +26,14 @@ import { PatientTeethTreatmentsModule } from './graphql/patient_management/patie
 import { PatientDiseasesModule } from './graphql/patient_management/patient_diseases/patient_diseases.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ImagesUploaderService } from './images_uploader/images_uploader.service';
+<<<<<<< HEAD
 import { ProductModule } from './graphql/product/product.module';
 import { StoredProductModule } from './graphql/stored_product/stored_product.module';
 import { BookInModule } from './graphql/book_in/book_in.module';
 import { BookOutModule } from './graphql/book_out/book_out.module';
+=======
+import { ProblemModule } from './graphql/problem/problem.module';
+>>>>>>> fa68b41d8cca6f409efac0962e146c4b5d766456
 
 const apolloDriverConfig: ApolloDriverConfig = {
   formatError: (error: any) => {

@@ -4,7 +4,7 @@ import { Disease } from './entities/disease.entity';
 import { CreateDiseaseInput } from './dto/create-disease.input';
 import { UpdateDiseaseInput } from './dto/update-disease.input';
 import { Paginatedisease } from './entities/Paginatedisease';
-import { checkIfExists, validator } from '../validatior/validator';
+import { checkIfExists, validator } from '../../validatior/validator';
 import { createDisease, updateDisease } from './validation/disease.validation';
 
 @Resolver(() => Disease)

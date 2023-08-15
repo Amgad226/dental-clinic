@@ -4,12 +4,12 @@ import { UpdatePatientInput } from './dto/update-patient.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PaginatorService } from 'src/pagination/PaginatorService';
 import { GraphQLError } from 'graphql';
-import { PatientDiseasesService } from '../patient_diseases/patient_diseases.service';
 import { Patient } from './entities/patient.entity';
 
 @Injectable()
 export class PatientService {
   constructor(private prisma: PrismaService) { }
+
   async create(createPatientInput: CreatePatientInput): Promise<Patient> {
     const { patient_diseases, patient_badHabits, patient_medicines, ...rest } = createPatientInput
     const new_patient = await this.prisma.patient.create({
@@ -20,11 +20,11 @@ export class PatientService {
         PatientBadHabet: {
           include: { bad_habet: true }
         },
-        // PatientMedicine: {
-        //   include: {
-        //     medicine: true
-        //   }
-        // }
+        PatientMedicine: {
+          include: {
+            medicine: true
+          }
+        }
       },
       data: {
         ...rest,

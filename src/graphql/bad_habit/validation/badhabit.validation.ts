@@ -1,7 +1,7 @@
-import { Props } from 'src/graphql/interfaces/props.interface';
-import { checkIfChemicalsExists, checkIfExists } from 'src/graphql/validatior/validator';
+import { ValidatorProps } from 'src/validatior/interfaces/props.interface';
+import { checkIfChemicalsExists, checkIfExists } from 'src/validatior/validator';
 
-export async function createBadHabit({ id, data, modelName }: Props) {
+export async function createBadHabit({ id, data, modelName }: ValidatorProps) {
   const checkIfChemicalExist = await checkIfChemicalsExists({ data });
   if (checkIfChemicalExist.fail == false) {
     return checkIfChemicalExist;
@@ -9,7 +9,7 @@ export async function createBadHabit({ id, data, modelName }: Props) {
   return { fail: true };
 }
 
-export async function updateBadHabit({ id, data, modelName }: Props) {
+export async function updateBadHabit({ id, data, modelName }: ValidatorProps) {
   const badHabitIfExist = await checkIfExists({ id, modelName });
   if (badHabitIfExist.fail == false) {
     return badHabitIfExist;
