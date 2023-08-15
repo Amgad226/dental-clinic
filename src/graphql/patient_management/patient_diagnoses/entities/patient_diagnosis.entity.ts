@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Problem } from 'src/problem/entities/problem.entity';
+import { Problem } from 'src/graphql/problem/entities/problem.entity';
 
 @ObjectType()
 export class PatientDiagnosis {

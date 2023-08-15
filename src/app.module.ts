@@ -9,7 +9,6 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { BadHabitModule } from './graphql/bad_habit/bad_habit.module';
 import { TreatmentTypeModule } from './graphql/treatment_type/treatment_type.module';
 import { ProblemTypeModule } from './graphql/problem_type/problem_type.module';
-import { ProblemModule } from './problem/problem.module';
 import { ChemicalMaterialModule } from './graphql/chemical_material/chemical_material.module';
 import { ConfigModule } from '@nestjs/config';
 import { TreatmentModule } from './graphql/treatment/treatment.module';
@@ -27,6 +26,7 @@ import { PatientTeethTreatmentsModule } from './graphql/patient_management/patie
 import { PatientDiseasesModule } from './graphql/patient_management/patient_diseases/patient_diseases.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ImagesUploaderService } from './images_uploader/images_uploader.service';
+import { ProblemModule } from './graphql/problem/problem.module';
 
 const apolloDriverConfig: ApolloDriverConfig = {
   formatError: (error: any) => {
