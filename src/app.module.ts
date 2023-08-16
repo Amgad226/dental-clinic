@@ -26,19 +26,20 @@ import { PatientTeethTreatmentsModule } from './graphql/patient_management/patie
 import { PatientDiseasesModule } from './graphql/patient_management/patient_diseases/patient_diseases.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ImagesUploaderService } from './images_uploader/images_uploader.service';
-import { ProductModule } from './graphql/product/product.module';
-import { StoredProductModule } from './graphql/stored_product/stored_product.module';
-import { BookInModule } from './graphql/book_in/book_in.module';
-import { BookOutModule } from './graphql/book_out/book_out.module';
 import { ProblemModule } from './graphql/problem/problem.module';
-import { PatientAppointmentsModule } from './patient_appointments/patient_appointments.module';
-import { PatientSessionsModule } from './patient_sessions/patient_sessions.module';
-import { PatientTreatmentsModule } from './patient_treatments/patient_treatments.module';
-import { PatientPerscrptionsModule } from './patient_perscrptions/patient_perscrptions.module';
-import { PatientReservationsModule } from './patient_reservations/patient_reservations.module';
-import { PatientLabOrdersModule } from './patient_lab_orders/patient_lab_orders.module';
-import { WorkingHoursModule } from './working_hours/working_hours.module';
-import { PatientPerscrptionsMediciensModule } from './patient_perscrptions_mediciens/patient_perscrptions_mediciens.module';
+import { PatientAppointmentsModule } from './graphql/patient_management/patient_appointments/patient_appointments.module';
+import { PatientSessionsModule } from './graphql/patient_management/patient_sessions/patient_sessions.module';
+import { PatientTreatmentsModule } from './graphql/patient_management/patient_treatments/patient_treatments.module';
+import { PatientPerscrptionsModule } from './graphql/patient_management/patient_perscrptions/patient_perscrptions.module';
+import { PatientReservationsModule } from './graphql/patient_management/patient_reservations/patient_reservations.module';
+import { PatientLabOrdersModule } from './graphql/patient_management/patient_lab_orders/patient_lab_orders.module';
+import { WorkingHoursModule } from './graphql/patient_management/working_hours/working_hours.module';
+import { PatientPerscrptionsMediciensModule } from './graphql/patient_management/patient_perscrptions_mediciens/patient_perscrptions_mediciens.module';
+import { ProductModule } from './graphql/store/product/product.module';
+import { StoredProductModule } from './graphql/store/stored_product/stored_product.module';
+import { BookInModule } from './graphql/store/book_in/book_in.module';
+import { BookOutModule } from './graphql/store/book_out/book_out.module';
+
 
 const apolloDriverConfig: ApolloDriverConfig = {
   formatError: (error: any) => {
