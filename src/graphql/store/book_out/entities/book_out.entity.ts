@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Product } from 'src/graphql/product/entities/product.entity';
+import { Product } from '../../product/entities/product.entity';
 import { CreateDateColumn } from 'typeorm';
 
 @ObjectType()
@@ -12,13 +12,13 @@ export class BookOut {
 
   @Field(() => Int)
   quantity: number;
-  
+
   @Field(() => Int)
   total_price: number;
 
-  @Field(() =>Date )
+  @Field(() => Date)
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
-  created_at: Date  
+  created_at: Date
 
   @Field(() => Product)
   product: Product;
