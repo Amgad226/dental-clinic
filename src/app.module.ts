@@ -33,6 +33,8 @@ import { ProductModule } from './graphql/store/product/product.module';
 import { StoredProductModule } from './graphql/store/stored_product/stored_product.module';
 import { BookInModule } from './graphql/store/book_in/book_in.module';
 import { BookOutModule } from './graphql/store/book_out/book_out.module';
+import { AccessTokenGuard } from './auth/guards/accessToken.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 
 const apolloDriverConfig: ApolloDriverConfig = {
