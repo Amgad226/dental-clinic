@@ -198,38 +198,38 @@ model Patient {
 }
 
 model PatientDisease {
-  id         Int     @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   patient_id Int
   disease_id Int
   tight      Boolean
   notes      String?
   start_date DateTime?
-  patient    Patient @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  disease    Disease @relation(fields: [disease_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  patient    Patient   @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  disease    Disease   @relation(fields: [disease_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("patients_diseases")
 }
 
 model PatientBadHabet {
-  id           Int      @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   bad_habet_id Int
   patient_id   Int
   notes        String?
   start_date   DateTime?
-  patient      Patient  @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  bad_habet    BadHabit @relation(fields: [bad_habet_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  patient      Patient   @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bad_habet    BadHabit  @relation(fields: [bad_habet_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("patients_badHabits")
 }
 
 model PatientMedicine {
-  id          Int     @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   medicine_id Int
   patient_id  Int
   notes       String?
   start_date  DateTime?
-  patient  Patient  @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  medicine Medicine @relation(fields: [medicine_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  patient     Patient   @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  medicine    Medicine  @relation(fields: [medicine_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("patients_medicines")
 }
@@ -312,37 +312,37 @@ model PatientTeethTreatment {
 }
 
 model Product {
-  id   Int    @id @default(autoincrement())
-  name String
-  bookins  BookIn[]
+  id             Int             @id @default(autoincrement())
+  name           String
+  bookins        BookIn[]
   storedproducts StoredProduct[]
-  bookouts  BookOut[]
+  bookouts       BookOut[]
 
   @@map("products")
 }
 
 model BookIn {
-  id          Int       @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   product_id  Int
   quantity    Int
   price       Int
   total_price Int
-  created_at  DateTime  @default(now())
-  product    Product    @relation(fields: [product_id],references: [id])
+  created_at  DateTime @default(now())
+  product     Product  @relation(fields: [product_id], references: [id])
 
   @@map("book_ins")
 }
 
 model StoredProduct {
-  id              Int    @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   product_id      Int
   expiration_date DateTime
   quantity        Int
   price           Int
   total_quantity  Int
-  product    Product     @relation(fields: [product_id],references: [id])
+  product         Product  @relation(fields: [product_id], references: [id])
 
-@@map("stored_products")
+  @@map("stored_products")
 }
 
 model BookOut {
@@ -350,10 +350,115 @@ model BookOut {
   product_id  Int
   quantity    Int
   total_price Int
-  created_at DateTime  @default(now())
-  product    Product   @relation(fields: [product_id],references: [id])
- 
+  created_at  DateTime @default(now())
+  product     Product  @relation(fields: [product_id], references: [id])
+
   @@map("book_outs")
+}
+
+enum Days {
+  sun
+  mon
+  tue
+  wen
+  thr
+  fri
+  sat
+}
+
+model WorkingHours {
+  id   Int      @id @default(autoincrement())
+  day  Days?
+  from DateTime
+  to   DateTime
+  open Boolean
+}
+
+model notifications {
+  id      Int      @id @default(autoincrement())
+  user_id Int
+  date    DateTime
+  msg     String
+
+  seen Boolean
+}
+
+enum AppointmentStates {
+  registerd
+  unreegisterd
+}
+
+enum AppointmentTypes {
+  normal
+  waiting
+  emergency
+  external
+}
+
+model PatientAppointment {
+  id         Int               @id @default(autoincrement())
+  patient_id Int
+  place      String
+  date       DateTime
+  state      AppointmentStates
+  type       AppointmentTypes
+  phase      String?
+  notes      String?
+}
+
+model PatientSession {
+  id                      Int @id @default(autoincrement())
+  patient_id              Int
+  patiient_appointment_id Int
+}
+
+model PatientReservation {
+  id         Int      @id @default(autoincrement())
+  patient_id Int
+  date       DateTime
+  notes      String?
+}
+
+enum PatientTreatmentTypes {
+  teethly
+  unteethly
+}
+
+model PatientTreatment {
+  id           Int                   @id @default(autoincrement())
+  patient_id   Int
+  treatment_id Int
+  place        String
+  price        Float
+  type         PatientTreatmentTypes
+}
+
+model PatientTreatmentDoneStep {
+  id                   Int     @id @default(autoincrement())
+  patient_treatment_id Int
+  step_id              Int
+  session_id           Int
+  note                 String?
+}
+
+model PatientLabOrder {
+  id                 Int @id @default(autoincrement())
+  patient_session_id Int
+  lab_order_id       Int
+}
+
+model PatientPerscrptions {
+  id                 Int @id @default(autoincrement())
+  patient_session_id Int
+}
+
+model PatientPerscrptionsMedicince {
+  id                     Int     @id @default(autoincrement())
+  patient_perscrption_id Int
+  medicince_id           Int
+  qantity                String
+  repetition             String
+  description            String?
 }
 
 // 
