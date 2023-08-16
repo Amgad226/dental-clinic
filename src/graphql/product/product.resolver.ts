@@ -3,12 +3,12 @@ import { ProductService } from './product.service';
 import { Product } from './entities/product.entity';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
-import { checkIfExists, validator } from '../validatior/validator';
+import { checkIfExists, validator } from 'src/validatior/validator';
 import { Paginateproduct } from './entities/Paginateproduct';
 
 @Resolver(() => Product)
 export class ProductResolver {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductService) { }
 
   @Mutation(() => Product)
   createProduct(@Args('createProductInput') createProductInput: CreateProductInput) {
@@ -44,9 +44,9 @@ export class ProductResolver {
   async updateProduct(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateProductInput') updateProductInput: UpdateProductInput,
-    ) {
+  ) {
     await validator(checkIfExists)({ id, modelName: 'product' });
-    return this.productService.update(id,updateProductInput);
+    return this.productService.update(id, updateProductInput);
   }
 
   @Mutation(() => Product)

@@ -1,11 +1,11 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { StoredProductService } from './stored_product.service';
 import { StoredProduct } from './entities/stored_product.entity';
-import { checkIfExists, validator } from '../validatior/validator';
+import { checkIfExists, validator } from 'src/validatior/validator';
 
 @Resolver(() => StoredProduct)
 export class StoredProductResolver {
-  constructor(private readonly storedProductService: StoredProductService) {}
+  constructor(private readonly storedProductService: StoredProductService) { }
   @Query(() => [StoredProduct], { name: 'storedProducts' })
   findAll() {
     return this.storedProductService.findAll();

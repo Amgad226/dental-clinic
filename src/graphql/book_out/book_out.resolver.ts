@@ -2,7 +2,7 @@ import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { BookOutService } from './book_out.service';
 import { BookOut } from './entities/book_out.entity';
 import { CreateBookOutInput } from './dto/create-book_out.input';
-import { checkIfExists, validator } from '../validatior/validator';
+import { checkIfExists, validator } from 'src/validatior/validator';
 
 @Resolver(() => BookOut)
 export class BookOutResolver {

@@ -2,12 +2,12 @@ import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { BookInService } from './book_in.service';
 import { BookIn } from './entities/book_in.entity';
 import { CreateBookInInput } from './dto/create-book_in.input';
-import { checkIfExists, validator } from '../validatior/validator';
+import { checkIfExists, validator } from 'src/validatior/validator';
 import { Paginatebookin } from './entities/Paginatebookin';
 
 @Resolver(() => BookIn)
 export class BookInResolver {
-  constructor(private readonly bookInService: BookInService) {}
+  constructor(private readonly bookInService: BookInService) { }
 
   @Mutation(() => BookIn)
   async createBookIn(@Args('createBookInInput') createBookInInput: CreateBookInInput) {
