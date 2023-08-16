@@ -1,10 +1,10 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 
 @ObjectType()
-export class BadHabit {
+export class Product {
   @Field(() => Int)
   id: number;
 
-  @Field(() => String)
-  name: string;
+  @Field()
+  name: String;
 }
