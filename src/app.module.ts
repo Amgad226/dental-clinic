@@ -28,15 +28,12 @@ import { PatientTeethTreatmentsModule } from './graphql/patient_management/patie
 import { PatientDiseasesModule } from './graphql/patient_management/patient_diseases/patient_diseases.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ImagesUploaderService } from './images_uploader/images_uploader.service';
-import { AccessTokenGuard } from './auth/guards/accessToken.guard';
-import { APP_GUARD } from '@nestjs/core';
-import { CustomGqlExceptionFilter } from './middlewares/GraphqlErrorMiddleware';
-import { AuthResolver } from './auth/auth.resolver';
-import { ProblemModule } from './problem/problem.module';
-import { ProductModule } from './graphql/product/product.module';
-import { StoredProductModule } from './graphql/stored_product/stored_product.module';
-import { BookInModule } from './graphql/book_in/book_in.module';
-import { BookOutModule } from './graphql/book_out/book_out.module';
+import { ProblemModule } from './graphql/problem/problem.module';
+import { ProductModule } from './graphql/store/product/product.module';
+import { StoredProductModule } from './graphql/store/stored_product/stored_product.module';
+import { BookInModule } from './graphql/store/book_in/book_in.module';
+import { BookOutModule } from './graphql/store/book_out/book_out.module';
+
 
 const apolloDriverConfig: ApolloDriverConfig = {
   formatError: (error: any) => {
