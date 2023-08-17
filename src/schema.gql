@@ -124,6 +124,9 @@ input CreatePatientAppointmentInput {
   """treatment place"""
   place: String
 
+  """reservation"""
+  reservation_id: Int
+
   """AppointmentTypes"""
   type: AppointmentTypes!
 }
@@ -837,6 +840,9 @@ input UpdatePatientAppointmentInput {
 
   """treatment place"""
   place: String
+
+  """reservation"""
+  reservation_id: Int
 
   """AppointmentTypes"""
   type: AppointmentTypes

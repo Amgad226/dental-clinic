@@ -30,4 +30,7 @@ export class CreatePatientAppointmentInput {
   @Field(() => String, { description: 'notes', nullable: true })
   notes?: string
 
+  @Field(() => Int, { description: 'reservation', nullable: true })
+  reservation_id?: number
+
 }

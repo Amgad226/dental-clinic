@@ -6,17 +6,29 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class PatientAppointmentsService {
   constructor(private prisma: PrismaService) { }
-  async create({ date, ...restInputs }: CreatePatientAppointmentInput) {
+  async create({ date, reservation_id, type, ...restInputs }: CreatePatientAppointmentInput) {
     if (date < new Date(Date.now())) {
       throw new Error('Date must greater than now date');
+    }
+    if (type === 'external' && !reservation_id) {
+      throw new Error('reservation_id requierd on external appointment type');
+
     }
     return await this.prisma.patientAppointment.create({
       data: {
         ...restInputs,
         date,
+        type,
         state: 'unregisterd'
       },
       include: { patient: true }
+    }).then(async (data) => {
+      if (type === 'external' && reservation_id) {
+        await this.prisma.patientReservation.delete({
+          where: { id: reservation_id }
+        })
+      }
+      return data
     });
   }
 
