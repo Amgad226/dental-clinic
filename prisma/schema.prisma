@@ -393,7 +393,7 @@ model notifications {
 
 enum AppointmentStates {
   registerd
-  unreegisterd
+  unregisterd
 }
 
 enum AppointmentTypes {
@@ -406,10 +406,10 @@ enum AppointmentTypes {
 model PatientAppointment {
   id         Int               @id @default(autoincrement())
   patient_id Int
-  place      String
   date       DateTime
   state      AppointmentStates
   type       AppointmentTypes
+  place      String?
   phase      String?
   notes      String?
 

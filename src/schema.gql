@@ -2,6 +2,18 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+enum AppointmentStates {
+  registerd
+  unregisterd
+}
+
+enum AppointmentTypes {
+  emergency
+  external
+  normal
+  waiting
+}
+
 type BadHabit {
   id: Int!
   name: String!
@@ -97,8 +109,23 @@ input CreateMedicineInput {
 }
 
 input CreatePatientAppointmentInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """appointment date"""
+  date: DateTime!
+
+  """notes"""
+  notes: String
+
+  """Patient id"""
+  patient_id: Int!
+
+  """phase"""
+  phase: String
+
+  """treatment place"""
+  place: String
+
+  """AppointmentTypes"""
+  type: AppointmentTypes!
 }
 
 input CreatePatientBadHabitForExistingPatientInput {
@@ -497,8 +524,32 @@ type Patient {
 }
 
 type PatientAppointment {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """notes"""
+  PatientSession: [PatientSession!]
+
+  """appointment date"""
+  date: DateTime!
+
+  """notes"""
+  notes: String
+
+  """patient"""
+  patient: Patient!
+
+  """Patient id"""
+  patient_id: Int!
+
+  """phase"""
+  phase: String
+
+  """treatment place"""
+  place: String
+
+  """AppointmentStates"""
+  state: AppointmentStates!
+
+  """AppointmentTypes"""
+  type: AppointmentTypes!
 }
 
 type PatientBadHabit {
@@ -655,7 +706,7 @@ type Query {
   medicines(item_per_page: Float, page: Float, search: String): paginateMedicine!
   patient(id: Int!): Patient!
   patientAppointment(id: Int!): PatientAppointment!
-  patientAppointments: [PatientAppointment!]!
+  patientAppointments(date: DateTime): [PatientAppointment!]!
   patientBadHabits(patient_id: Int!): [PatientBadHabit!]!
   patientCosts(item_per_page: Float, page: Float, patient_id: Int, sort: PatientCostSortInput): PaginatedPatientCost!
   patientDiagnose(id: Int!): PatientDiagnosis!
@@ -766,9 +817,24 @@ input UpdateMedicineInput {
 }
 
 input UpdatePatientAppointmentInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  """appointment date"""
+  date: DateTime
   id: Int!
+
+  """notes"""
+  notes: String
+
+  """Patient id"""
+  patient_id: Int
+
+  """phase"""
+  phase: String
+
+  """treatment place"""
+  place: String
+
+  """AppointmentTypes"""
+  type: AppointmentTypes
 }
 
 input UpdatePatientBadHabitInput {

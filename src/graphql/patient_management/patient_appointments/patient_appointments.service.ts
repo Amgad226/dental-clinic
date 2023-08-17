@@ -1,26 +1,55 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePatientAppointmentInput } from './dto/create-patient_appointment.input';
 import { UpdatePatientAppointmentInput } from './dto/update-patient_appointment.input';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class PatientAppointmentsService {
-  create(createPatientAppointmentInput: CreatePatientAppointmentInput) {
-    return 'This action adds a new patientAppointment';
+  constructor(private prisma: PrismaService) { }
+  async create(createPatientAppointmentInput: CreatePatientAppointmentInput) {
+    return await this.prisma.patientAppointment.create({
+      data: {
+        ...createPatientAppointmentInput,
+        state: 'unregisterd'
+      }
+    });
   }
 
-  findAll() {
-    return `This action returns all patientAppointments`;
+  findAll({ date }: { date?: Date }) {
+    if (isNaN(date?.getTime()) && date) {
+      throw new Error('Invalid date');
+    }
+    const startDate = new Date(date?.getFullYear(), date?.getMonth(), date?.getDate());
+    const endDate = new Date(date?.getFullYear(), date?.getMonth(), date?.getDate() + 1);
+
+    return this.prisma.patientAppointment.findMany({
+      where: {
+        date: !!date?.getTime() ? {
+          gte: startDate.toISOString(),
+          lt: endDate.toISOString(),
+        } : undefined
+      }
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} patientAppointment`;
+  async findOne(id: number) {
+    return await this.prisma.patientAppointment.findUnique({
+      where: { id }
+    });
   }
 
-  update(id: number, updatePatientAppointmentInput: UpdatePatientAppointmentInput) {
-    return `This action updates a #${id} patientAppointment`;
+  async update(id: number, updatePatientAppointmentInput: UpdatePatientAppointmentInput) {
+    return await this.prisma.patientAppointment.update({
+      where: { id },
+      data: {
+        ...updatePatientAppointmentInput
+      }
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} patientAppointment`;
+  async remove(id: number) {
+    return await this.prisma.patientAppointment.delete({
+      where: { id }
+    });
   }
 }

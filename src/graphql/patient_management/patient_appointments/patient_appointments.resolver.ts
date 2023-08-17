@@ -6,7 +6,7 @@ import { UpdatePatientAppointmentInput } from './dto/update-patient_appointment.
 
 @Resolver(() => PatientAppointment)
 export class PatientAppointmentsResolver {
-  constructor(private readonly patientAppointmentsService: PatientAppointmentsService) {}
+  constructor(private readonly patientAppointmentsService: PatientAppointmentsService) { }
 
   @Mutation(() => PatientAppointment)
   createPatientAppointment(@Args('createPatientAppointmentInput') createPatientAppointmentInput: CreatePatientAppointmentInput) {
@@ -14,8 +14,8 @@ export class PatientAppointmentsResolver {
   }
 
   @Query(() => [PatientAppointment], { name: 'patientAppointments' })
-  findAll() {
-    return this.patientAppointmentsService.findAll();
+  findAll(@Args('date', { type: () => Date, nullable: true }) date?: Date) {
+    return this.patientAppointmentsService.findAll({ date });
   }
 
   @Query(() => PatientAppointment, { name: 'patientAppointment' })
