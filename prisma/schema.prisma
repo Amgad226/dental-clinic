@@ -80,9 +80,10 @@ model Medicine {
   category_id   Int
   concentration Float
 
-  category                  Category                   @relation("category", fields: [category_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  medicineChemicalMaterials MedicineChemicalMaterial[]
-  PatientMedicine           PatientMedicine[]
+  category                     Category                       @relation("category", fields: [category_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  medicineChemicalMaterials    MedicineChemicalMaterial[]
+  PatientMedicine              PatientMedicine[]
+  PatientPerscrptionsMedicince PatientPerscrptionsMedicince[]
 
   @@map("medicines")
 }
@@ -117,6 +118,7 @@ model Treatment {
   steps                 Step[]
   PatientCost           PatientCost[]
   PatientTeethTreatment PatientTeethTreatment[]
+  PatientTreatment      PatientTreatment[]
 
   @@map("treatments")
 }
@@ -127,7 +129,8 @@ model Step {
   treatment_id Int
   treatment    Treatment @relation(fields: [treatment_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  subSteps SubStep[]
+  subSteps                 SubStep[]
+  PatientTreatmentDoneStep PatientTreatmentDoneStep[]
 
   @@map("steps")
 }
@@ -193,6 +196,10 @@ model Patient {
   PatientDiagnose       PatientDiagnose[]
   PatientTeethTreatment PatientTeethTreatment[]
   PatientMedicalImage   PatientMedicalImage[]
+  PatientAppointment    PatientAppointment[]
+  PatientSession        PatientSession[]
+  PatientReservation    PatientReservation[]
+  PatientTreatment      PatientTreatment[]
 
   @@map("patients")
 }
@@ -379,8 +386,9 @@ model notifications {
   user_id Int
   date    DateTime
   msg     String
+  seen    Boolean
 
-  seen Boolean
+  // user     User  @relation(fields: [user_id], references: [id])
 }
 
 enum AppointmentStates {
@@ -404,12 +412,21 @@ model PatientAppointment {
   type       AppointmentTypes
   phase      String?
   notes      String?
+
+  patient        Patient          @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  PatientSession PatientSession[]
 }
 
 model PatientSession {
   id                      Int @id @default(autoincrement())
   patient_id              Int
   patiient_appointment_id Int
+
+  patient                  Patient                    @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  patient_appointment      PatientAppointment         @relation(fields: [patiient_appointment_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  PatientTreatmentDoneStep PatientTreatmentDoneStep[]
+  PatientLabOrder          PatientLabOrder[]
+  PatientPerscrptions      PatientPerscrptions[]
 }
 
 model PatientReservation {
@@ -417,6 +434,8 @@ model PatientReservation {
   patient_id Int
   date       DateTime
   notes      String?
+
+  patient Patient @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 enum PatientTreatmentTypes {
@@ -431,25 +450,39 @@ model PatientTreatment {
   place        String
   price        Float
   type         PatientTreatmentTypes
+
+  patient                  Patient                    @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  treatment                Treatment                  @relation(fields: [treatment_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  PatientTreatmentDoneStep PatientTreatmentDoneStep[]
 }
 
 model PatientTreatmentDoneStep {
   id                   Int     @id @default(autoincrement())
   patient_treatment_id Int
   step_id              Int
-  session_id           Int
+  patient_session_id   Int
   note                 String?
+
+  patient_treatment PatientTreatment @relation(fields: [patient_treatment_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  step              Step             @relation(fields: [step_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  session           PatientSession   @relation(fields: [patient_session_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model PatientLabOrder {
   id                 Int @id @default(autoincrement())
   patient_session_id Int
   lab_order_id       Int
+
+  session PatientSession @relation(fields: [patient_session_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // lab_order LabOrder       @relation(fields: [lab_order_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model PatientPerscrptions {
   id                 Int @id @default(autoincrement())
   patient_session_id Int
+
+  session                      PatientSession                 @relation(fields: [patient_session_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  PatientPerscrptionsMedicince PatientPerscrptionsMedicince[]
 }
 
 model PatientPerscrptionsMedicince {
@@ -459,6 +492,9 @@ model PatientPerscrptionsMedicince {
   qantity                String
   repetition             String
   description            String?
+
+  perscrption PatientPerscrptions @relation(fields: [patient_perscrption_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  medicince   Medicine            @relation(fields: [medicince_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 // 
