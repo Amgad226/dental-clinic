@@ -232,8 +232,9 @@ input CreatePatientPerscrptionsMedicienInput {
 }
 
 input CreatePatientReservationInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  date: DateTime!
+  notes: String
+  patient_id: Int!
 }
 
 input CreatePatientSessionInput {
@@ -417,7 +418,6 @@ type Mutation {
   updatePatientPayment(updatePatientPaymentInput: UpdatePatientPaymentInput!): PatientPayment!
   updatePatientPerscrption(updatePatientPerscrptionInput: UpdatePatientPerscrptionInput!): PatientPerscrption!
   updatePatientPerscrptionsMedicien(updatePatientPerscrptionsMedicienInput: UpdatePatientPerscrptionsMedicienInput!): PatientPerscrptionsMedicien!
-  updatePatientReservation(updatePatientReservationInput: UpdatePatientReservationInput!): PatientReservation!
   updatePatientSession(updatePatientSessionInput: UpdatePatientSessionInput!): PatientSession!
   updatePatientTeethTreatment(updatePatientTeethTreatmentInput: UpdatePatientTeethTreatmentInput!): PatientTeethTreatment!
   updatePatientTreatment(updatePatientTreatmentInput: UpdatePatientTreatmentInput!): PatientTreatment!
@@ -529,6 +529,9 @@ type PatientAppointment {
 
   """appointment date"""
   date: DateTime!
+
+  """id"""
+  id: Int!
 
   """notes"""
   notes: String
@@ -647,8 +650,11 @@ type PatientPerscrptionsMedicien {
 }
 
 type PatientReservation {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  date: DateTime!
+  id: Int!
+  notes: String
+  patient: Patient!
+  patient_id: Int!
 }
 
 type PatientSession {
@@ -723,8 +729,7 @@ type Query {
   patientPerscrptions: [PatientPerscrption!]!
   patientPerscrptionsMedicien(id: Int!): PatientPerscrptionsMedicien!
   patientPerscrptionsMediciens: [PatientPerscrptionsMedicien!]!
-  patientReservation(id: Int!): PatientReservation!
-  patientReservations: [PatientReservation!]!
+  patientReservations(patient_id: Int): [PatientReservation!]!
   patientSession(id: Int!): PatientSession!
   patientSessions: [PatientSession!]!
   patientTeethTreatment(id: Int!): PatientTeethTreatment!
@@ -924,12 +929,6 @@ input UpdatePatientPerscrptionInput {
 }
 
 input UpdatePatientPerscrptionsMedicienInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input UpdatePatientReservationInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!

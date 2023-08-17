@@ -6,12 +6,17 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class PatientAppointmentsService {
   constructor(private prisma: PrismaService) { }
-  async create(createPatientAppointmentInput: CreatePatientAppointmentInput) {
+  async create({ date, ...restInputs }: CreatePatientAppointmentInput) {
+    if (date < new Date(Date.now())) {
+      throw new Error('Date must greater than now date');
+    }
     return await this.prisma.patientAppointment.create({
       data: {
-        ...createPatientAppointmentInput,
+        ...restInputs,
+        date,
         state: 'unregisterd'
-      }
+      },
+      include: { patient: true }
     });
   }
 
@@ -28,7 +33,8 @@ export class PatientAppointmentsService {
           gte: startDate.toISOString(),
           lt: endDate.toISOString(),
         } : undefined
-      }
+      },
+      include: { patient: true }
     });
   }
 

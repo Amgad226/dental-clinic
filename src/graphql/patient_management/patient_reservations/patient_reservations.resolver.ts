@@ -6,7 +6,7 @@ import { UpdatePatientReservationInput } from './dto/update-patient_reservation.
 
 @Resolver(() => PatientReservation)
 export class PatientReservationsResolver {
-  constructor(private readonly patientReservationsService: PatientReservationsService) {}
+  constructor(private readonly patientReservationsService: PatientReservationsService) { }
 
   @Mutation(() => PatientReservation)
   createPatientReservation(@Args('createPatientReservationInput') createPatientReservationInput: CreatePatientReservationInput) {
@@ -14,18 +14,8 @@ export class PatientReservationsResolver {
   }
 
   @Query(() => [PatientReservation], { name: 'patientReservations' })
-  findAll() {
-    return this.patientReservationsService.findAll();
-  }
-
-  @Query(() => PatientReservation, { name: 'patientReservation' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.patientReservationsService.findOne(id);
-  }
-
-  @Mutation(() => PatientReservation)
-  updatePatientReservation(@Args('updatePatientReservationInput') updatePatientReservationInput: UpdatePatientReservationInput) {
-    return this.patientReservationsService.update(updatePatientReservationInput.id, updatePatientReservationInput);
+  findAll(@Args('patient_id', { type: () => Int, nullable: true }) patient_id: number) {
+    return this.patientReservationsService.findAll({ patient_id });
   }
 
   @Mutation(() => PatientReservation)

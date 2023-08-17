@@ -5,6 +5,8 @@ import { PatientSession } from '../../patient_sessions/entities/patient_session.
 
 @ObjectType()
 export class PatientAppointment {
+  @Field(() => Int, { description: 'id' })
+  id: number;
   @Field(() => Int, { description: 'Patient id' })
   patient_id: number;
 

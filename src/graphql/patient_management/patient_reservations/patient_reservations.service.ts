@@ -1,26 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePatientReservationInput } from './dto/create-patient_reservation.input';
-import { UpdatePatientReservationInput } from './dto/update-patient_reservation.input';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class PatientReservationsService {
-  create(createPatientReservationInput: CreatePatientReservationInput) {
-    return 'This action adds a new patientReservation';
+  constructor(private prisma: PrismaService) { }
+
+  async create({ patient_id, date, notes }: CreatePatientReservationInput) {
+    const patient_reservations_count = await this.prisma.patientReservation.count({
+      where: { patient_id },
+    })
+    if (patient_reservations_count > 0) {
+      throw new Error('patient can not have more than 1 onHold reservation')
+    }
+    if (date < new Date(Date.now())) {
+      throw new Error('Date must greater than now date');
+    }
+    return await this.prisma.patientReservation.create({
+      data: {
+        date, notes, patient_id,
+      },
+      include: { patient: true }
+    });
   }
 
-  findAll() {
-    return `This action returns all patientReservations`;
+  async findAll({ patient_id }: { patient_id?: number }) {
+    return await this.prisma.patientReservation.findMany({
+      where: { patient_id }
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} patientReservation`;
-  }
-
-  update(id: number, updatePatientReservationInput: UpdatePatientReservationInput) {
-    return `This action updates a #${id} patientReservation`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} patientReservation`;
+  async remove(id: number) {
+    return await this.prisma.patientReservation.delete({
+      where: {
+        id
+      }
+    });
   }
 }
