@@ -9,7 +9,6 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { BadHabitModule } from './graphql/bad_habit/bad_habit.module';
 import { TreatmentTypeModule } from './graphql/treatment_type/treatment_type.module';
 import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
 import { ProblemTypeModule } from './graphql/problem_type/problem_type.module';
 import { ChemicalMaterialModule } from './graphql/chemical_material/chemical_material.module';
 import { ConfigModule } from '@nestjs/config';
@@ -73,7 +72,6 @@ const serveStaticImagesConfig = {
     BadHabitModule,
     TreatmentTypeModule,
     AuthModule,
-    UserModule,
     ProblemTypeModule,
     ProblemModule,
     ChemicalMaterialModule,

@@ -31,7 +31,7 @@ export class OtpService {
     }
   }
 
-  generateOtpCode(length: number = 4): number {
+  generateOtpCode(length: number = 4): string {
     if (length < 3 || length > 7) {
       throw new GraphQLError(
         "Invalid OTP code length. Length must be between 3 and 7.",
@@ -46,6 +46,6 @@ export class OtpService {
       otp += digits[randomIndex];
     }
 
-    return Number(otp);
+    return (otp);
   }
 }

@@ -4,5 +4,5 @@ import { SendOtp } from './send-otp.entity';
 
 
 @ObjectType()
-export class ResponseSendOtp extends Response(SendOtp) {}
+export class SendOtpResponse extends Response(SendOtp) {}
 

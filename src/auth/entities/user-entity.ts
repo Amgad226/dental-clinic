@@ -7,8 +7,10 @@ export class User {
     id: number;
 
     @Field()
-    userName: string;
+    phone: string;
 
     @Field()
-    phone: string;
+    isVerified: boolean;
+
+    
 }

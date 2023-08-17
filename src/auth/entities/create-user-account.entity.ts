@@ -1,9 +1,9 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { User } from "src/user/user.entity";
+import { User } from "./user-entity";
 import { IsNotEmpty, IsString } from 'class-validator'
 
 @ObjectType()
-export class SignResponse {
+export class CreateUserAccount {
     @IsNotEmpty()
     @IsString()
     @Field()

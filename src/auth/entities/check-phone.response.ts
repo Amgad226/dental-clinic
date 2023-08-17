@@ -4,5 +4,5 @@ import { Response } from 'src/global/response-entity';
 
 
 @ObjectType()
-export class ResponseCheckPhone extends Response(CheckPhone) {}
+export class CheckPhoneResponse extends Response(CheckPhone) {}
 

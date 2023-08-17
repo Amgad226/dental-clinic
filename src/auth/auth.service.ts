@@ -5,13 +5,18 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config/dist';
 import * as argon from 'argon2';
-import { SignInInput } from './dto/singin-input';
 import { ForbiddenException } from '@nestjs/common/exceptions';
 import { LogoutResponse } from './dto/logout-response';
-import { SignResponse } from './dto/sign-response';
 import { ApolloError } from 'apollo-server-express';
-import { PhoneInput } from './dto/login-input';
+import { PhoneInput } from './dto/phone-input';
 import { OtpService } from './otp.service';
+import { CreateUserAccountInput } from './dto/create-user-account';
+import { GraphQLError } from 'graphql';
+import { CheckPhoneResponse } from './entities/check-phone.response';
+import { SendOtpResponse } from './entities/send-otp.response';
+import { CreateUserAccountResponse } from './entities/create-user-account.response';
+import { LoginInput } from './dto/login-input';
+import { AuthResponse } from './entities/auth.entity';
 
 @Injectable()
 export class AuthService {
@@ -22,7 +27,7 @@ export class AuthService {
     private readonly otpService: OtpService,
   ) {}
 
-  async checkPhone(phoneInput: PhoneInput): Promise<any> {
+  async checkPhone(phoneInput: PhoneInput): Promise<CheckPhoneResponse> {
     let user = await this.prisma.user.findFirst({
       where: { phone: phoneInput.phone },
     });
@@ -34,8 +39,8 @@ export class AuthService {
     if (user != null && patient != null) {
       return {
         data: {
-          phoneExistsInUsers: true,
-          phoneExistsInPatients: true,
+          phoneHaveUserAccount: true,
+          phoneHavePatient: true,
         },
         message: 'user account found, give me password  ',
         status: 200,
@@ -43,8 +48,8 @@ export class AuthService {
     } else if (user == null && patient != null) {
       return {
         data: {
-          phoneExistsInUsers: false,
-          phoneExistsInPatients: true,
+          phoneHaveUserAccount: false,
+          phoneHavePatient: true,
         },
         message: 'patient found, give me otp then new password   ',
         status: 200,
@@ -52,8 +57,8 @@ export class AuthService {
     } else {
       return {
         data: {
-          phoneExistsInUsers: false,
-          phoneExistsInPatients: false,
+          phoneHaveUserAccount: false,
+          phoneHavePatient: false,
         },
         message:
           'user account not found create account then verify your phone with otp',
@@ -62,15 +67,26 @@ export class AuthService {
     }
   }
 
-  async sendOtp(phoneInput: PhoneInput): Promise<any> {
+  async sendOtp({ phone }: PhoneInput): Promise<SendOtpResponse> {
     const otp = this.otpService.generateOtpCode();
-    // const sended = await this.otpService.sendSMSVerifyCode({
-    //   phone_number: phoneInput.phone,
-    //   verify_code: otp,
-    //   template: 'Your code is $$CODE$$, Thank you',
-    // });
 
-    const sended =true;
+    await this.prisma.user.upsert({
+      where: { phone },
+      update: { otp },
+      create: {
+        phone,
+        otp,
+      },
+    });
+
+    const SEND_REAL_OTP = false;
+    const sended = SEND_REAL_OTP
+      ? await this.otpService.sendSMSVerifyCode({
+          phone_number: phone,
+          verify_code: otp,
+          template: 'Your code is $$CODE$$, Thank you',
+        })
+      : true;
 
     return sended
       ? {
@@ -85,17 +101,35 @@ export class AuthService {
         };
   }
 
-  async signup(signUpInput: SignUpInput): Promise<SignResponse> {
-    const hashedPassword = await argon.hash(signUpInput.password);
-    const user = await this.prisma.user.create({
+  async createUserAccount({
+    password,
+    phone,
+    otp,
+  }: CreateUserAccountInput): Promise<CreateUserAccountResponse> {
+    const user = await this.prisma.user.findFirst({ where: { phone } });
+
+    if (!user) {
+      throw new GraphQLError('phone not found ', { extensions: { code: 404 } });
+    }
+
+    if (user.isVerified) {
+      throw new GraphQLError('this account already created and is verified ', {
+        extensions: { code: 400 },
+      });
+    }
+
+    if (user.otp != otp) {
+      throw new GraphQLError('Wrong otp', { extensions: { code: 400 } });
+    }
+
+    const hashedPassword = await argon.hash(password);
+    await this.prisma.user.update({
+      where: {
+        phone,
+      },
       data: {
-        phone: signUpInput.phone,
         hashedPassword,
-        userName: signUpInput.userName,
         isVerified: true,
-        patient: {
-          connect: { id: signUpInput.patientId },
-        },
       },
     });
     const { accessToken, refreshToken } = await this.createTokens(
@@ -104,29 +138,43 @@ export class AuthService {
     );
     await this.updateRefreshToken(user.id, refreshToken);
 
-    return { accessToken, refreshToken, user };
+    return {
+      data: { accessToken, refreshToken, user },
+      message: 'user verified successfully',
+      status: 200,
+    };
   }
-  async singin(singinInput: SignInInput): Promise<SignResponse> {
+
+  async login(loginInput: LoginInput) {
+
     const user = await this.prisma.user.findUnique({
-      where: { phone: singinInput.phone },
+      where: { phone: loginInput.phone },
     });
     if (!user) {
-      throw new ForbiddenException('Credintails are not valid');
+      throw new GraphQLError('User not found ', { extensions: { code: 404 } });
     }
     const isPasswordMatch = await argon.verify(
       user.hashedPassword,
-      singinInput.password,
+      loginInput.password,
     );
     if (!isPasswordMatch) {
-      throw new ForbiddenException('Credintails are not valid');
+      throw new GraphQLError('Credintails are not valid', {
+        extensions: { code: 403 },
+      });
     }
     const { accessToken, refreshToken } = await this.createTokens(
       user.id,
       user.phone,
     );
     await this.updateRefreshToken(user.id, refreshToken);
-    return { accessToken, refreshToken, user };
+    
+    return {
+      data: { accessToken, refreshToken, user },
+      message: 'login successfully',
+      status: 200,
+    };
   }
+
   async logout(userId: number): Promise<LogoutResponse> {
     await this.prisma.user.updateMany({
       where: {
@@ -150,7 +198,7 @@ export class AuthService {
         phone,
       },
       {
-        expiresIn: '60s',
+        expiresIn: '1d',
         secret: this.configService.get('ACCESS_TOKEN_SECRET'),
       },
     );

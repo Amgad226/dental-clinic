@@ -2,9 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Auth {
-  """this field for check if this phone number exists in users """
-  phoneExists: Boolean!
+type AuthResponse {
+  data: CreateUserAccount
+  message: String
+  status: Int
 }
 
 type BadHabit {
@@ -40,11 +41,14 @@ type Category {
 }
 
 type CheckPhone {
-  """Example field (placeholder)"""
-  phoneExistsInPatients: Boolean!
+  phoneHavePatient: Boolean!
+  phoneHaveUserAccount: Boolean!
+}
 
-  """Example field (placeholder)"""
-  phoneExistsInUsers: Boolean!
+type CheckPhoneResponse {
+  data: CheckPhone
+  message: String
+  status: Int
 }
 
 type ChemicalMaterial {
@@ -237,6 +241,19 @@ input CreateTreatmentTypeInput {
   name: String!
 }
 
+type CreateUserAccount {
+  accessToken: String!
+  refreshToken: String!
+  user: User!
+}
+
+input CreateUserAccountInput {
+  c_password: String!
+  otp: String!
+  password: String!
+  phone: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -250,6 +267,11 @@ type Disease {
 enum Gender {
   female
   male
+}
+
+input LoginInput {
+  password: String!
+  phone: String!
 }
 
 type LogoutResponse {
@@ -291,8 +313,8 @@ type MedicineChemicalMaterials {
 }
 
 type Mutation {
-  CheckPhone(checkPhoneInput: PhoneInput!): ResponseCheckPhone!
-  SendOtp(checkPhoneInput: PhoneInput!): ResponseSendOtp!
+  CheckPhone(checkPhoneInput: PhoneInput!): CheckPhoneResponse!
+  SendOtp(checkPhoneInput: PhoneInput!): SendOtpResponse!
   createBadHabit(createBadHabitInput: CreateBadHabitInput!): BadHabit!
   createBookIn(createBookInInput: CreateBookInInput!): BookIn!
   createBookOut(createBookOutInput: CreateBookOutInput!): BookOut!
@@ -315,7 +337,8 @@ type Mutation {
   createProduct(createProductInput: CreateProductInput!): Product!
   createTreatment(createTreatmentInput: CreateTreatmentInput!): Treatment!
   createTreatmentType(createTreatmentTypeInput: CreateTreatmentTypeInput!): TreatmentType!
-  geNewTokens: NewTokenResponse!
+  createUserAccount(checkPhoneInput: CreateUserAccountInput!): AuthResponse!
+  login(loginInput: LoginInput!): AuthResponse!
   logout(userId: Float!): LogoutResponse!
   removeBadHabit(id: Int!): BadHabit!
   removeCategory(id: Int!): Category!
@@ -338,9 +361,6 @@ type Mutation {
   removeStoredProduct(id: Int!): StoredProduct!
   removeTreatment(id: Int!): Treatment!
   removeTreatmentType(id: Int!): TreatmentType!
-  reomveUser(id: Int!): Auth!
-  signup(signUpInput: SignUpInput!): SignResponse!
-  singin(signInInput: SignInInput!): SignResponse!
   updateBadHabit(id: Int!, updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
   updateChemicalMaterial(id: Int!, updateChemicalMaterialInput: UpdateChemicalMaterialInput!): ChemicalMaterial!
   updateDisease(id: Int!, updateDiseaseInput: UpdateDiseaseInput!): Disease!
@@ -360,11 +380,6 @@ type Mutation {
   updateProduct(id: Int!, updateProductInput: UpdateProductInput!): Product!
   updateTreatment(id: Int!, updateTreatmentInput: UpdateTreatmentInput!): Treatment!
   updateTreatmentType(id: Int!, updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
-}
-
-type NewTokenResponse {
-  accessToken: String!
-  refreshToken: String!
 }
 
 type PaginateChemicalMaterial {
@@ -615,39 +630,15 @@ type Query {
   treatments(item_per_page: Float, page: Float, search: String): paginateTreatment!
 }
 
-type ResponseCheckPhone {
-  data: CheckPhone
-  message: String
-  status: Int
-}
-
-type ResponseSendOtp {
-  data: SendOtp
-  message: String
-  status: Int
-}
-
 type SendOtp {
   """Example field (placeholder)"""
   otp: Int!
 }
 
-input SignInInput {
-  password: String!
-  phone: String!
-}
-
-type SignResponse {
-  accessToken: String!
-  refreshToken: String!
-  user: User!
-}
-
-input SignUpInput {
-  password: String!
-  patientId: Float!
-  phone: String!
-  userName: String!
+type SendOtpResponse {
+  data: SendOtp
+  message: String
+  status: Int
 }
 
 type Steps {
@@ -837,8 +828,8 @@ scalar Upload
 
 type User {
   id: Int!
+  isVerified: Boolean!
   phone: String!
-  userName: String!
 }
 
 type paginateMedicine {

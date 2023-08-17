@@ -5,7 +5,11 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
+    "db:fresh":"npx prisma migrate reset && npx prisma migrate dev && npx prisma db seed ",
     "docker:build": "docker-compose build",
     "docker:up": "docker-compose up  ",
     "db": "docker-compose --file docker-compose-DB.yaml up  ",

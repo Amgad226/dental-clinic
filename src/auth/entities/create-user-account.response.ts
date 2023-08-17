@@ -4,5 +4,5 @@ import { CreateUserAccount } from './create-user-account.entity';
 
 
 @ObjectType()
-export class AuthResponse extends Response(CreateUserAccount) {}
+export class CreateUserAccountResponse extends Response(CreateUserAccount) {}
 

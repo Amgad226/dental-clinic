@@ -7,5 +7,5 @@ export interface Props {
 export interface OtpProps {
   phone_number: string;
   template?: string;
-  verify_code?: number;
+  verify_code?: string;
 }
