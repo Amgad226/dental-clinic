@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreatePatientTreatmentInput } from './dto/create-patient_treatment.input';
 import { UpdatePatientTreatmentInput } from './dto/update-patient_treatment.input';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PatientTreatmentStatuses, PatientTreatmentTypes } from '@prisma/client';
 
 @Injectable()
 export class PatientTreatmentsService {
@@ -17,8 +18,12 @@ export class PatientTreatmentsService {
     });
   }
 
-  async findAll() {
+  async findAll({ patient_id, status, type }: { patient_id?: number, status?: PatientTreatmentStatuses, type?: PatientTreatmentTypes }) {
     return await this.prisma.patientTreatment.findMany({
+      where: {
+        patient_id,
+        status, type
+      },
       include: { patient: true, PatientTreatmentDoneStep: true, treatment: true }
     });
   }
