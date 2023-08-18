@@ -225,13 +225,16 @@ input CreatePatientPaymentInput {
 }
 
 input CreatePatientPerscrptionInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  createPatientPerscrptionsMedicienInput: [CreatePatientPerscrptionsMedicienInput!]!
+  patient_session_id: Int!
 }
 
 input CreatePatientPerscrptionsMedicienInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  description: String
+  medicince_id: Int!
+  patient_perscrption_id: Int!
+  qantity: String!
+  repetition: String!
 }
 
 input CreatePatientReservationInput {
@@ -447,7 +450,6 @@ type Mutation {
   updatePatientMedicalImagesType(updatePatientMedicalImagesTypeInput: UpdatePatientMedicalImagesTypeInput!): PatientMedicalImagesType!
   updatePatientMedicine(updatePatientMedicineInput: UpdatePatientMedicineInput!): PatientMedicine!
   updatePatientPayment(updatePatientPaymentInput: UpdatePatientPaymentInput!): PatientPayment!
-  updatePatientPerscrption(updatePatientPerscrptionInput: UpdatePatientPerscrptionInput!): PatientPerscrption!
   updatePatientPerscrptionsMedicien(updatePatientPerscrptionsMedicienInput: UpdatePatientPerscrptionsMedicienInput!): PatientPerscrptionsMedicien!
   updatePatientSession(updatePatientSessionInput: UpdatePatientSessionInput!): PatientSession!
   updatePatientTeethTreatment(updatePatientTeethTreatmentInput: UpdatePatientTeethTreatmentInput!): PatientTeethTreatment!
@@ -671,13 +673,22 @@ type PatientPayment {
 }
 
 type PatientPerscrption {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  Medicine: [Medicine!]!
+  PatientPerscrptionsMedicince: [PatientPerscrptionsMedicien!]!
+  id: Int!
+  patient_perscrption_id: Int!
+  patient_session_id: Int!
 }
 
 type PatientPerscrptionsMedicien {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  description: String
+  id: Int!
+  medicince: Medicine!
+  medicince_id: Int!
+  patient_perscrption_id: Int!
+  perscrption: PatientPerscrption!
+  qantity: String!
+  repetition: String!
 }
 
 type PatientReservation {
@@ -791,18 +802,18 @@ type Query {
   patientMedicines(patient_id: Int!): [PatientMedicine!]!
   patientPayments(item_per_page: Float, page: Float, patient_id: Int, sort: PateintPaymentSortInput): PaginatedPatientPayment!
   patientPerscrption(id: Int!): PatientPerscrption!
-  patientPerscrptions: [PatientPerscrption!]!
+  patientPerscrptions(patient_id: Int, patient_session_id: Int): [PatientPerscrption!]!
   patientPerscrptionsMedicien(id: Int!): PatientPerscrptionsMedicien!
-  patientPerscrptionsMediciens: [PatientPerscrptionsMedicien!]!
+  patientPerscrptionsMediciens(patient_perscrption_id: Int): [PatientPerscrptionsMedicien!]!
   patientReservations(patient_id: Int): [PatientReservation!]!
   patientSession(id: Int!): PatientSession!
-  patientSessions: [PatientSession!]!
+  patientSessions(patient_id: Int): [PatientSession!]!
   patientTeethTreatment(id: Int!): PatientTeethTreatment!
   patientTeethTreatments: [PatientTeethTreatment!]!
   patientTreatment(id: Int!): PatientTreatment!
   patientTreatmentDoneStep(id: Int!): PatientTreatmentDoneStep!
   patientTreatmentDoneSteps(patient_session_id: Int, patient_treatment_id: Int): [PatientTreatmentDoneStep!]!
-  patientTreatments: [PatientTreatment!]!
+  patientTreatments(patient_id: Int, status: PatientTreatmentStatuses, type: PatientTreatmentTypes): [PatientTreatment!]!
   patients(item_per_page: Float, page: Float): PaginatedPatient!
   problem(id: Int!): Problem!
   problemType(id: Int!): ProblemType!
@@ -998,16 +1009,13 @@ input UpdatePatientPaymentInput {
   patient_id: Int
 }
 
-input UpdatePatientPerscrptionInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
 input UpdatePatientPerscrptionsMedicienInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  description: String
   id: Int!
+  medicince_id: Int
+  patient_perscrption_id: Int
+  qantity: String
+  repetition: String
 }
 
 input UpdatePatientSessionInput {

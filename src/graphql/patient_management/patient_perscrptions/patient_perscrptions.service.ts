@@ -1,26 +1,48 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePatientPerscrptionInput } from './dto/create-patient_perscrption.input';
-import { UpdatePatientPerscrptionInput } from './dto/update-patient_perscrption.input';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class PatientPerscrptionsService {
-  create(createPatientPerscrptionInput: CreatePatientPerscrptionInput) {
-    return 'This action adds a new patientPerscrption';
+  constructor(private prisma: PrismaService) { }
+  async create({ patient_session_id, createPatientPerscrptionsMedicienInput }: CreatePatientPerscrptionInput) {
+    // check conflicts
+    const data = await this.prisma.patientPerscrptions.create({
+      data: {
+        patient_session_id,
+        PatientPerscrptionsMedicince: {
+          createMany: {
+            data: createPatientPerscrptionsMedicienInput
+          }
+        }
+      }
+    });
+    return data
   }
 
-  findAll() {
-    return `This action returns all patientPerscrptions`;
+  async findAll({ patient_id, patient_session_id }: { patient_id?: number, patient_session_id?: number }) {
+    return await this.prisma.patientPerscrptions.findMany({
+      where: {
+        patient_session_id,
+        session: {
+          patient_id
+        }
+      },
+      include: {
+        PatientPerscrptionsMedicince: true,
+        session: true
+      }
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} patientPerscrption`;
+  async findOne(id: number) {
+    return await this.prisma.patientPerscrptions.findUnique({
+      where: { id }
+    });
   }
 
-  update(id: number, updatePatientPerscrptionInput: UpdatePatientPerscrptionInput) {
-    return `This action updates a #${id} patientPerscrption`;
-  }
 
-  remove(id: number) {
-    return `This action removes a #${id} patientPerscrption`;
+  async remove(id: number) {
+    return await this.prisma.patientPerscrptions.delete({ where: { id } });
   }
 }

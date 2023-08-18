@@ -1,26 +1,46 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePatientPerscrptionsMedicienInput } from './dto/create-patient_perscrptions_medicien.input';
 import { UpdatePatientPerscrptionsMedicienInput } from './dto/update-patient_perscrptions_medicien.input';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class PatientPerscrptionsMediciensService {
-  create(createPatientPerscrptionsMedicienInput: CreatePatientPerscrptionsMedicienInput) {
-    return 'This action adds a new patientPerscrptionsMedicien';
+  constructor(private prisma: PrismaService) { }
+
+  async create(createPatientPerscrptionsMedicienInput: CreatePatientPerscrptionsMedicienInput) {
+    return await this.prisma.patientPerscrptionsMedicince.create({
+      data: createPatientPerscrptionsMedicienInput
+    })
   }
 
-  findAll() {
-    return `This action returns all patientPerscrptionsMediciens`;
+  async findAll({ patient_perscrption_id }: { patient_perscrption_id?: number }) {
+    return await this.prisma.patientPerscrptionsMedicince.findMany({
+      where: {
+        patient_perscrption_id
+      },
+      include: {
+        medicince: true,
+        perscrption: true
+      }
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} patientPerscrptionsMedicien`;
+  async findOne(id: number) {
+    return await this.prisma.patientPerscrptionsMedicince.findUnique({
+      where: { id }
+    });
   }
 
-  update(id: number, updatePatientPerscrptionsMedicienInput: UpdatePatientPerscrptionsMedicienInput) {
-    return `This action updates a #${id} patientPerscrptionsMedicien`;
+  async update(id: number, updatePatientPerscrptionsMedicienInput: UpdatePatientPerscrptionsMedicienInput) {
+    return await this.prisma.patientPerscrptionsMedicince.update({
+      data: updatePatientPerscrptionsMedicienInput,
+      where: { id }
+    })
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} patientPerscrptionsMedicien`;
+  async remove(id: number) {
+    return await this.prisma.patientPerscrptionsMedicince.delete({
+      where: { id }
+    })
   }
 }

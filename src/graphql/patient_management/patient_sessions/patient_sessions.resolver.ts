@@ -6,7 +6,7 @@ import { UpdatePatientSessionInput } from './dto/update-patient_session.input';
 
 @Resolver(() => PatientSession)
 export class PatientSessionsResolver {
-  constructor(private readonly patientSessionsService: PatientSessionsService) {}
+  constructor(private readonly patientSessionsService: PatientSessionsService) { }
 
   @Mutation(() => PatientSession)
   createPatientSession(@Args('createPatientSessionInput') createPatientSessionInput: CreatePatientSessionInput) {
@@ -14,8 +14,8 @@ export class PatientSessionsResolver {
   }
 
   @Query(() => [PatientSession], { name: 'patientSessions' })
-  findAll() {
-    return this.patientSessionsService.findAll();
+  findAll(@Args('patient_id', { type: () => Int, nullable: true }) patient_id?: number) {
+    return this.patientSessionsService.findAll({ patient_id });
   }
 
   @Query(() => PatientSession, { name: 'patientSession' })

@@ -6,7 +6,7 @@ import { UpdatePatientPerscrptionsMedicienInput } from './dto/update-patient_per
 
 @Resolver(() => PatientPerscrptionsMedicien)
 export class PatientPerscrptionsMediciensResolver {
-  constructor(private readonly patientPerscrptionsMediciensService: PatientPerscrptionsMediciensService) {}
+  constructor(private readonly patientPerscrptionsMediciensService: PatientPerscrptionsMediciensService) { }
 
   @Mutation(() => PatientPerscrptionsMedicien)
   createPatientPerscrptionsMedicien(@Args('createPatientPerscrptionsMedicienInput') createPatientPerscrptionsMedicienInput: CreatePatientPerscrptionsMedicienInput) {
@@ -14,8 +14,8 @@ export class PatientPerscrptionsMediciensResolver {
   }
 
   @Query(() => [PatientPerscrptionsMedicien], { name: 'patientPerscrptionsMediciens' })
-  findAll() {
-    return this.patientPerscrptionsMediciensService.findAll();
+  findAll(@Args('patient_perscrption_id', { type: () => Int , nullable: true}) patient_perscrption_id?: number) {
+    return this.patientPerscrptionsMediciensService.findAll({ patient_perscrption_id });
   }
 
   @Query(() => PatientPerscrptionsMedicien, { name: 'patientPerscrptionsMedicien' })

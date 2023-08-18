@@ -3,10 +3,11 @@ import { PatientTreatmentsService } from './patient_treatments.service';
 import { PatientTreatment } from './entities/patient_treatment.entity';
 import { CreatePatientTreatmentInput } from './dto/create-patient_treatment.input';
 import { UpdatePatientTreatmentInput } from './dto/update-patient_treatment.input';
+import { PatientTreatmentStatuses, PatientTreatmentTypes } from '@prisma/client';
 
 @Resolver(() => PatientTreatment)
 export class PatientTreatmentsResolver {
-  constructor(private readonly patientTreatmentsService: PatientTreatmentsService) {}
+  constructor(private readonly patientTreatmentsService: PatientTreatmentsService) { }
 
   @Mutation(() => PatientTreatment)
   createPatientTreatment(@Args('createPatientTreatmentInput') createPatientTreatmentInput: CreatePatientTreatmentInput) {
@@ -14,8 +15,15 @@ export class PatientTreatmentsResolver {
   }
 
   @Query(() => [PatientTreatment], { name: 'patientTreatments' })
-  findAll() {
-    return this.patientTreatmentsService.findAll();
+  findAll(@Args('patient_id', { type: () => Int, nullable: true }) patient_id?: number,
+    @Args('status', { type: () => PatientTreatmentStatuses , nullable: true}) status?: PatientTreatmentStatuses,
+    @Args('type', { type: () => PatientTreatmentTypes , nullable: true}) type?: PatientTreatmentTypes) {
+    return this.patientTreatmentsService.findAll({
+
+
+
+      patient_id, status, type
+    });
   }
 
   @Query(() => PatientTreatment, { name: 'patientTreatment' })
