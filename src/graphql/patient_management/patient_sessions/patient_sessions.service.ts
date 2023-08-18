@@ -7,13 +7,20 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class PatientSessionsService {
   constructor(private prisma: PrismaService) { }
 
-  async create({ createPatientTreatmentDoneStepInput, patient_id, patiient_appointment_id }: CreatePatientSessionInput) {
+  async create({ createPatientTreatmentDoneStepInput, patient_id, patiient_appointment_id, createPatientLabOrderInput, createPatientPerscrptionInput }: CreatePatientSessionInput) {
     const data = await this.prisma.patientSession.create({
       data: {
         patient_id,
-        patiient_appointment_id
+        patiient_appointment_id,
+        PatientLabOrder: createPatientLabOrderInput && {
+          create: createPatientLabOrderInput
+        },
+        PatientPerscrptions: createPatientPerscrptionInput && {
+          create: createPatientPerscrptionInput
+        }
       },
     });
+
     await this.prisma.patientTreatmentDoneStep.createMany({
       data: [...createPatientTreatmentDoneStepInput.map((input) => {
         return {

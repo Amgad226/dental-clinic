@@ -249,6 +249,8 @@ input CreatePatientReservationInput {
 }
 
 input CreatePatientSessionInput {
+  createPatientLabOrderInput: CreatePatientLabOrderInput
+  createPatientPerscrptionInput: CreatePatientPerscrptionInput
   createPatientTreatmentDoneStepInput: [CreatePatientTreatmentDoneStepInput!]!
   patient_id: Int!
   patiient_appointment_id: Int!
@@ -1042,6 +1044,8 @@ input UpdatePatientPerscrptionsMedicienInput {
 }
 
 input UpdatePatientSessionInput {
+  createPatientLabOrderInput: CreatePatientLabOrderInput
+  createPatientPerscrptionInput: CreatePatientPerscrptionInput
   createPatientTreatmentDoneStepInput: [CreatePatientTreatmentDoneStepInput!]
   id: Int!
   patient_id: Int
