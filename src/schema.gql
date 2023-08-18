@@ -89,7 +89,7 @@ input CreateBookOutInput {
   created_at: DateTime
   product_id: Int!
   quantity: Int!
-  stored_prduct_id: [Int!]!
+  stored_product_id: [Int!]!
 }
 
 input CreateCategoryInput {
@@ -307,6 +307,12 @@ type Disease {
 enum Gender {
   female
   male
+}
+
+type GetProducts {
+  name: String!
+  product_id: Int!
+  totalQuantity: Int!
 }
 
 input LoginInput {
@@ -637,11 +643,13 @@ type Query {
   bookIn(id: Int!): BookIn!
   bookIns(item_per_page: Float, page: Float, search: String): Paginatebookin!
   bookOut(id: Int!): BookOut!
+  bookOuts(item_per_page: Float, page: Float, search: String): [BookOut!]!
   categories: [Category!]!
   chemicalMaterial(id: Int!): ChemicalMaterial!
   chemicalMaterials(item_per_page: Float, page: Float, search: String): PaginateChemicalMaterial!
   disease(id: Int!): Disease!
   diseases(item_per_page: Float, page: Float, search: String): Paginatedisease!
+  getProducts: [GetProducts!]!
   medicine(id: Int!): Medicine!
   medicines(item_per_page: Float, page: Float, search: String): paginateMedicine!
   patient(id: Int!): Patient!
@@ -663,6 +671,8 @@ type Query {
   problemTypes: [ProblemType!]!
   problems(item_per_page: Float, page: Float, search: String): PaginateProblem!
   product(id: Int!): Product!
+  productbookedIn(id: Int!): [BookIn!]!
+  productbookedOut(id: Int!): [BookOut!]!
   products(item_per_page: Float, page: Float, search: String): Paginateproduct!
   selectStoredProduct(id: Int!): [StoredProduct!]!
   storedProducts: [StoredProduct!]!
@@ -684,6 +694,7 @@ type SendOtpResponse {
 }
 
 type Steps {
+  id: Int!
   name: String!
   subSteps: [SubStep!]
   treatment_id: Int!

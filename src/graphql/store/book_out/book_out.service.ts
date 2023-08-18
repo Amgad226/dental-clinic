@@ -7,7 +7,7 @@ import { StoredProductService } from '../stored_product/stored_product.service';
 @Injectable()
 export class BookOutService {
   constructor(private prisma: PrismaService, private stored_product: StoredProductService){}
-  async create({product_id,quantity,created_at,stored_prduct_id}: CreateBookOutInput) {
+  async create({product_id,quantity,created_at,stored_product_id}: CreateBookOutInput) {
     const old_total_quantity = await this.prisma.storedProduct.findFirst({
       where: {
         product_id:product_id,
@@ -21,7 +21,7 @@ export class BookOutService {
     return Error("The quantity That you required is not available")
    }
    //Update the stored-products and get the total price of all the stored-product
-   const total_price = await this.updateQuantities(stored_prduct_id,quantity)
+   const total_price = await this.updateQuantities(stored_product_id,quantity)
 
    const book_out = await this.prisma.bookOut.create({
     data:{
@@ -55,10 +55,23 @@ export class BookOutService {
   async findOne(id: number) {
     const bookOut = await this.prisma.bookOut.findUnique({
       where: { id: id },
+      include:{
+        product:true
+      }
     });
     return bookOut;
   }
 
+  async productsbookedout(id: number) {
+    const productsbookedout = await this.prisma.bookOut.findMany({
+      where: { product_id: id },
+      include:{
+        product:true
+      }
+    });
+    return productsbookedout;
+  }
+  
 //function to update quantity of stored-product + if its equal to zero then delete it  
   async updateQuantities(storedProduct , quantity:number) {
     let sum1 = 0;
