@@ -19,7 +19,7 @@ export class Patient {
   @Field(() => Gender)
   gender: Gender
 
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   phone: string
 
   @Field(() => String, { nullable: true })

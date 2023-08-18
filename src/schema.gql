@@ -521,7 +521,7 @@ type Patient {
   main_complaint: String
   maintal_status: String
   name: String!
-  phone: String
+  phone: String!
 }
 
 type PatientBadHabit {
