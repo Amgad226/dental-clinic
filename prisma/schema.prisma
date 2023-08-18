@@ -443,14 +443,19 @@ enum PatientTreatmentTypes {
   unteethly
 }
 
-model PatientTreatment {
-  id           Int                   @id @default(autoincrement())
-  patient_id   Int
-  treatment_id Int
-  place        String
-  price        Float
-  type         PatientTreatmentTypes
+enum PatientTreatmentStatuses {
+  done
+  ongoing
+}
 
+model PatientTreatment {
+  id                       Int                        @id @default(autoincrement())
+  patient_id               Int
+  treatment_id             Int
+  place                    String
+  price                    Float
+  type                     PatientTreatmentTypes
+  status                   PatientTreatmentStatuses
   patient                  Patient                    @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   treatment                Treatment                  @relation(fields: [treatment_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   PatientTreatmentDoneStep PatientTreatmentDoneStep[]

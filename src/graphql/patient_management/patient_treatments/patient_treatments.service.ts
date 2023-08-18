@@ -1,26 +1,45 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePatientTreatmentInput } from './dto/create-patient_treatment.input';
 import { UpdatePatientTreatmentInput } from './dto/update-patient_treatment.input';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class PatientTreatmentsService {
-  create(createPatientTreatmentInput: CreatePatientTreatmentInput) {
-    return 'This action adds a new patientTreatment';
+  constructor(private prisma: PrismaService) { }
+
+  async create(createPatientTreatmentInput: CreatePatientTreatmentInput) {
+    return await this.prisma.patientTreatment.create({
+      data: {
+        ...createPatientTreatmentInput,
+        status: 'ongoing'
+      },
+      include: { patient: true, PatientTreatmentDoneStep: true, treatment: true }
+    });
   }
 
-  findAll() {
-    return `This action returns all patientTreatments`;
+  async findAll() {
+    return await this.prisma.patientTreatment.findMany({
+      include: { patient: true, PatientTreatmentDoneStep: true, treatment: true }
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} patientTreatment`;
+  async findOne(id: number) {
+    return await this.prisma.patientTreatment.findUnique({
+      where: { id },
+      include: { patient: true, PatientTreatmentDoneStep: true, treatment: true }
+    });
   }
 
-  update(id: number, updatePatientTreatmentInput: UpdatePatientTreatmentInput) {
-    return `This action updates a #${id} patientTreatment`;
+  async update(id: number, updatePatientTreatmentDoneStepInput: UpdatePatientTreatmentInput) {
+    return await this.prisma.patientTreatment.update({
+      where: { id },
+      data: updatePatientTreatmentDoneStepInput
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} patientTreatment`;
+  async remove(id: number) {
+    return await this.prisma.patientTreatment.delete({
+      where: { id }
+    });
   }
 }

@@ -250,9 +250,17 @@ input CreatePatientTeethTreatmentInput {
   exampleField: Int!
 }
 
-input CreatePatientTreatmentInput {
+input CreatePatientTreatmentDoneStepInput {
   """Example field (placeholder)"""
   exampleField: Int!
+}
+
+input CreatePatientTreatmentInput {
+  patient_id: Int!
+  place: String!
+  price: Float!
+  treatment_id: Int!
+  type: PatientTreatmentTypes!
 }
 
 input CreateProblemInput {
@@ -382,6 +390,7 @@ type Mutation {
   createPatientSession(createPatientSessionInput: CreatePatientSessionInput!): PatientSession!
   createPatientTeethTreatment(createPatientTeethTreatmentInput: CreatePatientTeethTreatmentInput!): PatientTeethTreatment!
   createPatientTreatment(createPatientTreatmentInput: CreatePatientTreatmentInput!): PatientTreatment!
+  createPatientTreatmentDoneStep(createPatientTreatmentDoneStepInput: CreatePatientTreatmentDoneStepInput!): PatientTreatmentDoneStep!
   createProblem(createProblemInput: CreateProblemInput!): Problem!
   createProblemType(createProblemTypeInput: CreateProblemTypeInput!): ProblemType!
   createProduct(createProductInput: CreateProductInput!): Product!
@@ -410,6 +419,7 @@ type Mutation {
   removePatientSession(id: Int!): PatientSession!
   removePatientTeethTreatment(id: Int!): PatientTeethTreatment!
   removePatientTreatment(id: Int!): PatientTreatment!
+  removePatientTreatmentDoneStep(id: Int!): PatientTreatmentDoneStep!
   removeProblem(id: Int!): Problem!
   removeProblemType(id: Int!): ProblemType!
   removeProduct(id: Int!): Product!
@@ -417,10 +427,12 @@ type Mutation {
   removeTreatment(id: Int!): Treatment!
   removeTreatmentType(id: Int!): TreatmentType!
   removeWorkingHour(id: Int!): WorkingHour!
+  updateAllWorkingHour(updateAllWorkingHour: UpdateAllWorkingHourInput!): [WorkingHour!]!
   updateBadHabit(id: Int!, updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
   updateChemicalMaterial(id: Int!, updateChemicalMaterialInput: UpdateChemicalMaterialInput!): ChemicalMaterial!
   updateDisease(id: Int!, updateDiseaseInput: UpdateDiseaseInput!): Disease!
   updateMedicine(id: Float!, updateMedicineInput: UpdateMedicineInput!): Medicine!
+  updateOneWorkingHour(updateOneWorkingHour: UpdateWorkingHourInput!): WorkingHour!
   updatePatient(updatePatientInput: UpdatePatientInput!): Patient!
   updatePatientAppointment(updatePatientAppointmentInput: UpdatePatientAppointmentInput!): PatientAppointment!
   updatePatientBadHabit(updatePatientBadHabitInput: UpdatePatientBadHabitInput!): PatientBadHabit!
@@ -437,12 +449,12 @@ type Mutation {
   updatePatientSession(updatePatientSessionInput: UpdatePatientSessionInput!): PatientSession!
   updatePatientTeethTreatment(updatePatientTeethTreatmentInput: UpdatePatientTeethTreatmentInput!): PatientTeethTreatment!
   updatePatientTreatment(updatePatientTreatmentInput: UpdatePatientTreatmentInput!): PatientTreatment!
+  updatePatientTreatmentDoneStep(updatePatientTreatmentDoneStepInput: UpdatePatientTreatmentDoneStepInput!): PatientTreatmentDoneStep!
   updateProblem(id: Int!, updateProblemInput: UpdateProblemInput!): Problem!
   updateProblemType(id: Int!, updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
   updateProduct(id: Int!, updateProductInput: UpdateProductInput!): Product!
   updateTreatment(id: Int!, updateTreatmentInput: UpdateTreatmentInput!): Treatment!
   updateTreatmentType(id: Int!, updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
-  updateWorkingHour(updateWorkingHourInput: UpdateWorkingHourInput!): WorkingHour!
 }
 
 type PaginateChemicalMaterial {
@@ -684,8 +696,31 @@ type PatientTeethTreatment {
 }
 
 type PatientTreatment {
+  PatientTreatmentDoneStep: [PatientTreatmentDoneStep!]
+  id: Int!
+  patient: Patient!
+  patient_id: Int!
+  place: String!
+  price: Float!
+  status: PatientTreatmentStatuses!
+  treatment: Treatment!
+  treatment_id: Int!
+  type: PatientTreatmentTypes!
+}
+
+type PatientTreatmentDoneStep {
   """Example field (placeholder)"""
   exampleField: Int!
+}
+
+enum PatientTreatmentStatuses {
+  done
+  ongoing
+}
+
+enum PatientTreatmentTypes {
+  teethly
+  unteethly
 }
 
 type Problem {
@@ -751,6 +786,8 @@ type Query {
   patientTeethTreatment(id: Int!): PatientTeethTreatment!
   patientTeethTreatments: [PatientTeethTreatment!]!
   patientTreatment(id: Int!): PatientTreatment!
+  patientTreatmentDoneStep(id: Int!): PatientTreatmentDoneStep!
+  patientTreatmentDoneSteps: [PatientTreatmentDoneStep!]!
   patientTreatments: [PatientTreatment!]!
   patients(item_per_page: Float, page: Float): PaginatedPatient!
   problem(id: Int!): Problem!
@@ -765,7 +802,7 @@ type Query {
   treatmentType(id: Int!): TreatmentType!
   treatmentTypes: [TreatmentType!]!
   treatments(item_per_page: Float, page: Float, search: String): paginateTreatment!
-  workingHour(id: Int!): WorkingHour!
+  workingHour(day: Days!, id: Int!): WorkingHour!
   workingHours: [WorkingHour!]!
 }
 
@@ -803,6 +840,12 @@ type Treatment {
 type TreatmentType {
   id: Int!
   name: String!
+}
+
+input UpdateAllWorkingHourInput {
+  from: DateTime
+  open: Boolean
+  to: DateTime
 }
 
 input UpdateBadHabitInput {
@@ -965,10 +1008,19 @@ input UpdatePatientTeethTreatmentInput {
   id: Int!
 }
 
-input UpdatePatientTreatmentInput {
+input UpdatePatientTreatmentDoneStepInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
+}
+
+input UpdatePatientTreatmentInput {
+  id: Int!
+  patient_id: Int
+  place: String
+  price: Float
+  treatment_id: Int
+  type: PatientTreatmentTypes
 }
 
 input UpdateProblemInput {
