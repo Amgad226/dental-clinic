@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePatientReservationInput } from './dto/create-patient_reservation.input';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Days } from '@prisma/client';
 
 @Injectable()
 export class PatientReservationsService {
@@ -16,6 +17,27 @@ export class PatientReservationsService {
     if (date < new Date(Date.now())) {
       throw new Error('Date must greater than now date');
     }
+    const day = new Date(date).toLocaleString('en-US', { weekday: 'short' }) as Days
+    const workingHours = await this.prisma.workingHours.findUnique({
+      where: {
+        day
+      }
+    })
+    const fromH = workingHours.from.getHours();
+    const fromM = workingHours.from.getMinutes();
+    const dateH = date.getHours();
+    const dateM = date.getMinutes();
+    const toH = workingHours.to.getHours();
+    const toM = workingHours.to.getMinutes();
+
+    const fromTimeValue = Number(fromH) * 3600 + Number(fromM) * 60;
+    const dateTimeValue = Number(dateH) * 3600 + Number(dateM) * 60;
+    const toTimeValue = Number(toH) * 3600 + Number(toM) * 60;
+
+    if (dateTimeValue < fromTimeValue || dateTimeValue > toTimeValue) {
+      throw new Error(`Date must be within working hours range ${workingHours.from.toLocaleTimeString()} => ${workingHours.to.toLocaleTimeString()}`);
+    }
+
     return await this.prisma.patientReservation.create({
       data: {
         date, notes, patient_id,

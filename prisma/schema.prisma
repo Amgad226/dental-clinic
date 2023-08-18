@@ -364,18 +364,18 @@ model BookOut {
 }
 
 enum Days {
-  sun
-  mon
-  tue
-  wen
-  thr
-  fri
-  sat
+  Sun
+  Mon
+  Tue
+  Wed
+  Thu
+  Fri
+  Sat
 }
 
 model WorkingHours {
   id   Int      @id @default(autoincrement())
-  day  Days?
+  day  Days?    @unique
   from DateTime
   to   DateTime
   open Boolean
