@@ -241,8 +241,9 @@ input CreatePatientReservationInput {
 }
 
 input CreatePatientSessionInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  createPatientTreatmentDoneStepInput: [CreatePatientTreatmentDoneStepInput!]!
+  patient_id: Int!
+  patiient_appointment_id: Int!
 }
 
 input CreatePatientTeethTreatmentInput {
@@ -251,8 +252,11 @@ input CreatePatientTeethTreatmentInput {
 }
 
 input CreatePatientTreatmentDoneStepInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: Int!
+  note: String
+  patient_session_id: Int!
+  patient_treatment_id: Int!
+  step_id: Int!
 }
 
 input CreatePatientTreatmentInput {
@@ -419,7 +423,6 @@ type Mutation {
   removePatientSession(id: Int!): PatientSession!
   removePatientTeethTreatment(id: Int!): PatientTeethTreatment!
   removePatientTreatment(id: Int!): PatientTreatment!
-  removePatientTreatmentDoneStep(id: Int!): PatientTreatmentDoneStep!
   removeProblem(id: Int!): Problem!
   removeProblemType(id: Int!): ProblemType!
   removeProduct(id: Int!): Product!
@@ -686,8 +689,13 @@ type PatientReservation {
 }
 
 type PatientSession {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  PatientLabOrder: [PatientLabOrder!]
+  PatientPerscrptions: [PatientPerscrption!]
+  PatientTreatmentDoneStep: [PatientTreatmentDoneStep!]
+  patient: Patient!
+  patient_appointment: PatientAppointment!
+  patient_id: Int!
+  patiient_appointment_id: Int!
 }
 
 type PatientTeethTreatment {
@@ -709,8 +717,14 @@ type PatientTreatment {
 }
 
 type PatientTreatmentDoneStep {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: Int!
+  note: String
+  patient_session_id: Int!
+  patient_treatment: PatientTreatment!
+  patient_treatment_id: Int!
+  session: PatientSession!
+  step: Steps!
+  step_id: Int!
 }
 
 enum PatientTreatmentStatuses {
@@ -787,7 +801,7 @@ type Query {
   patientTeethTreatments: [PatientTeethTreatment!]!
   patientTreatment(id: Int!): PatientTreatment!
   patientTreatmentDoneStep(id: Int!): PatientTreatmentDoneStep!
-  patientTreatmentDoneSteps: [PatientTreatmentDoneStep!]!
+  patientTreatmentDoneSteps(patient_session_id: Int, patient_treatment_id: Int): [PatientTreatmentDoneStep!]!
   patientTreatments: [PatientTreatment!]!
   patients(item_per_page: Float, page: Float): PaginatedPatient!
   problem(id: Int!): Problem!
@@ -997,9 +1011,10 @@ input UpdatePatientPerscrptionsMedicienInput {
 }
 
 input UpdatePatientSessionInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  createPatientTreatmentDoneStepInput: [CreatePatientTreatmentDoneStepInput!]
   id: Int!
+  patient_id: Int
+  patiient_appointment_id: Int
 }
 
 input UpdatePatientTeethTreatmentInput {
@@ -1009,9 +1024,11 @@ input UpdatePatientTeethTreatmentInput {
 }
 
 input UpdatePatientTreatmentDoneStepInput {
-  """Example field (placeholder)"""
-  exampleField: Int
   id: Int!
+  note: String
+  patient_session_id: Int
+  patient_treatment_id: Int
+  step_id: Int
 }
 
 input UpdatePatientTreatmentInput {

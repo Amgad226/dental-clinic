@@ -6,7 +6,7 @@ import { UpdatePatientTreatmentDoneStepInput } from './dto/update-patient_treatm
 
 @Resolver(() => PatientTreatmentDoneStep)
 export class PatientTreatmentDoneStepsResolver {
-  constructor(private readonly patientTreatmentDoneStepsService: PatientTreatmentDoneStepsService) {}
+  constructor(private readonly patientTreatmentDoneStepsService: PatientTreatmentDoneStepsService) { }
 
   @Mutation(() => PatientTreatmentDoneStep)
   createPatientTreatmentDoneStep(@Args('createPatientTreatmentDoneStepInput') createPatientTreatmentDoneStepInput: CreatePatientTreatmentDoneStepInput) {
@@ -14,8 +14,11 @@ export class PatientTreatmentDoneStepsResolver {
   }
 
   @Query(() => [PatientTreatmentDoneStep], { name: 'patientTreatmentDoneSteps' })
-  findAll() {
-    return this.patientTreatmentDoneStepsService.findAll();
+  findAll(@Args('patient_session_id', { type: () => Int, nullable: true }) patient_session_id: number,
+    @Args('patient_treatment_id', { type: () => Int, nullable: true }) patient_treatment_id: number) {
+    return this.patientTreatmentDoneStepsService.findAll({
+      patient_session_id, patient_treatment_id
+    });
   }
 
   @Query(() => PatientTreatmentDoneStep, { name: 'patientTreatmentDoneStep' })
@@ -28,8 +31,5 @@ export class PatientTreatmentDoneStepsResolver {
     return this.patientTreatmentDoneStepsService.update(updatePatientTreatmentDoneStepInput.id, updatePatientTreatmentDoneStepInput);
   }
 
-  @Mutation(() => PatientTreatmentDoneStep)
-  removePatientTreatmentDoneStep(@Args('id', { type: () => Int }) id: number) {
-    return this.patientTreatmentDoneStepsService.remove(id);
-  }
+
 }
