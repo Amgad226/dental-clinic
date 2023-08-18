@@ -40,6 +40,7 @@ import { StoredProductModule } from './graphql/store/stored_product/stored_produ
 import { BookInModule } from './graphql/store/book_in/book_in.module';
 import { BookOutModule } from './graphql/store/book_out/book_out.module';
 import { PatientTreatmentDoneStepsModule } from './graphql/patient_management/patient_treatment_done_steps/patient_treatment_done_steps.module';
+import { LabOrderModule } from './graphql/lab_order/lab_order.module';
 
 
 
@@ -110,6 +111,7 @@ const serveStaticImagesConfig = {
     WorkingHoursModule,
     PatientPerscrptionsMediciensModule,
     PatientTreatmentDoneStepsModule,
+    LabOrderModule,
   ],
   controllers: [AppController],
   providers: [AppService, ImagesUploaderService],

@@ -95,6 +95,11 @@ input CreateDiseaseInput {
   name: String!
 }
 
+input CreateLabOrderInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 input CreateMedicineInput {
   category_id: Int!
 
@@ -189,8 +194,8 @@ input CreatePatientInput {
 }
 
 input CreatePatientLabOrderInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  lab_order_id: Int!
+  patient_session_id: Int!
 }
 
 input CreatePatientMedicalImageInput {
@@ -338,6 +343,11 @@ enum Gender {
   male
 }
 
+type LabOrder {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Medicine {
   """category"""
   category: Category
@@ -379,6 +389,7 @@ type Mutation {
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   createChemicalMaterial(createChemicalMaterialInput: CreateChemicalMaterialInput!): ChemicalMaterial!
   createDisease(createDiseaseInput: CreateDiseaseInput!): Disease!
+  createLabOrder(createLabOrderInput: CreateLabOrderInput!): LabOrder!
   createMedicine(createMedicineInput: CreateMedicineInput!): Medicine!
   createPatient(createPatientInput: CreatePatientInput!): Patient!
   createPatientAppointment(createPatientAppointmentInput: CreatePatientAppointmentInput!): PatientAppointment!
@@ -408,6 +419,7 @@ type Mutation {
   removeCategory(id: Int!): Category!
   removeChemicalMaterial(id: Int!): ChemicalMaterial!
   removeDisease(id: Int!): Disease!
+  removeLabOrder(id: Int!): LabOrder!
   removeMedicine(id: Int!): Medicine!
   removePatient(id: Int!): Patient!
   removePatientAppointment(id: Int!): PatientAppointment!
@@ -437,6 +449,7 @@ type Mutation {
   updateBadHabit(id: Int!, updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
   updateChemicalMaterial(id: Int!, updateChemicalMaterialInput: UpdateChemicalMaterialInput!): ChemicalMaterial!
   updateDisease(id: Int!, updateDiseaseInput: UpdateDiseaseInput!): Disease!
+  updateLabOrder(updateLabOrderInput: UpdateLabOrderInput!): LabOrder!
   updateMedicine(id: Float!, updateMedicineInput: UpdateMedicineInput!): Medicine!
   updateOneWorkingHour(updateOneWorkingHour: UpdateWorkingHourInput!): WorkingHour!
   updatePatient(updatePatientInput: UpdatePatientInput!): Patient!
@@ -633,8 +646,11 @@ type PatientDisease {
 }
 
 type PatientLabOrder {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: Int!
+  lab_order: LabOrder!
+  lab_order_id: Int!
+  patient_session_id: Int!
+  session: PatientSession!
 }
 
 type PatientMedicalImage {
@@ -784,6 +800,7 @@ type Query {
   chemicalMaterials(item_per_page: Float, page: Float, search: String): PaginateChemicalMaterial!
   disease(id: Int!): Disease!
   diseases(item_per_page: Float, page: Float, search: String): Paginatedisease!
+  labOrder(id: Int!): LabOrder!
   medicine(id: Int!): Medicine!
   medicines(item_per_page: Float, page: Float, search: String): paginateMedicine!
   patient(id: Int!): Patient!
@@ -795,7 +812,7 @@ type Query {
   patientDiagnoses(item_per_page: Float, page: Float, patient_id: Float, problem_type_id: Float): PaginatedPatientDiagnosis!
   patientDiseases(patient_id: Int!): [PatientDisease!]!
   patientLabOrder(id: Int!): PatientLabOrder!
-  patientLabOrders: [PatientLabOrder!]!
+  patientLabOrders(lab_order_id: Int, patient_id: Int, patient_session_id: Int): [PatientLabOrder!]!
   patientMedicalImages(medical_image_type_id: Int, patient_id: Int): [PatientMedicalImage!]!
   patientMedicalImagesType(id: Int!): PatientMedicalImagesType!
   patientMedicalImagesTypes: [PatientMedicalImagesType!]!
@@ -891,6 +908,12 @@ input UpdateDiseaseInput {
   name: String!
 }
 
+input UpdateLabOrderInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
 input UpdateMedicineInput {
   """chemical_material_id field """
   category_id: Int!
@@ -975,9 +998,9 @@ input UpdatePatientInput {
 }
 
 input UpdatePatientLabOrderInput {
-  """Example field (placeholder)"""
-  exampleField: Int
   id: Int!
+  lab_order_id: Int
+  patient_session_id: Int
 }
 
 input UpdatePatientMedicalImageInput {

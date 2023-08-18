@@ -478,8 +478,8 @@ model PatientLabOrder {
   patient_session_id Int
   lab_order_id       Int
 
-  session PatientSession @relation(fields: [patient_session_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  // lab_order LabOrder       @relation(fields: [lab_order_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  session   PatientSession @relation(fields: [patient_session_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  lab_order LabOrder       @relation(fields: [lab_order_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model PatientPerscrptions {
@@ -500,6 +500,13 @@ model PatientPerscrptionsMedicince {
 
   perscrption PatientPerscrptions @relation(fields: [patient_perscrption_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   medicince   Medicine            @relation(fields: [medicince_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model LabOrder {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  PatientLabOrder PatientLabOrder[]
 }
 
 // 

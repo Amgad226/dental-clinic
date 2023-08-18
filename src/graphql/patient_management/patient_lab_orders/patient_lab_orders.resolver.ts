@@ -6,7 +6,7 @@ import { UpdatePatientLabOrderInput } from './dto/update-patient_lab_order.input
 
 @Resolver(() => PatientLabOrder)
 export class PatientLabOrdersResolver {
-  constructor(private readonly patientLabOrdersService: PatientLabOrdersService) {}
+  constructor(private readonly patientLabOrdersService: PatientLabOrdersService) { }
 
   @Mutation(() => PatientLabOrder)
   createPatientLabOrder(@Args('createPatientLabOrderInput') createPatientLabOrderInput: CreatePatientLabOrderInput) {
@@ -14,8 +14,12 @@ export class PatientLabOrdersResolver {
   }
 
   @Query(() => [PatientLabOrder], { name: 'patientLabOrders' })
-  findAll() {
-    return this.patientLabOrdersService.findAll();
+  findAll(@Args('lab_order_id', { type: () => Int, nullable: true }) lab_order_id?: number,
+    @Args('patient_id', { type: () => Int, nullable: true }) patient_id?: number,
+    @Args('patient_session_id', { type: () => Int, nullable: true }) patient_session_id?: number) {
+    return this.patientLabOrdersService.findAll({
+      lab_order_id, patient_id, patient_session_id
+    });
   }
 
   @Query(() => PatientLabOrder, { name: 'patientLabOrder' })
