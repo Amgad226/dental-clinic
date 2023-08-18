@@ -5,6 +5,7 @@ import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { checkIfExists, validator } from 'src/validatior/validator';
 import { Paginateproduct } from './entities/Paginateproduct';
+import { GetProducts } from './entities/GetProductsOutput';
 
 @Resolver(() => Product)
 export class ProductResolver {
@@ -53,5 +54,10 @@ export class ProductResolver {
   async removeProduct(@Args('id', { type: () => Int }) id: number) {
     await validator(checkIfExists)({ id, modelName: 'product' });
     return this.productService.remove(id);
+  }
+
+  @Query(() => [GetProducts], { name: 'getProducts' })
+  async getProducts(): Promise<{ product_id : number ;name: string; totalQuantity: number }[]> {
+    return this.productService.getProducts();
   }
 }
