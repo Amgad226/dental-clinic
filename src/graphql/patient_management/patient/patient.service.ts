@@ -28,6 +28,8 @@ export class PatientService {
       },
       data: {
         ...rest,
+        phone:'2',
+        
         PatientDisease: patient_diseases && {
           createMany: { data: [...patient_diseases] }
         },

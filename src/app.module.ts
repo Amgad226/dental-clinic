@@ -8,6 +8,7 @@ import { DiseaseModule } from './graphql/disease/disease.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { BadHabitModule } from './graphql/bad_habit/bad_habit.module';
 import { TreatmentTypeModule } from './graphql/treatment_type/treatment_type.module';
+import { AuthModule } from './auth/auth.module';
 import { ProblemTypeModule } from './graphql/problem_type/problem_type.module';
 import { ChemicalMaterialModule } from './graphql/chemical_material/chemical_material.module';
 import { ConfigModule } from '@nestjs/config';
@@ -31,6 +32,8 @@ import { ProductModule } from './graphql/store/product/product.module';
 import { StoredProductModule } from './graphql/store/stored_product/stored_product.module';
 import { BookInModule } from './graphql/store/book_in/book_in.module';
 import { BookOutModule } from './graphql/store/book_out/book_out.module';
+import { AccessTokenGuard } from './auth/guards/accessToken.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 
 const apolloDriverConfig: ApolloDriverConfig = {
@@ -47,8 +50,7 @@ const apolloDriverConfig: ApolloDriverConfig = {
   autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
   sortSchema: true,
   status400ForVariableCoercionErrors: true,
-  includeStacktraceInErrorResponses: true
-
+  includeStacktraceInErrorResponses: true,
 };
 
 const graphQLModuleConfig: any = {
@@ -58,11 +60,9 @@ const graphQLModuleConfig: any = {
 const serveStaticImagesConfig = {
   rootPath: join(__dirname, '..', 'public'), // Specify the root path of your image directory
   serveRoot: '/public',
-}
-
+};
 
 @Module({
-
   imports: [
     ConfigModule.forRoot(),
     ServeStaticModule.forRoot(serveStaticImagesConfig),
@@ -71,6 +71,7 @@ const serveStaticImagesConfig = {
     DiseaseModule,
     BadHabitModule,
     TreatmentTypeModule,
+    AuthModule,
     ProblemTypeModule,
     ProblemModule,
     ChemicalMaterialModule,
@@ -93,6 +94,13 @@ const serveStaticImagesConfig = {
     BookOutModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ImagesUploaderService],
+  providers: [
+    AppService,
+    ImagesUploaderService,
+    {
+      provide: APP_GUARD,
+      useClass: AccessTokenGuard,
+    },
+  ],
 })
-export class AppModule { }
+export class AppModule {}

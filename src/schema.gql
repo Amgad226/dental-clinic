@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthResponse {
+  data: CreateUserAccount
+  message: String
+  status: Int
+}
+
 type BadHabit {
   id: Int!
   name: String!
@@ -32,6 +38,17 @@ type Category {
 
   """name field (placeholder)"""
   name: String!
+}
+
+type CheckPhone {
+  phoneHavePatient: Boolean!
+  phoneHaveUserAccount: Boolean!
+}
+
+type CheckPhoneResponse {
+  data: CheckPhone
+  message: String
+  status: Int
 }
 
 type ChemicalMaterial {
@@ -224,6 +241,19 @@ input CreateTreatmentTypeInput {
   name: String!
 }
 
+type CreateUserAccount {
+  accessToken: String!
+  refreshToken: String!
+  user: User!
+}
+
+input CreateUserAccountInput {
+  c_password: String!
+  otp: String!
+  password: String!
+  phone: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -237,6 +267,15 @@ type Disease {
 enum Gender {
   female
   male
+}
+
+input LoginInput {
+  password: String!
+  phone: String!
+}
+
+type LogoutResponse {
+  loggedOut: Boolean!
 }
 
 type Medicine {
@@ -274,6 +313,8 @@ type MedicineChemicalMaterials {
 }
 
 type Mutation {
+  CheckPhone(checkPhoneInput: PhoneInput!): CheckPhoneResponse!
+  SendOtp(checkPhoneInput: PhoneInput!): SendOtpResponse!
   createBadHabit(createBadHabitInput: CreateBadHabitInput!): BadHabit!
   createBookIn(createBookInInput: CreateBookInInput!): BookIn!
   createBookOut(createBookOutInput: CreateBookOutInput!): BookOut!
@@ -296,6 +337,9 @@ type Mutation {
   createProduct(createProductInput: CreateProductInput!): Product!
   createTreatment(createTreatmentInput: CreateTreatmentInput!): Treatment!
   createTreatmentType(createTreatmentTypeInput: CreateTreatmentTypeInput!): TreatmentType!
+  createUserAccount(checkPhoneInput: CreateUserAccountInput!): AuthResponse!
+  login(loginInput: LoginInput!): AuthResponse!
+  logout(userId: Float!): LogoutResponse!
   removeBadHabit(id: Int!): BadHabit!
   removeCategory(id: Int!): Category!
   removeChemicalMaterial(id: Int!): ChemicalMaterial!
@@ -516,6 +560,10 @@ type PatientTeethTreatment {
   exampleField: Int!
 }
 
+input PhoneInput {
+  phone: String!
+}
+
 type Problem {
   """Problem_type"""
   Problem_type: ProblemType!
@@ -580,6 +628,17 @@ type Query {
   treatmentType(id: Int!): TreatmentType!
   treatmentTypes: [TreatmentType!]!
   treatments(item_per_page: Float, page: Float, search: String): paginateTreatment!
+}
+
+type SendOtp {
+  """Example field (placeholder)"""
+  otp: Int!
+}
+
+type SendOtpResponse {
+  data: SendOtp
+  message: String
+  status: Int
 }
 
 type Steps {
@@ -766,6 +825,12 @@ input UpdateTreatmentTypeInput {
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
+
+type User {
+  id: Int!
+  isVerified: Boolean!
+  phone: String!
+}
 
 type paginateMedicine {
   item_per_page: Int!
