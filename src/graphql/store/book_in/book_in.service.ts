@@ -61,8 +61,21 @@ export class BookInService {
   async findOne(id: number) {
     const bookIn = await this.prisma.bookIn.findUnique({
       where: { id: id },
+      include:{
+        product:true
+      }
     });
     return bookIn;
+  }
+
+  async productsbookedin(id: number) {
+    const productsbookedin = await this.prisma.bookIn.findMany({
+      where: { product_id: id },
+      include:{
+        product:true
+      }
+    });
+    return productsbookedin;
   }
 
 // function for update the total-quantity for stored-product
