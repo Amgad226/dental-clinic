@@ -17,7 +17,7 @@ export class PatientReservationsService {
     if (date < new Date(Date.now())) {
       throw new Error('Date must greater than now date');
     }
-    const day = new Date(date).toLocaleString('en-US', { weekday: 'short' }) as Days
+    const day = new Date(date).toLocaleString('en-SY', { weekday: 'short' }) as Days
     const workingHours = await this.prisma.workingHours.findUnique({
       where: {
         day

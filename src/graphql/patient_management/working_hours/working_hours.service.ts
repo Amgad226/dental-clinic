@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateWorkingHourInput } from './dto/create-working_hour.input';
-import { UpdateWorkingHourInput } from './dto/update-working_hour.input';
+import { UpdateWorkingHourInput } from './dto/update-one-working_hour.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Days } from '@prisma/client';
+import { UpdateAllWorkingHourInput } from './dto/update-all-working_hour.input';
 
 @Injectable()
 export class WorkingHoursService {
@@ -17,7 +18,7 @@ export class WorkingHoursService {
     return await this.prisma.workingHours.findMany();
   }
 
-  async findOne({ id = 1, day = 'Sun' }: {
+  async findOne({ id, day }: {
     id?: number, day?: Days
   }) {
     return await this.prisma.workingHours.findUnique({
@@ -37,7 +38,7 @@ export class WorkingHoursService {
     });
   }
 
-  async updateAll(updateWorkingHourInput: UpdateWorkingHourInput) {
+  async updateAll(updateWorkingHourInput: UpdateAllWorkingHourInput) {
     if (updateWorkingHourInput.open === false) {
       const reservation = await this.prisma.patientReservation.count()
       if (reservation > 0) {
@@ -45,11 +46,12 @@ export class WorkingHoursService {
         please accept or reject all to be able to close the reservations requests`);
       }
     }
-    return await this.prisma.workingHours.updateMany({
+    await this.prisma.workingHours.updateMany({
       data: {
         ...updateWorkingHourInput,
       },
     });
+    return await this.prisma.workingHours.findMany()
   }
   async remove(id: number) {
     return await this.prisma.workingHours.delete({
