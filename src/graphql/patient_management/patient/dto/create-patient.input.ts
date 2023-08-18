@@ -27,8 +27,8 @@ export class CreatePatientInput {
   @Field(() => String)
   phone: string
 
-  @Field(() => String, { nullable: true })
-  birth_date?: string
+  @Field(() => Date)
+  birth_date: Date
 
   @Field(() => String, { nullable: true })
   job?: string
