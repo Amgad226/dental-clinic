@@ -1,7 +1,6 @@
 import { InputType, Int, Field, registerEnumType } from '@nestjs/graphql';
 import { AppointmentStates, AppointmentTypes } from '@prisma/client';
-import { PatientSession } from '../../patient_sessions/entities/patient_session.entity';
-import { Patient } from '../../patient/entities/patient.entity';
+
 
 
 registerEnumType(AppointmentStates, {

@@ -291,14 +291,27 @@ input CreateTreatmentTypeInput {
 }
 
 input CreateWorkingHourInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """Sun Mon ..."""
+  day: Days!
+  from: DateTime!
+  open: Boolean!
+  to: DateTime!
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+enum Days {
+  Fri
+  Mon
+  Sat
+  Sun
+  Thu
+  Tue
+  Wed
+}
 
 type Disease {
   id: Int!
@@ -993,17 +1006,24 @@ input UpdateTreatmentTypeInput {
 }
 
 input UpdateWorkingHourInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  """Sun Mon ..."""
+  day: Days
+  from: DateTime
   id: Int!
+  open: Boolean
+  to: DateTime
 }
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
 
 type WorkingHour {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """Sun Mon ..."""
+  day: Days!
+  from: DateTime!
+  id: Int!
+  open: Boolean!
+  to: DateTime!
 }
 
 type paginateMedicine {

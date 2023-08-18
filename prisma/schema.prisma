@@ -375,7 +375,7 @@ enum Days {
 
 model WorkingHours {
   id   Int      @id @default(autoincrement())
-  day  Days?    @unique
+  day  Days     @unique
   from DateTime
   to   DateTime
   open Boolean
