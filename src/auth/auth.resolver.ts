@@ -1,24 +1,18 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
-import { AuthResponse } from './entities/auth.entity';
-import { SignUpInput } from './dto/singup-input';
-import { UpdateAuthInput } from './dto/update-auth.input';
+import { AuthResponse } from './entities/auth.response';
 import { LogoutResponse } from './dto/logout-response';
 import { Public } from './decorators/public.decorators';
-import { NewTokenResponse } from './dto/newTokensResponse';
 import { CurrentUserId } from './decorators/currentUserId.decorator';
 import { CurrentUser } from './decorators/currentUser.decorator';
-import { UseGuards } from '@nestjs/common';
-import { RefreshTokenGuard } from './guards/refreshToken.guard';
 import { PhoneInput } from './dto/phone-input';
-import { CheckPhone } from './entities/check-phone.entity';
 import { CheckPhoneResponse } from './entities/check-phone.response';
-import { Controller, Get, Res, HttpStatus } from '@nestjs/common';
-import { Response } from 'src/global/response-entity';
 import { SendOtpResponse } from './entities/send-otp.response';
 import { CreateUserAccountInput } from './dto/create-user-account';
-import { CreateUserAccountResponse } from './entities/create-user-account.response';
 import { LoginInput } from './dto/login-input';
+import { CreateUserPatientInput } from './dto/create-patient';
+import { CreateUserPatientResponse } from './entities/create-user-patient.response';
+import { CreateUserAccountResponse } from './entities/create-user-account.response';
 
 @Resolver()
 export class AuthResolver {
@@ -37,32 +31,42 @@ export class AuthResolver {
   }
 
   @Public()
-  @Mutation(() => AuthResponse, { name: 'createUserAccount' })
+  @Mutation(() => CreateUserAccountResponse, { name: 'createUserAccount' })
   createUserAccount(
-    @Args('checkPhoneInput') createUserAccountInput: CreateUserAccountInput,
+    @Args('createUserAccountInput')
+    createUserAccountInput: CreateUserAccountInput,
   ) {
     return this.authService.createUserAccount(createUserAccountInput);
   }
 
+  @Mutation(() => CreateUserPatientResponse, { name: 'createPatientToUser' })
+  createPatientToUser(
+    @Args('CreatePatientInput') CreatePatientInput: CreateUserPatientInput,
+    @CurrentUser() user,
+  ) {
+    return this.authService.createPatientToUser(CreatePatientInput, user);
+  }
+
+  @Mutation(() => CreateUserPatientResponse, { name: 'linkPatientToUser' })
+  linkPatientToUser(@CurrentUser() user) {
+    return this.authService.linkPatientToUser(user);
+  }
 
   @Public()
   @Mutation(() => AuthResponse, { name: 'login' })
-  login(@Args('loginInput') loginInput: LoginInput
-  ) {
+  login(@Args('loginInput') loginInput: LoginInput) {
     return this.authService.login(loginInput);
   }
 
   @Mutation(() => LogoutResponse)
-  logout(@Args('userId') userId: number) {
-    return this.authService.logout(userId);
+  async logout(@CurrentUserId() usesId) {
+    return this.authService.logout(usesId);
   }
 
   // @Mutation(() => Auth)
   // reomveUser(@Args('id', { type: () => Int }) id: number) {
   //   return this.authService.removeUser(id);
   // }
-
-
 
   // @Public()
   // @UseGuards(RefreshTokenGuard)
@@ -73,8 +77,6 @@ export class AuthResolver {
   // ) {
   //   return this.authService.getNewTokens(userId, refreshToken);
   // }
-
-
 
   // @Query(() => [Auth], { name: 'auth' })
   // findAll() {

@@ -2,8 +2,16 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Auth {
+  accessToken: String!
+  patient: Patient!
+  refreshToken: String!
+  status: CheckPhone!
+  user: User!
+}
+
 type AuthResponse {
-  data: CreateUserAccount
+  data: Auth
   message: String
   status: Int
 }
@@ -41,6 +49,8 @@ type Category {
 }
 
 type CheckPhone {
+  code: Float!
+  message: String!
   phoneHavePatient: Boolean!
   phoneHaveUserAccount: Boolean!
 }
@@ -158,7 +168,7 @@ input CreatePatientDiseaseInput {
 
 input CreatePatientInput {
   address: String
-  birth_date: DateTime
+  birth_date: String
   gender: String!
   job: String
   main_complaint: String
@@ -167,7 +177,7 @@ input CreatePatientInput {
   patient_badHabits: [CreatePatientBadHabitInput!]
   patient_diseases: [CreatePatientDiseaseInput!]
   patient_medicines: [CreatePatientMedicineInput!]
-  phone: String
+  phone: String!
 }
 
 input CreatePatientMedicalImageInput {
@@ -254,6 +264,36 @@ input CreateUserAccountInput {
   phone: String!
 }
 
+type CreateUserAccountResponse {
+  data: CreateUserAccount
+  message: String
+  status: Int
+}
+
+type CreateUserPatient {
+  patient: Patient!
+  user: User!
+}
+
+input CreateUserPatientInput {
+  address: String
+  birth_date: String!
+  gender: String!
+  job: String
+  main_complaint: String
+  maintal_status: String
+  name: String!
+  patient_badHabits: [CreatePatientBadHabitInput!]
+  patient_diseases: [CreatePatientDiseaseInput!]
+  patient_medicines: [CreatePatientMedicineInput!]
+}
+
+type CreateUserPatientResponse {
+  data: CreateUserPatient
+  message: String
+  status: Int
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -332,14 +372,16 @@ type Mutation {
   createPatientMedicine(createPatientMedicineInput: CreatePatientMedicineForExistingPatientInput!): PatientMedicine!
   createPatientPayment(createPatientPaymentInput: CreatePatientPaymentInput!): PatientPayment!
   createPatientTeethTreatment(createPatientTeethTreatmentInput: CreatePatientTeethTreatmentInput!): PatientTeethTreatment!
+  createPatientToUser(CreatePatientInput: CreateUserPatientInput!): CreateUserPatientResponse!
   createProblem(createProblemInput: CreateProblemInput!): Problem!
   createProblemType(createProblemTypeInput: CreateProblemTypeInput!): ProblemType!
   createProduct(createProductInput: CreateProductInput!): Product!
   createTreatment(createTreatmentInput: CreateTreatmentInput!): Treatment!
   createTreatmentType(createTreatmentTypeInput: CreateTreatmentTypeInput!): TreatmentType!
-  createUserAccount(checkPhoneInput: CreateUserAccountInput!): AuthResponse!
+  createUserAccount(createUserAccountInput: CreateUserAccountInput!): CreateUserAccountResponse!
+  linkPatientToUser: CreateUserPatientResponse!
   login(loginInput: LoginInput!): AuthResponse!
-  logout(userId: Float!): LogoutResponse!
+  logout: LogoutResponse!
   removeBadHabit(id: Int!): BadHabit!
   removeCategory(id: Int!): Category!
   removeChemicalMaterial(id: Int!): ChemicalMaterial!
@@ -466,7 +508,7 @@ type Patient {
   PatientPayment: [PatientPayment!]
   PatientTeethTreatment: [PatientTeethTreatment!]
   address: String
-  birth_date: DateTime
+  birth_date: String
   gender: Gender!
   id: Int!
   job: String
@@ -744,7 +786,7 @@ input UpdatePatientDiseaseInput {
 
 input UpdatePatientInput {
   address: String
-  birth_date: DateTime
+  birth_date: String
   gender: String
   id: Int!
   job: String

@@ -4,17 +4,13 @@ import { IsNotEmpty, IsString } from 'class-validator'
 import { Patient } from "src/graphql/patient_management/patient/entities/patient.entity";
 
 @ObjectType()
-export class CreateUserAccount {
-    @IsNotEmpty()
-    @IsString()
-    @Field()
-    accessToken: string;
-
-    @Field()
-    refreshToken: string;
+export class CreateUserPatient {
 
     @Field(() => User)
     user: User;
+
+    @Field(() => Patient)
+    patient: Patient;
 
 }
 

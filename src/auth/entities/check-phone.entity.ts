@@ -8,5 +8,13 @@ export class CheckPhone {
   @Field(() => Boolean)
   phoneHavePatient: boolean;
 
+  @Field(() => Number)
+  code :number 
+
+  @Field(() => String)
+  message :string 
+  
+
+
 
 }

@@ -214,7 +214,7 @@ model Patient {
   name                  String
   gender                Gender
   phone                 String                  @unique
-  birth_date            DateTime?
+  birth_date            String?
   job                   String?
   main_complaint        String?
   maintal_status        String?

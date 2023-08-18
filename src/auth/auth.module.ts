@@ -7,7 +7,10 @@ import { ConfigService } from '@nestjs/config';
 import { AccessTokenStrategy } from './strategies/accessToken.strategy';
 import { RefreshTokenStrategy } from './strategies/refreshToken.strategy';
 import { OtpService } from './otp.service';
+import { PassportModule } from '@nestjs/passport';
+// import { LocalStrategy } from './stra/local-strategy';
+import { PatientService } from 'src/graphql/patient_management/patient/patient.service';
 @Module({
-  providers: [OtpService,ConfigService,AuthResolver, AuthService, JwtService, AccessTokenStrategy, RefreshTokenStrategy]
+  providers: [PatientService,OtpService,ConfigService,AuthResolver, AuthService, JwtService, AccessTokenStrategy, RefreshTokenStrategy]
 })
-export class AuthModule { } 
+export class AuthModule {}

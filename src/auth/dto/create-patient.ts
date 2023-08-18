@@ -1,8 +1,13 @@
+
 import { InputType, Field, registerEnumType } from '@nestjs/graphql';
 import { Gender } from '@prisma/client';
-import { CreatePatientBadHabitInput } from '../../patient_bad-habits/dto/create-patient_bad-habit.input';
-import { CreatePatientMedicineInput } from '../../patient_medicines/dto/create-patient_medicine.input';
-import { CreatePatientDiseaseInput } from '../../patient_diseases/dto/create-patient-disease.input';
+import { CreatePatientBadHabitInput } from 'src/graphql/patient_management/patient_bad-habits/dto/create-patient_bad-habit.input';
+import { CreatePatientMedicineInput } from 'src/graphql/patient_management/patient_medicines/dto/create-patient_medicine.input'; 
+import { CreatePatientDiseaseInput } from 'src/graphql/patient_management/patient_diseases/dto/create-patient-disease.input';
+import { Type } from 'class-transformer';
+import { IsDate } from 'class-validator';
+import { IsDateString } from 'class-validator';
+import { IsDateFormatted } from './isDateFormatted';
 
 
 registerEnumType(Gender, {
@@ -11,7 +16,7 @@ registerEnumType(Gender, {
 
 
 @InputType()
-export class CreatePatientInput {
+export class CreateUserPatientInput {
   @Field(() => String)
   name: string
 
@@ -23,12 +28,14 @@ export class CreatePatientInput {
   //   return value;
   // })
   gender: Gender
+// 
 
-  @Field(() => String)
-  phone: string
 
-  @Field(() => String, { nullable: true })
-  birth_date?: string
+
+// @IsDateFormatted()
+@Field(() => String,{})
+  birth_date: string;
+
 
   @Field(() => String, { nullable: true })
   job?: string

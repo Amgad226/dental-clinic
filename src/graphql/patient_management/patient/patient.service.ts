@@ -11,7 +11,16 @@ export class PatientService {
   constructor(private prisma: PrismaService) { }
 
   async create(createPatientInput: CreatePatientInput): Promise<Patient> {
+    
+    const patient = await this.prisma.patient.findFirst({ where: { phone:createPatientInput.phone } });
+
+    if (patient) {
+      throw new GraphQLError('patient already exists ', { extensions: { code: 400 } });
+    }
+
     const { patient_diseases, patient_badHabits, patient_medicines, ...rest } = createPatientInput
+    console.log(rest.birth_date);
+    
     const new_patient = await this.prisma.patient.create({
       include: {
         PatientDisease: {
@@ -28,8 +37,7 @@ export class PatientService {
       },
       data: {
         ...rest,
-        phone:'2',
-        
+
         PatientDisease: patient_diseases && {
           createMany: { data: [...patient_diseases] }
         },

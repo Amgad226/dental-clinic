@@ -1,13 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { SignUpInput } from './dto/singup-input';
-import { UpdateAuthInput } from './dto/update-auth.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config/dist';
 import * as argon from 'argon2';
 import { ForbiddenException } from '@nestjs/common/exceptions';
 import { LogoutResponse } from './dto/logout-response';
-import { ApolloError } from 'apollo-server-express';
 import { PhoneInput } from './dto/phone-input';
 import { OtpService } from './otp.service';
 import { CreateUserAccountInput } from './dto/create-user-account';
@@ -16,7 +13,8 @@ import { CheckPhoneResponse } from './entities/check-phone.response';
 import { SendOtpResponse } from './entities/send-otp.response';
 import { CreateUserAccountResponse } from './entities/create-user-account.response';
 import { LoginInput } from './dto/login-input';
-import { AuthResponse } from './entities/auth.entity';
+import { CreateUserPatientInput } from './dto/create-patient';
+import { PatientService } from 'src/graphql/patient_management/patient/patient.service';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +22,7 @@ export class AuthService {
     private prisma: PrismaService,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private patientService: PatientService,
     private readonly otpService: OtpService,
   ) {}
 
@@ -36,38 +35,68 @@ export class AuthService {
       where: { phone: phoneInput.phone },
     });
 
-    if (user != null && patient != null) {
-      return {
-        data: {
-          phoneHaveUserAccount: true,
-          phoneHavePatient: true,
-        },
-        message: 'user account found, give me password  ',
-        status: 200,
+    let status;
+
+    if (user && patient) {
+      const checkPivotExist = await this.prisma.patientUser.findFirst({
+        where: { user_id: user.id },
+      });
+      if (checkPivotExist) {
+        //  checkPhone -> login
+        status = {
+          message: 'User account and patient found,[login -> home page] ',
+          code: 1,
+        };
+      } else {
+        status = {
+          message:
+            'User account and patient found, but not linked together , [ login -> linkPatientToUser  -> home page] ',
+          code: 2,
+        };
+      }
+    } else if (!user && patient) {
+      status = {
+        message:
+          'Patient found, provide OTP and new password [ sendOtp ->  createUserAccount(get token from it) -> linkPatientToUser  -> home page]',
+        code: 3,
       };
-    } else if (user == null && patient != null) {
-      return {
-        data: {
-          phoneHaveUserAccount: false,
-          phoneHavePatient: true,
-        },
-        message: 'patient found, give me otp then new password   ',
-        status: 200,
+    } else if (user && !patient) {
+      status = {
+        message:
+          'User account found, but no patient; create patient , [ login -> createPatientToUser  -> home page ]',
+        code: 4,
       };
     } else {
-      return {
-        data: {
-          phoneHaveUserAccount: false,
-          phoneHavePatient: false,
-        },
+      status = {
+        //
         message:
-          'user account not found create account then verify your phone with otp',
-        status: 200,
+          'User account and patient not found,[  sendOtp -> createUserAccount(get token from it) -> createPatientToUser  -> home page ] ',
+        code: 5,
       };
     }
+    
+    return {
+      data: {
+        ...status,
+        phoneHaveUserAccount: !!user,
+        phoneHavePatient: !!patient,
+      },
+      message: 'request successfully',
+      status: 200,
+    };
   }
 
+  // create user account,that is have phone and otp values and other null
   async sendOtp({ phone }: PhoneInput): Promise<SendOtpResponse> {
+    let user = await this.prisma.user.findFirst({
+      where: { phone },
+    });
+    if (user?.isVerified) {
+      throw new GraphQLError('already this phone verified  ', {
+        extensions: { code: 400 },
+      });
+    }
+
     const otp = this.otpService.generateOtpCode();
 
     await this.prisma.user.upsert({
@@ -100,7 +129,8 @@ export class AuthService {
           status: 400,
         };
   }
-
+  //IS_PUBLIC
+  // verify user account by otp and store password
   async createUserAccount({
     password,
     phone,
@@ -145,31 +175,133 @@ export class AuthService {
     };
   }
 
-  async login(loginInput: LoginInput) {
+  //AUTH
+  // create new patient and link auth user with this new patient info
+  async createPatientToUser(createPatientInput: CreateUserPatientInput, user) {
+    const checkPatientExists = await this.prisma.patient.findFirst({
+      where: { phone: user.phone },
+    });
+    if (checkPatientExists) {
+      throw new GraphQLError('this phone already have patient', {
+        extensions: { code: 403 },
+      });
+    }
+    console.log({ ...user });
 
+    const patientData = {
+      ...createPatientInput,
+      phone: user.phone,
+    };
+    // console.log(1);
+
+    const patient = await this.patientService.create(patientData);
+    const pivot = await this.prisma.patientUser.create({
+      data: {
+        patient_id: patient.id,
+        user_id: user.id,
+      },
+    });
+
+    return {
+      data: { user: { ...user }, patient: { ...patient } },
+      message: 'user verified successfully',
+      status: 200,
+    };
+  }
+
+  async linkPatientToUser(user) {
+    console.dir(user);
+    const checkPivotExist = await this.prisma.patientUser.findFirst({
+      where: { user_id: user.id },
+    });
+    if (checkPivotExist) {
+      throw new GraphQLError('this phone already have user account ', {
+        extensions: { code: 403 },
+      });
+    }
+    const patient = await this.prisma.patient.findFirst({
+      where: {
+        phone: user.phone,
+      },
+    });
+    const pivot = await this.prisma.patientUser.create({
+      data: {
+        patient_id: patient.id,
+        user_id: user.id,
+      },
+    });
+    return {
+      data: { user: { ...user }, patient: { ...patient } },
+      message: 'patient linked with this user account successfully',
+      status: 200,
+    };
+  }
+
+  async login(loginInput: LoginInput) {
     const user = await this.prisma.user.findUnique({
       where: { phone: loginInput.phone },
     });
     if (!user) {
-      throw new GraphQLError('User not found ', { extensions: { code: 404 } });
+      throw new GraphQLError('phone not found _', {
+        extensions: { code: 404 },
+      });
     }
+    if (!user?.isVerified) {
+      throw new GraphQLError('account has not verified yet', {
+        extensions: { code: 403 },
+      });
+    }
+
     const isPasswordMatch = await argon.verify(
       user.hashedPassword,
       loginInput.password,
     );
     if (!isPasswordMatch) {
-      throw new GraphQLError('Credintails are not valid', {
+      throw new GraphQLError('Credentials are not valid', {
         extensions: { code: 403 },
       });
     }
+
     const { accessToken, refreshToken } = await this.createTokens(
       user.id,
       user.phone,
     );
     await this.updateRefreshToken(user.id, refreshToken);
-    
+
+    const patient = await this.prisma.patient.findFirst({
+      where: { phone: user.phone },
+    });
+    let status;
+    let suspension = false;
+    if (!patient) {
+      suspension = true;
+      status = {
+        message:
+          'User account found, but no patient; create patient [createPatientToUser ->home page]',
+        code: 4,
+      };
+    } else {
+      suspension = true;
+      const checkPivotExist = await this.prisma.patientUser.findFirst({
+        where: { user_id: user.id, patient_id: patient.id },
+      });
+      if (!checkPivotExist) {
+        status = {
+          message:
+            'User account and patient found but not linked together , [linkPatientToUser ->home page]  ',
+          code: 2,
+        };
+      }
+    }
+    if (suspension) {
+      status = {
+        message: 'you are welcome go to home page',
+        code: 6,
+      };
+    }
+
     return {
-      data: { accessToken, refreshToken, user },
+      data: { accessToken, refreshToken, user, patient, status },
       message: 'login successfully',
       status: 200,
     };
@@ -187,10 +319,12 @@ export class AuthService {
     });
     return { loggedOut: true };
   }
+
   async removeUser(userId: number) {
     // need to check if the user token is valid
     return await this.prisma.user.delete({ where: { id: userId } });
   }
+
   async createTokens(userId: number, phone: string) {
     const accessToken = this.jwtService.sign(
       {
