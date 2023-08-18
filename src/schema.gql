@@ -804,7 +804,6 @@ input UpdatePatientInput {
   main_complaint: String
   maintal_status: String
   name: String
-  phone: String
 }
 
 input UpdatePatientMedicalImageInput {
