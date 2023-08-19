@@ -371,7 +371,7 @@ model BookIn {
   price       Int
   total_price Int
   created_at  DateTime @default(now())
-  product     Product  @relation(fields: [product_id], references: [id])
+  product     Product  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("book_ins")
 }
@@ -383,7 +383,7 @@ model StoredProduct {
   quantity        Int
   price           Int
   total_quantity  Int
-  product         Product  @relation(fields: [product_id], references: [id])
+  product         Product  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("stored_products")
 }
@@ -394,7 +394,7 @@ model BookOut {
   quantity    Int
   total_price Int
   created_at  DateTime @default(now())
-  product     Product  @relation(fields: [product_id], references: [id])
+  product     Product  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("book_outs")
 }

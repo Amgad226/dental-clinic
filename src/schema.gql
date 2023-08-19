@@ -609,6 +609,13 @@ type PaginateGetProducts {
   totalPages: Int!
 }
 
+type PaginateGetProducts {
+  item_per_page: Int!
+  items: [GetProducts!]
+  page: Int!
+  totalPages: Int!
+}
+
 type PaginateProblem {
   item_per_page: Int!
   items: [Problem!]
@@ -621,6 +628,13 @@ type PaginateStoredProduct {
   item_per_page: Int!
   items: [StoredProduct!]
   meta: Meta
+  page: Int!
+  totalPages: Int!
+}
+
+type PaginateStoredProduct {
+  item_per_page: Int!
+  items: [StoredProduct!]
   page: Int!
   totalPages: Int!
 }
