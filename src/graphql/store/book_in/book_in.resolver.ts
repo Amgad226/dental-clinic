@@ -17,6 +17,7 @@ export class BookInResolver {
 
   @Query(() => Paginatebookin, { name: 'bookIns' })
   async findAll(
+    @Args('product_id', { type: () => Int, nullable: true }) product_id?: number,
     @Args('page', { nullable: true }) page?: number,
     @Args('search', { nullable: true }) serach?: string,
     @Args('item_per_page', { nullable: true }) item_per_page?: number,
@@ -25,6 +26,7 @@ export class BookInResolver {
       page,
       item_per_page,
       serach,
+      product_id
     );
     return {
       items: book_in.data,
