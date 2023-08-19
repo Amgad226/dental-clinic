@@ -44,7 +44,7 @@ export class MedicineResolver {
   }
 
   
-  @Query(() => Medicine, { name: 'medicine' })
+  @Query(() => Medicine, { name: 'medicineConflicts' })
   medicineConflicts() {
     return this.medicineService.medicineConflicts();
   }

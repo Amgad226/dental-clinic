@@ -664,7 +664,8 @@ type Query {
   disease(id: Int!): Disease!
   diseases(item_per_page: Float, page: Float, search: String): Paginatedisease!
   getProducts(item_per_page: Float, page: Float, search: String): PaginateGetProducts!
-  medicine: Medicine!
+  medicine(id: Int!): Medicine!
+  medicineConflicts: Medicine!
   medicines(item_per_page: Float, page: Float, search: String): paginateMedicine!
   patient(id: Int!): Patient!
   patientBadHabits(patient_id: Int!): [PatientBadHabit!]!
