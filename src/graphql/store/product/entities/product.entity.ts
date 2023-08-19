@@ -5,6 +5,6 @@ export class Product {
   @Field(() => Int)
   id: number;
 
-  @Field()
-  name: String;
+  @Field(() => String)
+  name: string;
 }

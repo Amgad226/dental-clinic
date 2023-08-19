@@ -6,6 +6,7 @@ import { UpdateProductInput } from './dto/update-product.input';
 import { checkIfExists, validator } from 'src/validatior/validator';
 import { Paginateproduct } from './entities/Paginateproduct';
 import { GetProducts } from './entities/GetProductsOutput';
+import { PaginateGetProducts } from './entities/PaginateGetproduct';
 
 @Resolver(() => Product)
 export class ProductResolver {
@@ -19,13 +20,15 @@ export class ProductResolver {
   @Query(() => Paginateproduct, { name: 'products' })
   async findAll(
     @Args('page', { nullable: true }) page?: number,
-    @Args('search', { nullable: true }) serach?: string,
+    @Args('search', { nullable: true }) search?: string,
     @Args('item_per_page', { nullable: true }) item_per_page?: number,
   ) {
     const product = await this.productService.findAll(
-      page,
-      item_per_page,
-      serach,
+      {
+        page,
+        item_per_page,
+        search,
+      }
     );
     return {
       items: product.data,
@@ -56,8 +59,11 @@ export class ProductResolver {
     return this.productService.remove(id);
   }
 
-  @Query(() => [GetProducts], { name: 'getProducts' })
-  async getProducts(): Promise<{ product_id: number; name: string; totalQuantity: number }[]> {
-    return this.productService.getProducts();
+  @Query(() => PaginateGetProducts, { name: 'getProducts' })
+  async getProducts(@Args('page', { nullable: true }) page?: number,
+    @Args('search', { nullable: true }) search?: string,
+    @Args('item_per_page', { nullable: true }) item_per_page?: number,) {
+
+    return await this.productService.getProducts({ item_per_page, page, search });
   }
 }

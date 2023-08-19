@@ -3,10 +3,11 @@ import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PaginatorService } from 'src/pagination/PaginatorService';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ProductService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create({ name }: CreateProductInput) {
     const product = await this.prisma.product.create({
@@ -15,12 +16,15 @@ export class ProductService {
     return product;
   }
 
-  async findAll(page: any, item_per_page: any, search?: string) {
-    return await PaginatorService({
+  async findAll({ item_per_page, page, search }: { page: any, item_per_page: any, search?: string }) {
+    return await PaginatorService<Prisma.ProductFindManyArgs>({
       Modal: this.prisma.product,
       item_per_page,
       page,
       search,
+      relations: {
+        include: { storedproducts: true }
+      }
     });
   }
 
@@ -45,27 +49,35 @@ export class ProductService {
     });
   }
 
-  async getProducts(): Promise<{ product_id : number ;name: string; totalQuantity: number }[]> {
-    const products = await this.prisma.product.findMany({
-      include: {
-        storedproducts: true,
-      },
+  async getProducts({ item_per_page, page, search }: { page: any, item_per_page: any, search?: string }) {
+    const { data, ...restProps } = await PaginatorService<Prisma.ProductFindManyArgs>({
+      Modal: this.prisma.product,
+      item_per_page,
+      page,
+      search,
+      relations: {
+        include: { storedproducts: true }
+      }
     });
     const productsWithQuantities = await Promise.all(
-      products.map(async (product) => {
+      data.map(async (product) => {
         const totalQuantity = await this.getTotalQuantity(product.id);
         return {
-          product_id:product.id,
+          product_id: product.id,
           name: product.name,
           totalQuantity: totalQuantity,
         };
       })
     );
-    return productsWithQuantities;
+    return {
+      ...restProps,
+      items: productsWithQuantities,
+    };
   }
+  
   async getTotalQuantity(productId: number) {
     const storedProduct = await this.prisma.storedProduct.findFirst({
-      where: { product_id:productId },
+      where: { product_id: productId },
     });
     return storedProduct.total_quantity;
   }
