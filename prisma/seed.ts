@@ -10,6 +10,7 @@ import { truncateDB } from './seeders/TruncateSeeder';
 import { seedTreatment, seedTreatmentType } from './seeders/TreatmentSeeder';
 import { seedStep, seedSubStep } from './seeders/StepSeeder';
 import { seedWorkingHour } from './seeders/WorkingHourSeeder';
+
 const prisma = new PrismaClient();
 
 async function main() {
@@ -20,7 +21,9 @@ async function main() {
   await seedDisease()
   await seedbadHabit()
   await seedMedicines()
+
   await seedPatient()
+  
   await seedTreatmentType()
   await seedTreatment()
   await seedStep()

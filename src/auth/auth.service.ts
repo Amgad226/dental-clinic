@@ -74,7 +74,7 @@ export class AuthService {
         code: 5,
       };
     }
-    
+
     return {
       data: {
         ...status,
@@ -136,6 +136,12 @@ export class AuthService {
     phone,
     otp,
   }: CreateUserAccountInput): Promise<CreateUserAccountResponse> {
+    if (phone === '0999999999') {
+      throw new GraphQLError('this number is used for doctor ', {
+        extensions: { code: 400 },
+      });
+    }
+
     const user = await this.prisma.user.findFirst({ where: { phone } });
 
     if (!user) {
@@ -251,13 +257,15 @@ export class AuthService {
         extensions: { code: 403 },
       });
     }
+    const hashedRefreshToken = await argon.hash(loginInput.password);
+    console.log(hashedRefreshToken);
 
     const isPasswordMatch = await argon.verify(
       user.hashedPassword,
       loginInput.password,
     );
     if (!isPasswordMatch) {
-      throw new GraphQLError('Credentials are not valid', {
+      throw new GraphQLError('Wrong credentials', {
         extensions: { code: 403 },
       });
     }
@@ -300,8 +308,68 @@ export class AuthService {
       };
     }
 
+    status = {
+      phoneHaveUserAccount: !!user,
+      phoneHavePatient: !!patient,
+      ...status,
+    };
+
     return {
       data: { accessToken, refreshToken, user, patient, status },
+      message: 'login successfully',
+      status: 200,
+    };
+  }
+
+  async loginDoctor(loginInput: LoginInput) {
+    const user = await this.prisma.user.findUnique({
+      where: { phone: loginInput.phone },
+    });
+    if (!user) {
+      throw new GraphQLError('phone not found _', {
+        extensions: { code: 404 },
+      });
+    }
+    
+    if(user.role_id!=2){
+      throw new GraphQLError('you are not doctor كول خرا', {
+        extensions: { code: 403 },
+      });
+    }
+
+    if (!user?.isVerified) {
+      throw new GraphQLError('account has not verified yet', {
+        extensions: { code: 403 },
+      });
+    }
+    const hashedRefreshToken = await argon.hash(loginInput.password);
+
+    const isPasswordMatch = await argon.verify(
+      user.hashedPassword,
+      loginInput.password,
+    );
+    if (!isPasswordMatch) {
+      throw new GraphQLError('Wrong Credential', {
+        extensions: { code: 403 },
+      });
+    }
+
+  
+    const { accessToken, refreshToken } = await this.createTokens(
+      user.id,
+      user.phone,
+    );
+    await this.updateRefreshToken(user.id, refreshToken);
+
+    let status = {
+      phoneHaveUserAccount: true,
+      phoneHavePatient: false,
+      message: 'you are welcome go to home page',
+      code: 1,
+    };
+
+    return {
+      data: { accessToken, refreshToken, user, status },
       message: 'login successfully',
       status: 200,
     };
