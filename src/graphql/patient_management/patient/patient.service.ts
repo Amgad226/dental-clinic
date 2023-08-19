@@ -8,60 +8,78 @@ import { Patient } from './entities/patient.entity';
 
 @Injectable()
 export class PatientService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(createPatientInput: CreatePatientInput): Promise<Patient> {
+    
+    const patient = await this.prisma.patient.findFirst({ where: { phone:createPatientInput.phone } });
+
+    if (patient) {
+      throw new GraphQLError('patient already exists ', { extensions: { code: 400 } });
+    }
+
     const { patient_diseases, patient_badHabits, patient_medicines, ...rest } = createPatientInput
+    console.log(rest.birth_date);
+    
     const new_patient = await this.prisma.patient.create({
       include: {
         PatientDisease: {
-          include: { disease: true }
+          include: { disease: true },
         },
         PatientBadHabet: {
-          include: { bad_habet: true }
+          include: { bad_habet: true },
         },
         PatientMedicine: {
           include: {
-            medicine: true
-          }
-        }
+            medicine: true,
+          },
+        },
       },
       data: {
         ...rest,
+
         PatientDisease: patient_diseases && {
-          createMany: { data: [...patient_diseases] }
+          createMany: { data: [...patient_diseases] },
         },
-        PatientBadHabet: patient_badHabits && { createMany: { data: [...patient_badHabits] } },
-        PatientMedicine: patient_medicines && { createMany: { data: [...patient_medicines] } }
+        PatientBadHabet: patient_badHabits && {
+          createMany: { data: [...patient_badHabits] },
+        },
+        PatientMedicine: patient_medicines && {
+          createMany: { data: [...patient_medicines] },
+        },
       },
     });
-    return new_patient
+    return new_patient;
   }
 
   async findAll(page?: number, item_per_page?: number) {
     return await PaginatorService({
-      Modal: this.prisma.patient
-      , page, item_per_page,
-    })
+      Modal: this.prisma.patient,
+      page,
+      item_per_page,
+    });
   }
 
   async findOne(id: number) {
     const patient = await this.prisma.patient.findUnique({
-      where: { id }, include: {
+      where: { id },
+      include: {
         PatientDisease: {
-          take: 3, include: {
-            disease: true
-          }
+          take: 3,
+          include: {
+            disease: true,
+          },
         },
         PatientBadHabet: { take: 3, include: { bad_habet: true } },
         PatientTeethTreatment: true,
         PatientMedicine: {
-          take: 3, include: {
-            medicine: true
-          }
-        }
-      }
-    })
+          take: 3,
+          include: {
+            medicine: true,
+          },
+        },
+      },
+    });
     if (!patient) {
       throw new GraphQLError('patient not found', {
         extensions: {
@@ -73,7 +91,7 @@ export class PatientService {
   }
 
   async update(id: number, updatePatientInput: UpdatePatientInput) {
-    const patient = await this.prisma.patient.findUnique({ where: { id } })
+    const patient = await this.prisma.patient.findUnique({ where: { id } });
     if (!patient) {
       throw new GraphQLError('patient not found', {
         extensions: {
@@ -83,13 +101,13 @@ export class PatientService {
     }
     return await this.prisma.patient.update({
       where: { id },
-      data: { ...updatePatientInput }
+      data: { ...updatePatientInput },
     });
   }
 
   async remove(id: number) {
     return await this.prisma.patient.delete({
-      where: { id }
+      where: { id },
     });
   }
 }

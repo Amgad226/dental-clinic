@@ -43,6 +43,12 @@ export class MedicineResolver {
     return this.medicineService.findOne(id);
   }
 
+  
+  @Query(() => Medicine, { name: 'medicine' })
+  medicineConflicts() {
+    return this.medicineService.medicineConflicts();
+  }
+
   @Mutation(() => Medicine)
   async updateMedicine(
     @Args('id') id: number,
@@ -60,4 +66,8 @@ export class MedicineResolver {
 
     return this.medicineService.remove(id);
   }
+
+
+
+  
 }

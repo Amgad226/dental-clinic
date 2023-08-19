@@ -39,4 +39,10 @@ export class BookInResolver {
     await validator(checkIfExists)({ id, modelName: 'bookIn' });
     return this.bookInService.findOne(id);
   }
+
+  @Query(() => [BookIn], { name: 'productbookedIn' })
+  async productsbookedin(@Args('id', { type: () => Int }) id: number) {
+    await validator(checkIfExists)({ id, modelName: 'product' });
+    return this.bookInService.productsbookedin(id);
+  }
 }

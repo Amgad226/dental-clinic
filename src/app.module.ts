@@ -8,6 +8,7 @@ import { DiseaseModule } from './graphql/disease/disease.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { BadHabitModule } from './graphql/bad_habit/bad_habit.module';
 import { TreatmentTypeModule } from './graphql/treatment_type/treatment_type.module';
+import { AuthModule } from './auth/auth.module';
 import { ProblemTypeModule } from './graphql/problem_type/problem_type.module';
 import { ChemicalMaterialModule } from './graphql/chemical_material/chemical_material.module';
 import { ConfigModule } from '@nestjs/config';
@@ -42,6 +43,8 @@ import { BookOutModule } from './graphql/store/book_out/book_out.module';
 import { PatientTreatmentDoneStepsModule } from './graphql/patient_management/patient_treatment_done_steps/patient_treatment_done_steps.module';
 import { LabOrderModule } from './graphql/lab_order/lab_order.module';
 
+import { AccessTokenGuard } from './auth/guards/accessToken.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 
 const apolloDriverConfig: ApolloDriverConfig = {
@@ -58,8 +61,7 @@ const apolloDriverConfig: ApolloDriverConfig = {
   autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
   sortSchema: true,
   status400ForVariableCoercionErrors: true,
-  includeStacktraceInErrorResponses: true
-
+  includeStacktraceInErrorResponses: true,
 };
 
 const graphQLModuleConfig: any = {
@@ -69,11 +71,9 @@ const graphQLModuleConfig: any = {
 const serveStaticImagesConfig = {
   rootPath: join(__dirname, '..', 'public'), // Specify the root path of your image directory
   serveRoot: '/public',
-}
-
+};
 
 @Module({
-
   imports: [
     ConfigModule.forRoot(),
     ServeStaticModule.forRoot(serveStaticImagesConfig),
@@ -82,6 +82,7 @@ const serveStaticImagesConfig = {
     DiseaseModule,
     BadHabitModule,
     TreatmentTypeModule,
+    AuthModule,
     ProblemTypeModule,
     ProblemModule,
     ChemicalMaterialModule,
@@ -114,6 +115,13 @@ const serveStaticImagesConfig = {
     LabOrderModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ImagesUploaderService],
+  providers: [
+    AppService,
+    ImagesUploaderService,
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AccessTokenGuard,
+    // },
+  ],
 })
-export class AppModule { }
+export class AppModule {}

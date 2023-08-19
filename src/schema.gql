@@ -12,6 +12,19 @@ enum AppointmentTypes {
   external
   normal
   waiting
+  }
+type Auth {
+  accessToken: String!
+  patient: Patient!
+  refreshToken: String!
+  status: CheckPhone!
+  user: User!
+}
+
+type AuthResponse {
+  data: Auth
+  message: String
+  status: Int
 }
 
 type BadHabit {
@@ -46,6 +59,19 @@ type Category {
   name: String!
 }
 
+type CheckPhone {
+  code: Float!
+  message: String!
+  phoneHavePatient: Boolean!
+  phoneHaveUserAccount: Boolean!
+}
+
+type CheckPhoneResponse {
+  data: CheckPhone
+  message: String
+  status: Int
+}
+
 type ChemicalMaterial {
   """conflicts of ChemicalMaterial field """
   conflicts: [ChemicalMaterial!]
@@ -74,7 +100,7 @@ input CreateBookOutInput {
   created_at: DateTime
   product_id: Int!
   quantity: Int!
-  stored_prduct_id: [Int!]!
+  stored_product_id: [Int!]!
 }
 
 input CreateCategoryInput {
@@ -181,7 +207,7 @@ input CreatePatientDiseaseInput {
 
 input CreatePatientInput {
   address: String
-  birth_date: DateTime
+  birth_date: String
   gender: String!
   job: String
   main_complaint: String
@@ -196,6 +222,7 @@ input CreatePatientInput {
 input CreatePatientLabOrderInput {
   lab_order_id: Int!
   patient_session_id: Int!
+  phone: String!
 }
 
 input CreatePatientMedicalImageInput {
@@ -318,6 +345,47 @@ input CreateWorkingHourInput {
   from: DateTime!
   open: Boolean!
   to: DateTime!
+type CreateUserAccount {
+  accessToken: String!
+  refreshToken: String!
+  user: User!
+}
+
+input CreateUserAccountInput {
+  c_password: String!
+  otp: String!
+  password: String!
+  phone: String!
+}
+
+type CreateUserAccountResponse {
+  data: CreateUserAccount
+  message: String
+  status: Int
+}
+
+type CreateUserPatient {
+  patient: Patient!
+  user: User!
+}
+
+input CreateUserPatientInput {
+  address: String
+  birth_date: String!
+  gender: String!
+  job: String
+  main_complaint: String
+  maintal_status: String
+  name: String!
+  patient_badHabits: [CreatePatientBadHabitInput!]
+  patient_diseases: [CreatePatientDiseaseInput!]
+  patient_medicines: [CreatePatientMedicineInput!]
+}
+
+type CreateUserPatientResponse {
+  data: CreateUserPatient
+  message: String
+  status: Int
 }
 
 """
@@ -348,6 +416,19 @@ enum Gender {
 type LabOrder {
   """Example field (placeholder)"""
   exampleField: Int!
+type GetProducts {
+  name: String!
+  product_id: Int!
+  totalQuantity: Int!
+}
+
+input LoginInput {
+  password: String!
+  phone: String!
+}
+
+type LogoutResponse {
+  loggedOut: Boolean!
 }
 
 type Medicine {
@@ -389,6 +470,8 @@ type Meta {
 }
 
 type Mutation {
+  CheckPhone(checkPhoneInput: PhoneInput!): CheckPhoneResponse!
+  SendOtp(checkPhoneInput: PhoneInput!): SendOtpResponse!
   createBadHabit(createBadHabitInput: CreateBadHabitInput!): BadHabit!
   createBookIn(createBookInInput: CreateBookInInput!): BookIn!
   createBookOut(createBookOutInput: CreateBookOutInput!): BookOut!
@@ -398,29 +481,27 @@ type Mutation {
   createLabOrder(createLabOrderInput: CreateLabOrderInput!): LabOrder!
   createMedicine(createMedicineInput: CreateMedicineInput!): Medicine!
   createPatient(createPatientInput: CreatePatientInput!): Patient!
-  createPatientAppointment(createPatientAppointmentInput: CreatePatientAppointmentInput!): PatientAppointment!
   createPatientBadHabit(createPatientBadHabitInput: CreatePatientBadHabitForExistingPatientInput!): PatientBadHabit!
   createPatientCost(createPatientCostInput: CreatePatientCostInput!): PatientCost!
   createPatientDiagnosis(createPatientDiagnosisInput: CreatePatientDiagnosisInput!): PatientDiagnosis!
   createPatientDisease(createPatientDiseaseInput: CreatePatientDiseaseForExistingPatientInput!): PatientDisease!
-  createPatientLabOrder(createPatientLabOrderInput: CreatePatientLabOrderInput!): PatientLabOrder!
   createPatientMedicalImage(createPatientMedicalImageInput: CreatePatientMedicalImageInput!): PatientMedicalImage!
   createPatientMedicalImagesType(createPatientMedicalImagesTypeInput: CreatePatientMedicalImagesTypeInput!): PatientMedicalImagesType!
   createPatientMedicine(createPatientMedicineInput: CreatePatientMedicineForExistingPatientInput!): PatientMedicine!
   createPatientPayment(createPatientPaymentInput: CreatePatientPaymentInput!): PatientPayment!
-  createPatientPerscrption(createPatientPerscrptionInput: CreatePatientPerscrptionInput!): PatientPerscrption!
-  createPatientPerscrptionsMedicien(createPatientPerscrptionsMedicienInput: CreatePatientPerscrptionsMedicienInput!): PatientPerscrptionsMedicien!
-  createPatientReservation(createPatientReservationInput: CreatePatientReservationInput!): PatientReservation!
-  createPatientSession(createPatientSessionInput: CreatePatientSessionInput!): PatientSession!
   createPatientTeethTreatment(createPatientTeethTreatmentInput: CreatePatientTeethTreatmentInput!): PatientTeethTreatment!
   createPatientTreatment(createPatientTreatmentInput: CreatePatientTreatmentInput!): PatientTreatment!
   createPatientTreatmentDoneStep(createPatientTreatmentDoneStepInput: CreatePatientTreatmentDoneStepInput!): PatientTreatmentDoneStep!
+  createPatientToUser(CreatePatientInput: CreateUserPatientInput!): CreateUserPatientResponse!
   createProblem(createProblemInput: CreateProblemInput!): Problem!
   createProblemType(createProblemTypeInput: CreateProblemTypeInput!): ProblemType!
   createProduct(createProductInput: CreateProductInput!): Product!
   createTreatment(createTreatmentInput: CreateTreatmentInput!): Treatment!
   createTreatmentType(createTreatmentTypeInput: CreateTreatmentTypeInput!): TreatmentType!
-  createWorkingHour(createWorkingHourInput: CreateWorkingHourInput!): WorkingHour!
+  createUserAccount(createUserAccountInput: CreateUserAccountInput!): CreateUserAccountResponse!
+  linkPatientToUser: CreateUserPatientResponse!
+  login(loginInput: LoginInput!): AuthResponse!
+  logout: LogoutResponse!
   removeBadHabit(id: Int!): BadHabit!
   removeCategory(id: Int!): Category!
   removeChemicalMaterial(id: Int!): ChemicalMaterial!
@@ -428,22 +509,15 @@ type Mutation {
   removeLabOrder(id: Int!): LabOrder!
   removeMedicine(id: Int!): Medicine!
   removePatient(id: Int!): Patient!
-  removePatientAppointment(id: Int!): PatientAppointment!
   removePatientBadHabit(id: Int!): PatientBadHabit!
   removePatientCost(id: Int!): PatientCost!
   removePatientDiagnosis(id: Int!): PatientDiagnosis!
   removePatientDisease(id: Int!): PatientDisease!
-  removePatientLabOrder(id: Int!): PatientLabOrder!
   removePatientMedicalImage(id: Int!): PatientMedicalImage!
   removePatientMedicalImagesType(id: Int!): PatientMedicalImagesType!
   removePatientMedicine(id: Int!): PatientMedicine!
   removePatientPayment(id: Int!): PatientPayment!
-  removePatientPerscrption(id: Int!): PatientPerscrption!
-  removePatientPerscrptionsMedicien(id: Int!): PatientPerscrptionsMedicien!
-  removePatientReservation(id: Int!): PatientReservation!
-  removePatientSession(id: Int!): PatientSession!
   removePatientTeethTreatment(id: Int!): PatientTeethTreatment!
-  removePatientTreatment(id: Int!): PatientTreatment!
   removeProblem(id: Int!): Problem!
   removeProblemType(id: Int!): ProblemType!
   removeProduct(id: Int!): Product!
@@ -459,12 +533,10 @@ type Mutation {
   updateMedicine(id: Float!, updateMedicineInput: UpdateMedicineInput!): Medicine!
   updateOneWorkingHour(updateOneWorkingHour: UpdateWorkingHourInput!): WorkingHour!
   updatePatient(updatePatientInput: UpdatePatientInput!): Patient!
-  updatePatientAppointment(updatePatientAppointmentInput: UpdatePatientAppointmentInput!): PatientAppointment!
   updatePatientBadHabit(updatePatientBadHabitInput: UpdatePatientBadHabitInput!): PatientBadHabit!
   updatePatientCost(updatePatientCostInput: UpdatePatientCostInput!): PatientCost!
   updatePatientDiagnosis(updatePatientDiagnoseInput: UpdatePatientDiagnosisInput!): PatientDiagnosis!
   updatePatientDisease(updatePatientDiseaseInput: UpdatePatientDiseaseInput!): PatientDisease!
-  updatePatientLabOrder(updatePatientLabOrderInput: UpdatePatientLabOrderInput!): PatientLabOrder!
   updatePatientMedicalImage(updatePatientMedicalImageInput: UpdatePatientMedicalImageInput!): PatientMedicalImage!
   updatePatientMedicalImagesType(updatePatientMedicalImagesTypeInput: UpdatePatientMedicalImagesTypeInput!): PatientMedicalImagesType!
   updatePatientMedicine(updatePatientMedicineInput: UpdatePatientMedicineInput!): PatientMedicine!
@@ -474,6 +546,7 @@ type Mutation {
   updatePatientTeethTreatment(updatePatientTeethTreatmentInput: UpdatePatientTeethTreatmentInput!): PatientTeethTreatment!
   updatePatientTreatment(updatePatientTreatmentInput: UpdatePatientTreatmentInput!): PatientTreatment!
   updatePatientTreatmentDoneStep(updatePatientTreatmentDoneStepInput: UpdatePatientTreatmentDoneStepInput!): PatientTreatmentDoneStep!
+  updatePatientTeethTreatment(updatePatientTeethTreatmentInput: UpdatePatientTeethTreatmentInput!): PatientTeethTreatment!
   updateProblem(id: Int!, updateProblemInput: UpdateProblemInput!): Problem!
   updateProblemType(id: Int!, updateProblemTypeInput: UpdateProblemTypeInput!): ProblemType!
   updateProduct(id: Int!, updateProductInput: UpdateProductInput!): Product!
@@ -575,7 +648,7 @@ type Patient {
   PatientPayment: [PatientPayment!]
   PatientTeethTreatment: [PatientTeethTreatment!]
   address: String
-  birth_date: DateTime
+  birth_date: String
   gender: Gender!
   id: Int!
   job: String
@@ -615,6 +688,7 @@ type PatientAppointment {
 
   """AppointmentTypes"""
   type: AppointmentTypes!
+  phone: String!
 }
 
 type PatientBadHabit {
@@ -778,6 +852,8 @@ enum PatientTreatmentStatuses {
 enum PatientTreatmentTypes {
   teethly
   unteethly
+input PhoneInput {
+  phone: String!
 }
 
 type Problem {
@@ -811,6 +887,7 @@ type Query {
   bookIn(id: Int!): BookIn!
   bookIns(item_per_page: Float, page: Float, search: String): Paginatebookin!
   bookOut(id: Int!): BookOut!
+  bookOuts(item_per_page: Float, page: Float, search: String): [BookOut!]!
   categories: [Category!]!
   checkConflictsForPerscriptionMedicines(medicince_ids: Int!): Boolean!
   chemicalMaterial(id: Int!): ChemicalMaterial!
@@ -823,6 +900,10 @@ type Query {
   patient(id: Int!): Patient!
   patientAppointment(id: Int!): PatientAppointment!
   patientAppointments(date: DateTime): [PatientAppointment!]!
+  getProducts: [GetProducts!]!
+  medicine: Medicine!
+  medicines(item_per_page: Float, page: Float, search: String): paginateMedicine!
+  patient(id: Int!): Patient!
   patientBadHabits(patient_id: Int!): [PatientBadHabit!]!
   patientCosts(item_per_page: Float, page: Float, patient_id: Int, sort: PatientCostSortInput): PaginatedPatientCost!
   patientDiagnose(id: Int!): PatientDiagnosis!
@@ -848,12 +929,16 @@ type Query {
   patientTreatmentDoneStep(id: Int!): PatientTreatmentDoneStep!
   patientTreatmentDoneSteps(patient_session_id: Int, patient_treatment_id: Int): [PatientTreatmentDoneStep!]!
   patientTreatments(patient_id: Int, status: PatientTreatmentStatuses, type: PatientTreatmentTypes): [PatientTreatment!]!
+  patientTeethTreatment(id: Int!): PatientTeethTreatment!
+  patientTeethTreatments: [PatientTeethTreatment!]!
   patients(item_per_page: Float, page: Float): PaginatedPatient!
   problem(id: Int!): Problem!
   problemType(id: Int!): ProblemType!
   problemTypes: [ProblemType!]!
   problems(item_per_page: Float, page: Float, search: String): PaginateProblem!
   product(id: Int!): Product!
+  productbookedIn(id: Int!): [BookIn!]!
+  productbookedOut(id: Int!): [BookOut!]!
   products(item_per_page: Float, page: Float, search: String): Paginateproduct!
   selectStoredProduct(id: Int!): [StoredProduct!]!
   storedProducts: [StoredProduct!]!
@@ -865,7 +950,19 @@ type Query {
   workingHours: [WorkingHour!]!
 }
 
+type SendOtp {
+  """Example field (placeholder)"""
+  otp: Int!
+}
+
+type SendOtpResponse {
+  data: SendOtp
+  message: String
+  status: Int
+}
+
 type Steps {
+  id: Int!
   name: String!
   subSteps: [SubStep!]
   treatment_id: Int!
@@ -1004,7 +1101,7 @@ input UpdatePatientDiseaseInput {
 
 input UpdatePatientInput {
   address: String
-  birth_date: DateTime
+  birth_date: String
   gender: String
   id: Int!
   job: String
@@ -1143,6 +1240,13 @@ type WorkingHour {
   id: Int!
   open: Boolean!
   to: DateTime!
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+type User {
+  id: Int!
+  isVerified: Boolean!
+  phone: String!
 }
 
 type paginateMedicine {

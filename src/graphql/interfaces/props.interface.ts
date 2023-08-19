@@ -1,7 +1,11 @@
-import { ModelsNames } from "src/prisma/types/modelsNames.type";
-
 export interface Props {
-    id?: number,
-    data?: any,
-    modelName?: ModelsNames
+  id?: number;
+  data?: any;
+  modelName?: string;
+}
+
+export interface OtpProps {
+  phone_number: string;
+  template?: string;
+  verify_code?: string;
 }

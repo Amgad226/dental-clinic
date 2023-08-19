@@ -163,6 +163,41 @@ model Problem {
   @@map("problems")
 }
 
+model User {
+  id                 Int           @id @default(autoincrement())
+  phone              String        @unique
+  hashedPassword     String?
+  otp                String
+  isVerified         Boolean       @default(false)
+  hashedRefreshToken String?
+  createAt           DateTime      @default(now())
+  updateAt           DateTime      @default(now())
+  role_id            Int           @default(1)
+  role               Role          @relation(fields: [role_id], references: [id])
+  PatientUser        PatientUser[]
+
+  @@map("users")
+}
+
+model PatientUser {
+  id         Int     @id @default(autoincrement())
+  patient_id Int
+  user_id    Int     @unique
+  patient    Patient @relation(fields: [patient_id], references: [id])
+  user       User    @relation(fields: [user_id], references: [id])
+
+  @@map("users_patients")
+}
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  User User[]
+
+  @@map("roles")
+}
+
 model Category {
   id   Int    @id @default(autoincrement())
   name String
@@ -181,8 +216,8 @@ model Patient {
   id                    Int                     @id @default(autoincrement())
   name                  String
   gender                Gender
-  phone                 String?
-  birth_date            DateTime?
+  phone                 String                  @unique
+  birth_date            String?
   job                   String?
   main_complaint        String?
   maintal_status        String?
@@ -200,6 +235,7 @@ model Patient {
   PatientSession        PatientSession[]
   PatientReservation    PatientReservation[]
   PatientTreatment      PatientTreatment[]
+  PatientUser           PatientUser[]
 
   @@map("patients")
 }
