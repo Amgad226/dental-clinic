@@ -13,6 +13,10 @@ export class PatientPerscrptionsMediciensService {
     })
   }
 
+  async checkConflicts(medicince_ids: number[]) {
+    return true
+  }
+
   async findAll({ patient_perscrption_id }: { patient_perscrption_id?: number }) {
     return await this.prisma.patientPerscrptionsMedicince.findMany({
       where: {

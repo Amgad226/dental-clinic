@@ -14,8 +14,13 @@ export class PatientPerscrptionsMediciensResolver {
   }
 
   @Query(() => [PatientPerscrptionsMedicien], { name: 'patientPerscrptionsMediciens' })
-  findAll(@Args('patient_perscrption_id', { type: () => Int , nullable: true}) patient_perscrption_id?: number) {
+  findAll(@Args('patient_perscrption_id', { type: () => Int, nullable: true }) patient_perscrption_id?: number) {
     return this.patientPerscrptionsMediciensService.findAll({ patient_perscrption_id });
+  }
+
+  @Query(() => Boolean, { name: 'checkConflictsForPerscriptionMedicines' })
+  checkConflicts(@Args('medicince_ids', { type: () => Int }) medicince_ids: number[]) {
+    return this.patientPerscrptionsMediciensService.checkConflicts(medicince_ids);
   }
 
   @Query(() => PatientPerscrptionsMedicien, { name: 'patientPerscrptionsMedicien' })
