@@ -4,55 +4,37 @@ const prisma = new PrismaClient();
 export async function seedbadHabit() {
   const badHabits = [
     {
+      id:1,
       name: 'تدخين',
-      chemical_id:1
+      chemical_material_id:1
     },
     {
+      id:2,
       name: 'كحولي',
-      chemical_id:2
+      chemical_material_id:2
 
     },
     {
+      id:3,
       name: 'بيمشي وهو نايم',
-      chemical_id:2
+      chemical_material_id:2
 
     },
   ];
 
-  for (const element of badHabits) {
-    const existingBadHabit = await prisma.badHabit.findFirst({
-      where: { name: element.name },
-    });
-
-    if (!existingBadHabit) {
-      await prisma.badHabit.create({
-        data: { 
-            name: element.name ,
-            badHabitChemicalMaterials:{
-                create:{
-                    chemical_material_id:element.chemical_id,
-                    
-                }
-            }
+  for (const { id, name, chemical_material_id } of badHabits) {
+    const badHabit = await prisma.badHabit.upsert({
+      where: { id },
+      update: {},
+      create: {
+        name,
+        badHabitChemicalMaterials: {
+          create: {
+            chemical_material_id,
+          },
         },
-      });
-    }
+      },
+    });
   }
 
-//   if (
-//     !(await prisma.badHabitChemicalMaterial.findFirst({
-//       where: {
-//         disease: {
-//           name: 'تدخين',
-//         },
-//       },
-//     }))
-//   ) {
-//     var chemical_material_id = [1];
-//     await prisma.badHabitChemicalMaterial.create({
-//       data: {
-//         bad_habit_id,
-//       },
-//     });
-//   }
 }

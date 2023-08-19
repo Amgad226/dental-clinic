@@ -80,9 +80,10 @@ model Medicine {
   category_id   Int
   concentration Float
 
-  category                  Category                   @relation("category", fields: [category_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  medicineChemicalMaterials MedicineChemicalMaterial[]
-  PatientMedicine           PatientMedicine[]
+  category                     Category                       @relation("category", fields: [category_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  medicineChemicalMaterials    MedicineChemicalMaterial[]
+  PatientMedicine              PatientMedicine[]
+  PatientPerscrptionsMedicince PatientPerscrptionsMedicince[]
 
   @@map("medicines")
 }
@@ -117,6 +118,7 @@ model Treatment {
   steps                 Step[]
   PatientCost           PatientCost[]
   PatientTeethTreatment PatientTeethTreatment[]
+  PatientTreatment      PatientTreatment[]
 
   @@map("treatments")
 }
@@ -127,7 +129,8 @@ model Step {
   treatment_id Int
   treatment    Treatment @relation(fields: [treatment_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  subSteps SubStep[]
+  subSteps                 SubStep[]
+  PatientTreatmentDoneStep PatientTreatmentDoneStep[]
 
   @@map("steps")
 }
@@ -228,6 +231,10 @@ model Patient {
   PatientDiagnose       PatientDiagnose[]
   PatientTeethTreatment PatientTeethTreatment[]
   PatientMedicalImage   PatientMedicalImage[]
+  PatientAppointment    PatientAppointment[]
+  PatientSession        PatientSession[]
+  PatientReservation    PatientReservation[]
+  PatientTreatment      PatientTreatment[]
   PatientUser           PatientUser[]
 
   @@map("patients")
@@ -390,6 +397,152 @@ model BookOut {
   product     Product  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("book_outs")
+}
+
+enum Days {
+  Sun
+  Mon
+  Tue
+  Wed
+  Thu
+  Fri
+  Sat
+}
+
+model WorkingHours {
+  id   Int      @id @default(autoincrement())
+  day  Days     @unique
+  from DateTime
+  to   DateTime
+  open Boolean
+}
+
+model notifications {
+  id      Int      @id @default(autoincrement())
+  user_id Int
+  date    DateTime
+  msg     String
+  seen    Boolean
+
+  // user     User  @relation(fields: [user_id], references: [id])
+}
+
+enum AppointmentStates {
+  registerd
+  unregisterd
+}
+
+enum AppointmentTypes {
+  normal
+  waiting
+  emergency
+  external
+}
+
+model PatientAppointment {
+  id         Int               @id @default(autoincrement())
+  patient_id Int
+  date       DateTime
+  state      AppointmentStates
+  type       AppointmentTypes
+  place      String?
+  phase      String?
+  notes      String?
+
+  patient        Patient          @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  PatientSession PatientSession[]
+}
+
+model PatientSession {
+  id                      Int @id @default(autoincrement())
+  patient_id              Int
+  patiient_appointment_id Int
+
+  patient                  Patient                    @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  patient_appointment      PatientAppointment         @relation(fields: [patiient_appointment_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  PatientTreatmentDoneStep PatientTreatmentDoneStep[]
+  PatientLabOrder          PatientLabOrder[]
+  PatientPerscrptions      PatientPerscrptions[]
+}
+
+model PatientReservation {
+  id         Int      @id @default(autoincrement())
+  patient_id Int
+  date       DateTime
+  notes      String?
+
+  patient Patient @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+enum PatientTreatmentTypes {
+  teethly
+  unteethly
+}
+
+enum PatientTreatmentStatuses {
+  done
+  ongoing
+}
+
+model PatientTreatment {
+  id                       Int                        @id @default(autoincrement())
+  patient_id               Int
+  treatment_id             Int
+  place                    String
+  price                    Float
+  type                     PatientTreatmentTypes
+  status                   PatientTreatmentStatuses
+  patient                  Patient                    @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  treatment                Treatment                  @relation(fields: [treatment_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  PatientTreatmentDoneStep PatientTreatmentDoneStep[]
+}
+
+model PatientTreatmentDoneStep {
+  id                   Int     @id @default(autoincrement())
+  patient_treatment_id Int
+  step_id              Int
+  patient_session_id   Int
+  note                 String?
+
+  patient_treatment PatientTreatment @relation(fields: [patient_treatment_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  step              Step             @relation(fields: [step_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  session           PatientSession   @relation(fields: [patient_session_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model PatientLabOrder {
+  id                 Int @id @default(autoincrement())
+  patient_session_id Int
+  lab_order_id       Int
+
+  session   PatientSession @relation(fields: [patient_session_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  lab_order LabOrder       @relation(fields: [lab_order_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model PatientPerscrptions {
+  id                 Int @id @default(autoincrement())
+  patient_session_id Int
+
+  session                      PatientSession                 @relation(fields: [patient_session_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  PatientPerscrptionsMedicince PatientPerscrptionsMedicince[]
+}
+
+model PatientPerscrptionsMedicince {
+  id                     Int     @id @default(autoincrement())
+  patient_perscrption_id Int
+  medicince_id           Int
+  qantity                String
+  repetition             String
+  description            String?
+
+  perscrption PatientPerscrptions @relation(fields: [patient_perscrption_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  medicince   Medicine            @relation(fields: [medicince_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model LabOrder {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  PatientLabOrder PatientLabOrder[]
 }
 
 // 

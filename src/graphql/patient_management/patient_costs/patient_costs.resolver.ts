@@ -21,10 +21,7 @@ export class PatientCostsResolver {
     @Args('patient_id', { type: () => Int, nullable: true }) patient_id?: number,
     @Args('sort', { type: () => PatientCostSortInput, nullable: true }) sort?: PatientCostSortInput) {
     const data = await this.patientCostsService.findAll({ patient_id, sort, item_per_page, page });
-    return {
-      ...data,
-      items: data.data
-    }
+    return data
   }
 
   // @Query(() => PatientCost, { name: 'patientCost' })

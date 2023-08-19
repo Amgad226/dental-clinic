@@ -12,6 +12,15 @@ export async function seedPatient() {
       address: 'ببيلا',
       birth_date: '16-12-2001',
       job: 'back-end developer',
+      PatientDisease: {
+        createMany: { data: [{ disease_id: 1, tight: true }] },
+      },
+      PatientBadHabet: {
+        createMany: { data: [{ bad_habet_id: 1 }] },
+      },
+      PatientMedicine: {
+        createMany: { data: [{ medicine_id: 1 }] },
+      },
     },
   });
 
@@ -25,6 +34,15 @@ export async function seedPatient() {
       address: 'ضاحية الاسد',
       birth_date: '24-8-2001',
       job: 'full-stack developer',
+      PatientDisease: {
+        createMany: { data: [{ disease_id:2, tight: true }] },
+      },
+      PatientBadHabet: {
+        createMany: { data: [{ bad_habet_id: 2 }] },
+      },
+      PatientMedicine: {
+        createMany: { data: [{ medicine_id: 2 }] },
+      },
     },
   });
 

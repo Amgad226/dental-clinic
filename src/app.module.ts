@@ -28,10 +28,21 @@ import { PatientDiseasesModule } from './graphql/patient_management/patient_dise
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ImagesUploaderService } from './images_uploader/images_uploader.service';
 import { ProblemModule } from './graphql/problem/problem.module';
+import { PatientAppointmentsModule } from './graphql/patient_management/patient_appointments/patient_appointments.module';
+import { PatientSessionsModule } from './graphql/patient_management/patient_sessions/patient_sessions.module';
+import { PatientTreatmentsModule } from './graphql/patient_management/patient_treatments/patient_treatments.module';
+import { PatientPerscrptionsModule } from './graphql/patient_management/patient_perscrptions/patient_perscrptions.module';
+import { PatientReservationsModule } from './graphql/patient_management/patient_reservations/patient_reservations.module';
+import { PatientLabOrdersModule } from './graphql/patient_management/patient_lab_orders/patient_lab_orders.module';
+import { WorkingHoursModule } from './graphql/patient_management/working_hours/working_hours.module';
+import { PatientPerscrptionsMediciensModule } from './graphql/patient_management/patient_perscrptions_mediciens/patient_perscrptions_mediciens.module';
 import { ProductModule } from './graphql/store/product/product.module';
 import { StoredProductModule } from './graphql/store/stored_product/stored_product.module';
 import { BookInModule } from './graphql/store/book_in/book_in.module';
 import { BookOutModule } from './graphql/store/book_out/book_out.module';
+import { PatientTreatmentDoneStepsModule } from './graphql/patient_management/patient_treatment_done_steps/patient_treatment_done_steps.module';
+import { LabOrderModule } from './graphql/lab_order/lab_order.module';
+
 import { AccessTokenGuard } from './auth/guards/accessToken.guard';
 import { APP_GUARD } from '@nestjs/core';
 
@@ -92,6 +103,16 @@ const serveStaticImagesConfig = {
     StoredProductModule,
     BookInModule,
     BookOutModule,
+    PatientAppointmentsModule,
+    PatientSessionsModule,
+    PatientTreatmentsModule,
+    PatientPerscrptionsModule,
+    PatientReservationsModule,
+    PatientLabOrdersModule,
+    WorkingHoursModule,
+    PatientPerscrptionsMediciensModule,
+    PatientTreatmentDoneStepsModule,
+    LabOrderModule,
   ],
   controllers: [AppController],
   providers: [

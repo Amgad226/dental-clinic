@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 export async function seedMedicines() {
   const medicines = [
     {
+      id: 1,
       name: 'setamol',
       category_id: 1,
       concentration: 2.2,
@@ -11,6 +12,7 @@ export async function seedMedicines() {
     },
 
     {
+      id: 2,
       name: 'panadol',
       category_id: 1,
       concentration: 1.3,
@@ -23,6 +25,7 @@ export async function seedMedicines() {
       // },
     },
     {
+      id: 3,
       name: 'nedformed-imed',
       category_id: 1,
       concentration: 1.3,
@@ -35,6 +38,7 @@ export async function seedMedicines() {
       // },
     },
     {
+      id: 4,
       name: 'xxxxx',
       category_id: 2,
       concentration: 0.3,
@@ -48,26 +52,20 @@ export async function seedMedicines() {
     },
   ];
 
-  for (const element of medicines) {
-    const existingMedicine = await prisma.medicine.findFirst({
-      where: { name: element.name },
+  for (const { chemical_materials_ids, id, ...other } of medicines) {
+    const medicine = await prisma.medicine.upsert({
+      where: { id },
+      update: {},
+      create: {
+        ...other,
+      },
     });
-
-    if (!existingMedicine) {
-      let { chemical_materials_ids, ...other } = element;
-
-      const medicine = await prisma.medicine.create({
-        data: {
-          ...other,
-        },
-      });
-      //attach data chemical_material_id and medicine_id in pivot table
-      await prisma.medicineChemicalMaterial.createMany({
-        data: chemical_materials_ids.map((id) => ({
-          chemical_material_id: id,
-          medicine_id: medicine.id,
-        })),
-      });
-    }
+    //attach data chemical_material_id and medicine_id in pivot table
+    await prisma.medicineChemicalMaterial.createMany({
+      data: chemical_materials_ids.map((id) => ({
+        chemical_material_id: id,
+        medicine_id: medicine.id,
+      })),
+    });
   }
 }
