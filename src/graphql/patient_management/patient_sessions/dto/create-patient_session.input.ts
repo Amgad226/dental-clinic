@@ -1,7 +1,7 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
-import { CreatePatientTreatmentDoneStepInput } from '../../patient_treatment_done_steps/dto/create-patient_treatment_done_step.input';
-import { CreatePatientPerscrptionInput } from '../../patient_perscrptions/dto/create-patient_perscrption.input';
-import { CreatePatientLabOrderInput } from '../../patient_lab_orders/dto/create-patient_lab_order.input';
+import { CreatePatientTreatmentDoneStepFromSessionInput } from '../../patient_treatment_done_steps/dto/create-patient_treatment_done_step_from_session.input';
+import { CreatePatientLabOrderFromSessionInput } from '../../patient_lab_orders/dto/create-patient_lab_order_from_session.input';
+import { CreatePatientPerscrptionFromSessionInput } from '../../patient_perscrptions/dto/create-patient_perscrption_from_session.input';
 
 @InputType()
 export class CreatePatientSessionInput {
@@ -11,12 +11,12 @@ export class CreatePatientSessionInput {
   @Field(() => Int)
   patiient_appointment_id: number;
 
-  @Field(() => [CreatePatientTreatmentDoneStepInput])
-  createPatientTreatmentDoneStepInput: CreatePatientTreatmentDoneStepInput[];
+  @Field(() => [CreatePatientTreatmentDoneStepFromSessionInput])
+  CreatePatientTreatmentDoneStepFromSessionInput: CreatePatientTreatmentDoneStepFromSessionInput[];
 
-  @Field(() => CreatePatientPerscrptionInput, { nullable: true })
-  createPatientPerscrptionInput?: CreatePatientPerscrptionInput;
+  @Field(() => CreatePatientPerscrptionFromSessionInput, { nullable: true })
+  createPatientPerscrptionFromSessionInput?: CreatePatientPerscrptionFromSessionInput;
 
-  @Field(() => CreatePatientLabOrderInput, { nullable: true })
-  createPatientLabOrderInput?: CreatePatientLabOrderInput;
+  @Field(() => CreatePatientLabOrderFromSessionInput, { nullable: true })
+  createPatientLabOrderFromSessionInput?: CreatePatientLabOrderFromSessionInput;
 }

@@ -7,22 +7,29 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class PatientSessionsService {
   constructor(private prisma: PrismaService) { }
 
-  async create({ createPatientTreatmentDoneStepInput, patient_id, patiient_appointment_id, createPatientLabOrderInput, createPatientPerscrptionInput }: CreatePatientSessionInput) {
+  async create({ CreatePatientTreatmentDoneStepFromSessionInput, patient_id, patiient_appointment_id, createPatientLabOrderFromSessionInput, createPatientPerscrptionFromSessionInput }: CreatePatientSessionInput) {
     const data = await this.prisma.patientSession.create({
       data: {
         patient_id,
         patiient_appointment_id,
-        PatientLabOrder: createPatientLabOrderInput && {
-          create: createPatientLabOrderInput
+        PatientLabOrder: createPatientLabOrderFromSessionInput && {
+          create: createPatientLabOrderFromSessionInput
         },
-        PatientPerscrptions: createPatientPerscrptionInput && {
-          create: createPatientPerscrptionInput
+        PatientPerscrptions: createPatientPerscrptionFromSessionInput && {
+          create: createPatientPerscrptionFromSessionInput
         }
       },
-    });
+    }).then(async (data) => {
+      await this.prisma.patientAppointment.update({
+        where: {
+          id: patiient_appointment_id
+        }, data: { state: 'registerd' }
+      })
+      return data
+    })
 
     await this.prisma.patientTreatmentDoneStep.createMany({
-      data: [...createPatientTreatmentDoneStepInput.map((input) => {
+      data: [...CreatePatientTreatmentDoneStepFromSessionInput.map((input) => {
         return {
           ...input,
           patient_session_id: data.id
@@ -33,31 +40,43 @@ export class PatientSessionsService {
   }
 
   async findAll({ patient_id }: { patient_id?: number }) {
-    return await this.prisma.patientSession.findMany({
+    const data = await this.prisma.patientSession.findMany({
       where: {
         patient_id
       },
       include: {
         patient: true,
         patient_appointment: true,
-        PatientTreatmentDoneStep: true,
+        PatientTreatmentDoneStep: { include: { patient_treatment: { include: { treatment: { include: { steps: true } } } } } },
         PatientLabOrder: true,
-        PatientPerscrptions: true
+        PatientPerscrptions: true,
       }
     });
+    return data
   }
 
   async findOne(id: number) {
-    return await this.prisma.patientSession.findUnique({
+    const data = await this.prisma.patientSession.findUnique({
       where: { id },
       include: {
         patient: true,
         patient_appointment: true,
-        PatientTreatmentDoneStep: true,
+        PatientTreatmentDoneStep: { include: { patient_treatment: { include: { treatment: { include: { steps: true } } } } } },
         PatientLabOrder: true,
         PatientPerscrptions: true
       }
     });
+    const treatment_id = data.PatientTreatmentDoneStep[0].patient_treatment.treatment.id
+    const Treatment = await this.prisma.treatment.findUnique({
+      where: { id: treatment_id }
+      , include: {
+        steps: true
+      }
+    })
+    return {
+      ...data,
+      Treatment
+    }
   }
 
   async update(id: number, updatePatientSessionInput: UpdatePatientSessionInput) {

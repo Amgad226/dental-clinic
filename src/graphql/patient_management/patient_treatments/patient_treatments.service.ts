@@ -14,7 +14,7 @@ export class PatientTreatmentsService {
         ...createPatientTreatmentInput,
         status: 'ongoing'
       },
-      include: { patient: true, PatientTreatmentDoneStep: true, treatment: true }
+      include: { patient: true, PatientTreatmentDoneStep: true, treatment: { include: { steps: true } } }
     });
   }
 
@@ -24,14 +24,14 @@ export class PatientTreatmentsService {
         patient_id,
         status, type
       },
-      include: { patient: true, PatientTreatmentDoneStep: true, treatment: true }
+      include: { patient: true, PatientTreatmentDoneStep: true, treatment: { include: { steps: true } } }
     });
   }
 
   async findOne(id: number) {
     return await this.prisma.patientTreatment.findUnique({
       where: { id },
-      include: { patient: true, PatientTreatmentDoneStep: true, treatment: true }
+      include: { patient: true, PatientTreatmentDoneStep: true, treatment: { include: { steps: true } } }
     });
   }
 

@@ -58,6 +58,7 @@ export class BookInService {
       page,
       search,
       relations: {
+        include: { product: true },
         where: {
           product_id
         }
