@@ -12,6 +12,10 @@ export class PatientService {
 
   async create(createPatientInput: CreatePatientInput): Promise<Patient> {
     
+    if(createPatientInput.phone==="0999999999"){
+      throw new GraphQLError('this number is used for doctor ', { extensions: { code: 400 } });
+
+    }
     const patient = await this.prisma.patient.findFirst({ where: { phone:createPatientInput.phone } });
 
     if (patient) {

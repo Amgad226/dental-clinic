@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import * as argon from 'argon2';
 const prisma = new PrismaClient();
 
 export async function seedPatient() {
@@ -35,7 +36,7 @@ export async function seedPatient() {
       birth_date: '24-8-2001',
       job: 'full-stack developer',
       PatientDisease: {
-        createMany: { data: [{ disease_id:2, tight: true }] },
+        createMany: { data: [{ disease_id: 2, tight: true }] },
       },
       PatientBadHabet: {
         createMany: { data: [{ bad_habet_id: 2 }] },
@@ -46,14 +47,28 @@ export async function seedPatient() {
     },
   });
 
+  const doctor = await prisma.user.create({
+    data: {
+      otp: '3123',
+      isVerified: true,
+      phone: '0999999999',
+      hashedPassword: await argon.hash('amgad123'),
+      role_id: 2,
+      hashedRefreshToken: await argon.hash(
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInBob25lIjoiMDk0NTYyMzI0NiIsImFjY2Vzc1Rva2VuIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5U1dRaU9qSXNJbkJvYjI1bElqb2lNRGswTlRZeU16STBOaUlzSW1saGRDSTZNVFk1TWpRMU5qTTBPQ3dpWlhod0lqb3hOamt5TlRReU56UTRmUS5Qb0cyWFd6RVZCQU04aWFqdUc5YTFiUHlDVlFfVF9XeEJ3eUZqbkVyalY0IiwiaWF0IjoxNjkyNDU2MzQ4LCJleHAiOjE2OTMwNjExNDh9.RFFpzol21lTq_5Ni1e-Zr-_SjbRIzscpMARbmXsmcag',
+      ),
+    },
+  });
+
   const amgadUser = await prisma.user.create({
     data: {
       otp: '3123',
       isVerified: true,
       phone: '0945623246',
-      hashedPassword:
-        '$argon2id$v=19$m=65536,t=3,p=4$kjygC9LKmU40pmncToerJw$yQQfpI3+tIbvP96HMVCbKjNW7U5qHRaHXkJn7L5sEkY',
-      //amgad123
+      hashedPassword: await argon.hash('amgad123'),
+      hashedRefreshToken: await argon.hash(
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInBob25lIjoiMDk0NTYyMzI0NiIsImFjY2Vzc1Rva2VuIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5U1dRaU9qSXNJbkJvYjI1bElqb2lNRGswTlRZeU16STBOaUlzSW1saGRDSTZNVFk1TWpRMU5qTTBPQ3dpWlhod0lqb3hOamt5TlRReU56UTRmUS5Qb0cyWFd6RVZCQU04aWFqdUc5YTFiUHlDVlFfVF9XeEJ3eUZqbkVyalY0IiwiaWF0IjoxNjkyNDU2MzQ4LCJleHAiOjE2OTMwNjExNDh9.RFFpzol21lTq_5Ni1e-Zr-_SjbRIzscpMARbmXsmcag',
+      ),
     },
   });
 
@@ -62,9 +77,10 @@ export async function seedPatient() {
       otp: '3123',
       isVerified: true,
       phone: '0951645425',
-      hashedPassword:
-        '$argon2id$v=19$m=65536,t=3,p=4$kjygC9LKmU40pmncToerJw$yQQfpI3+tIbvP96HMVCbKjNW7U5qHRaHXkJn7L5sEkY',
-      //amgad123
+      hashedRefreshToken: await argon.hash(
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInBob25lIjoiMDk0NTYyMzI0NiIsImFjY2Vzc1Rva2VuIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5U1dRaU9qSXNJbkJvYjI1bElqb2lNRGswTlRZeU16STBOaUlzSW1saGRDSTZNVFk1TWpRMU5qTTBPQ3dpWlhod0lqb3hOamt5TlRReU56UTRmUS5Qb0cyWFd6RVZCQU04aWFqdUc5YTFiUHlDVlFfVF9XeEJ3eUZqbkVyalY0IiwiaWF0IjoxNjkyNDU2MzQ4LCJleHAiOjE2OTMwNjExNDh9.RFFpzol21lTq_5Ni1e-Zr-_SjbRIzscpMARbmXsmcag',
+      ),
+      hashedPassword: await argon.hash('amgad123'),
     },
   });
 
