@@ -384,6 +384,10 @@ type MedicineChemicalMaterials {
   medicine_id: Int!
 }
 
+type Meta {
+  total: Float
+}
+
 type Mutation {
   createBadHabit(createBadHabitInput: CreateBadHabitInput!): BadHabit!
   createBookIn(createBookInInput: CreateBookInInput!): BookIn!
@@ -480,6 +484,7 @@ type Mutation {
 type PaginateChemicalMaterial {
   item_per_page: Int!
   items: [ChemicalMaterial!]
+  meta: Meta
   page: Int!
   totalPages: Int!
 }
@@ -487,6 +492,7 @@ type PaginateChemicalMaterial {
 type PaginateProblem {
   item_per_page: Int!
   items: [Problem!]
+  meta: Meta
   page: Int!
   totalPages: Int!
 }
@@ -494,6 +500,7 @@ type PaginateProblem {
 type Paginatebadhabit {
   item_per_page: Int!
   items: [BadHabit!]
+  meta: Meta
   page: Int!
   totalPages: Int!
 }
@@ -501,6 +508,7 @@ type Paginatebadhabit {
 type Paginatebookin {
   item_per_page: Int!
   items: [BookIn!]
+  meta: Meta
   page: Int!
   totalPages: Int!
 }
@@ -508,6 +516,7 @@ type Paginatebookin {
 type PaginatedPatient {
   item_per_page: Int!
   items: [Patient!]
+  meta: Meta
   page: Int!
   totalPages: Int!
 }
@@ -515,6 +524,7 @@ type PaginatedPatient {
 type PaginatedPatientCost {
   item_per_page: Int!
   items: [PatientCost!]
+  meta: Meta
   page: Int!
   totalPages: Int!
 }
@@ -522,6 +532,7 @@ type PaginatedPatientCost {
 type PaginatedPatientDiagnosis {
   item_per_page: Int!
   items: [PatientDiagnosis!]
+  meta: Meta
   page: Int!
   totalPages: Int!
 }
@@ -529,6 +540,7 @@ type PaginatedPatientDiagnosis {
 type PaginatedPatientPayment {
   item_per_page: Int!
   items: [PatientPayment!]
+  meta: Meta
   page: Int!
   totalPages: Int!
 }
@@ -536,6 +548,7 @@ type PaginatedPatientPayment {
 type Paginatedisease {
   item_per_page: Int!
   items: [Disease!]
+  meta: Meta
   page: Int!
   totalPages: Int!
 }
@@ -543,6 +556,7 @@ type Paginatedisease {
 type Paginateproduct {
   item_per_page: Int!
   items: [Product!]
+  meta: Meta
   page: Int!
   totalPages: Int!
 }
@@ -1134,6 +1148,7 @@ type WorkingHour {
 type paginateMedicine {
   item_per_page: Int!
   items: [Medicine!]
+  meta: Meta
   page: Int!
   totalPages: Int!
 }
@@ -1141,6 +1156,7 @@ type paginateMedicine {
 type paginateTreatment {
   item_per_page: Int!
   items: [Treatment!]
+  meta: Meta
   page: Int!
   totalPages: Int!
 }

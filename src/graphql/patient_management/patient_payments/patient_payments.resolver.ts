@@ -24,10 +24,7 @@ export class PatientPaymentsResolver {
   ) {
     const data = await this.patientPaymentsService.findAll({ patient_id, sort, item_per_page, page });
 
-    return {
-      ...data,
-      items: data.data
-    }
+    return data
   }
 
   // @Query(() => PatientPayment, { name: 'patientPayment' })

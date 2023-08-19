@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import { Type } from '@nestjs/common';
 
 export function PaginateResult<T>(ItemType: Type<T>): any {
@@ -15,7 +15,16 @@ export function PaginateResult<T>(ItemType: Type<T>): any {
 
     @Field(() => Int)
     page: number;
+
+    @Field(() => Meta, { nullable: true })
+    meta?: Meta;
   }
 
   return PageClass;
+}
+
+@ObjectType()
+export class Meta {
+  @Field(() => Float, { nullable: true })
+  total?: number;
 }

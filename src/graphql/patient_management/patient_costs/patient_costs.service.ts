@@ -21,7 +21,7 @@ export class PatientCostsService {
     patient_id?: number, sort?: PatientCostSortInput, page?: number, item_per_page?: number
   }) {
     const { field, order } = sort ?? {}
-    return await PaginatorService<Prisma.PatientCostFindManyArgs>({
+    const data = await PaginatorService<Prisma.PatientCostFindManyArgs>({
       Modal: this.prisma.patientCost
       , page, item_per_page,
       relations: {
@@ -34,6 +34,18 @@ export class PatientCostsService {
         include: { treatment: true }
       }
     })
+    const { _sum } = await this.prisma.patientCost.aggregate({
+      _sum: {
+        amount: true
+      }
+    })
+    return {
+      ...data,
+      items: data.data,
+      meta: {
+        total: _sum.amount
+      }
+    }
   }
 
   // findOne(id: number) {
