@@ -1,13 +1,12 @@
 import { InputType, Int, Field, registerEnumType } from '@nestjs/graphql';
 import { Days } from '@prisma/client';
 
-
 registerEnumType(Days, {
-  name: 'Days'
+  name: 'Days',
 });
 @InputType()
 export class CreateWorkingHourInput {
-  @Field(() => Days, { description: 'Sun Mon ...' })
+  @Field(() => Days, { description: 'Sun, Mon, Tue, Wed, Thu, Fri, Sat' })
   day: Days;
 
   @Field(() => Date)
