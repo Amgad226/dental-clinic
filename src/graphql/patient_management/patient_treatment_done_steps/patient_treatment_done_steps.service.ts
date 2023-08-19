@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePatientTreatmentDoneStepInput } from './dto/create-patient_treatment_done_step.input';
 import { UpdatePatientTreatmentDoneStepInput } from './dto/update-patient_treatment_done_step.input';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreatePatientTreatmentDoneStepInput } from './dto/create-patient_treatment_done_step.input';
 
 @Injectable()
 export class PatientTreatmentDoneStepsService {
@@ -34,15 +34,17 @@ export class PatientTreatmentDoneStepsService {
           }
         }
       }
-    });
-    if (patient_treatment_done_steps + 1 === treatment_steps) {
-      await this.prisma.patientTreatment.update({
-        where: { id: patient_treatment_id },
-        data: {
-          status: 'done'
-        }
-      })
-    }
+    }).then(async (data) => {
+      if ((patient_treatment_done_steps + 1) === treatment_steps) {
+        await this.prisma.patientTreatment.update({
+          where: { id: patient_treatment_id },
+          data: {
+            status: 'done'
+          }
+        })
+      }
+      return data
+    })
     return data
 
   }

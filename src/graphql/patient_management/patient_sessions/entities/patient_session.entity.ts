@@ -4,6 +4,7 @@ import { Patient } from '../../patient/entities/patient.entity';
 import { PatientAppointment } from '../../patient_appointments/entities/patient_appointment.entity';
 import { PatientLabOrder } from '../../patient_lab_orders/entities/patient_lab_order.entity';
 import { PatientPerscrption } from '../../patient_perscrptions/entities/patient_perscrption.entity';
+import { Treatment } from 'src/graphql/treatment/entities/treatment.entity';
 
 @ObjectType()
 export class PatientSession {
@@ -27,5 +28,8 @@ export class PatientSession {
 
   @Field(() => [PatientPerscrption], { nullable: true })
   PatientPerscrptions?: PatientPerscrption[];
+
+  @Field(() => Treatment, { nullable: true })
+  Treatment?: Treatment;
 
 }
