@@ -16,6 +16,7 @@ function getAllPossiblePairs(arr) {
 
 export async function checkConflicts({ data }: ValidatorProps) {
 
+
   const ids = data.chemical_material_id;
   const pairs = getAllPossiblePairs(ids);
 
@@ -36,27 +37,27 @@ export async function checkConflicts({ data }: ValidatorProps) {
       });
 
       return data.length > 0 ? data : null;
-    })
+    }),
   );
 
   const realData = results.filter((d) => d !== null).flat();
 
-  const newString = realData.map((item) => `${item.chemical_material_1.name} have conflict with ${item.chemical_material_2.name}`);
+  const newString = realData.map(
+    (item) =>
+      `${item.chemical_material_1.name} have conflict with ${item.chemical_material_2.name}`,
+  );
 
-
-
-
-  if ((realData.length > 0)) {
+  if (realData.length > 0) {
     return {
       fail: false,
       msg: newString,
-      status: 400
-    }
+      status: 400,
+    };
   }
 
   return {
     fail: true,
-  }
+  };
 }
 
 export async function createMedicine({ id, data, modelName }: ValidatorProps) {
@@ -76,7 +77,7 @@ export async function createMedicine({ id, data, modelName }: ValidatorProps) {
     return checkConflict;
   }
 
-  return { fail: true, }
+  return { fail: true };
 }
 
 
@@ -89,7 +90,10 @@ export async function updateMedicine({ id, data, modelName }: ValidatorProps) {
   }
 
   if (data.category_id) {
-    const categoryIfExist = await checkIfExists({ id: data.category_id, modelName: "category" });
+    const categoryIfExist = await checkIfExists({
+      id: data.category_id,
+      modelName: 'category',
+    });
     if (categoryIfExist.fail == false) {
       return categoryIfExist;
     }
@@ -107,6 +111,5 @@ export async function updateMedicine({ id, data, modelName }: ValidatorProps) {
     return checkConflict;
   }
 
-  return { fail: true, }
+  return { fail: true };
 }
-
