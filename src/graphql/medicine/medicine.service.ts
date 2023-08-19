@@ -8,15 +8,25 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class MedicineService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(createMedicineInput: CreateMedicineInput) {
-    const { name, concentration, category_id, chemical_material_id } = createMedicineInput;
-    console.log('from sercive');
+    const { name, concentration, category_id, chemical_material_id } =
+      createMedicineInput;
 
+    const chemical_materials_id_array: any[] = chemical_material_id.map(
+      (id) => {
+        return { chemical_material_id: id };
+      },
+    );
     //create new medicine
     const medicine = await this.prisma.medicine.create({
       data: {
+        medicineChemicalMaterials: {
+          createMany: {
+            data: chemical_materials_id_array,
+          },
+        },
         name: name,
         concentration: concentration,
         category: {
@@ -26,17 +36,17 @@ export class MedicineService {
         },
       },
       include: {
-        category: true
-      }
+        category: true,
+      },
     });
 
     //attach data chemical_material_id and medicine_id in pivot table
-    await this.prisma.medicineChemicalMaterial.createMany({
-      data: createMedicineInput.chemical_material_id.map((id) => ({
-        chemical_material_id: id,
-        medicine_id: medicine.id,
-      })),
-    });
+    // await this.prisma.medicineChemicalMaterial.createMany({
+    //   data: createMedicineInput.chemical_material_id.map((id) => ({
+    //     chemical_material_id: id,
+    //     medicine_id: medicine.id,
+    //   })),
+    // });
 
     return medicine;
   }
@@ -50,9 +60,9 @@ export class MedicineService {
       search,
       relations: {
         include: {
-          category: true
-        }
-      }
+          category: true,
+        },
+      },
     });
   }
 
@@ -63,17 +73,23 @@ export class MedicineService {
         category: true,
         medicineChemicalMaterials: {
           include: {
-            chemical_material: true
-          }
-        }
+            chemical_material: true,
+          },
+        },
       },
     });
-
   }
 
-  async update(id: number, { category_id, chemical_material_id, concentration, name }: UpdateMedicineInput) {
-
-    await this.prisma.medicineChemicalMaterial.deleteMany({ where: { id, } })
+  async update(
+    id: number,
+    {
+      category_id,
+      chemical_material_id,
+      concentration,
+      name,
+    }: UpdateMedicineInput,
+  ) {
+    await this.prisma.medicineChemicalMaterial.deleteMany({ where: { id } });
 
     //attach data chemical_material_id and medicine_id in pivot table
     await this.prisma.medicineChemicalMaterial.createMany({
@@ -83,18 +99,35 @@ export class MedicineService {
       })),
     });
 
-
     return await this.prisma.medicine.update({
       where: { id },
       data: {
-        category_id, concentration, name,
+        category_id,
+        concentration,
+        name,
       },
     });
   }
 
   async remove(id: number) {
-
     return await this.prisma.medicine.delete({ where: { id } });
+  }
 
+  async medicineConflicts() {
+    const medicineArray = [1, 2];
+    this.m(medicineArray, 1);
+  }
+
+  async m(medicineArray: number[], patientID: number) {
+    let medicine_chemical_materials =
+      this.prisma.medicineChemicalMaterial.findMany({
+        where: {
+          medicine_id: { in: medicineArray },
+        },
+        select: {
+          chemical_material_id: true,
+        },
+      });
+    console.log(medicine_chemical_materials);
   }
 }

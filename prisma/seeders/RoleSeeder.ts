@@ -17,20 +17,3 @@ export async function seedRole() {
     },
   });
 }
-
-export async function seedUser() {
-  const userRole = await prisma.role.upsert({
-    where: { name: 'user' },
-    update: {},
-    create: {
-      name: 'user',
-    },
-  });
-  const adminRole = await prisma.role.upsert({
-    where: { name: 'admin' },
-    update: {},
-    create: {
-      name: 'admin',
-    },
-  });
-}
