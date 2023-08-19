@@ -57,7 +57,7 @@ export class ProductResolver {
   }
 
   @Query(() => [GetProducts], { name: 'getProducts' })
-  async getProducts(): Promise<{ product_id : number ;name: string; totalQuantity: number }[]> {
+  async getProducts(): Promise<{ product_id: number; name: string; totalQuantity: number }[]> {
     return this.productService.getProducts();
   }
 }
