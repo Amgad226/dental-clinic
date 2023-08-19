@@ -19,7 +19,14 @@ export class PatientSessionsService {
           create: createPatientPerscrptionFromSessionInput
         }
       },
-    });
+    }).then(async (data) => {
+      await this.prisma.patientAppointment.update({
+        where: {
+          id: patiient_appointment_id
+        }, data: { state: 'registerd' }
+      })
+      return data
+    })
 
     await this.prisma.patientTreatmentDoneStep.createMany({
       data: [...CreatePatientTreatmentDoneStepFromSessionInput.map((input) => {

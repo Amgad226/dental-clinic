@@ -25,7 +25,7 @@ export async function PaginatorService<T>(
 
   if (page > 0) page--;
   const skip = page * item_per_page;
-// const {where , ...restprops} = relations as any
+  // const {where , ...restprops} = relations as any
 
   let where = {}
   let restProps = {}
