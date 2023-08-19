@@ -437,9 +437,23 @@ type PaginateChemicalMaterial {
   totalPages: Int!
 }
 
+type PaginateGetProducts {
+  item_per_page: Int!
+  items: [GetProducts!]
+  page: Int!
+  totalPages: Int!
+}
+
 type PaginateProblem {
   item_per_page: Int!
   items: [Problem!]
+  page: Int!
+  totalPages: Int!
+}
+
+type PaginateStoredProduct {
+  item_per_page: Int!
+  items: [StoredProduct!]
   page: Int!
   totalPages: Int!
 }
@@ -641,7 +655,7 @@ type Query {
   badHabit(id: Int!): BadHabit!
   badHabits(item_per_page: Float, page: Float, search: String): Paginatebadhabit!
   bookIn(id: Int!): BookIn!
-  bookIns(item_per_page: Float, page: Float, search: String): Paginatebookin!
+  bookIns(item_per_page: Float, page: Float, product_id: Int, search: String): Paginatebookin!
   bookOut(id: Int!): BookOut!
   bookOuts(item_per_page: Float, page: Float, search: String): [BookOut!]!
   categories: [Category!]!
@@ -649,7 +663,7 @@ type Query {
   chemicalMaterials(item_per_page: Float, page: Float, search: String): PaginateChemicalMaterial!
   disease(id: Int!): Disease!
   diseases(item_per_page: Float, page: Float, search: String): Paginatedisease!
-  getProducts: [GetProducts!]!
+  getProducts(item_per_page: Float, page: Float, search: String): PaginateGetProducts!
   medicine: Medicine!
   medicines(item_per_page: Float, page: Float, search: String): paginateMedicine!
   patient(id: Int!): Patient!
@@ -673,9 +687,8 @@ type Query {
   product(id: Int!): Product!
   productbookedIn(id: Int!): [BookIn!]!
   productbookedOut(id: Int!): [BookOut!]!
-  products(item_per_page: Float, page: Float, search: String): Paginateproduct!
-  selectStoredProduct(id: Int!): [StoredProduct!]!
-  storedProducts: [StoredProduct!]!
+  products(item_per_page: Int, page: Int, search: String): Paginateproduct!
+  storedProducts(item_per_page: Int, page: Int, product_id: Int, search: String): PaginateStoredProduct!
   treatment(id: Int!): Treatment!
   treatmentType(id: Int!): TreatmentType!
   treatmentTypes: [TreatmentType!]!
