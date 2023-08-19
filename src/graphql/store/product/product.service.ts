@@ -56,7 +56,25 @@ export class ProductService {
       page,
       search,
       relations: {
-        include: { storedproducts: true }
+        include: {
+          storedproducts:
+          {
+            where: {
+              total_quantity: {
+                gt: 0
+              }
+            }
+          }
+        },
+        where: {
+          storedproducts: {
+            every: {
+              total_quantity: {
+                gt: 0
+              },
+            }
+          }
+        }
       }
     });
     const productsWithQuantities = await Promise.all(
@@ -69,16 +87,19 @@ export class ProductService {
         };
       })
     );
+    const productsWithQuantitiesWithoutZero = productsWithQuantities.filter((product) => {
+      return product.totalQuantity > 0
+    })
     return {
       ...restProps,
-      items: productsWithQuantities,
+      items: productsWithQuantitiesWithoutZero,
     };
   }
-  
+
   async getTotalQuantity(productId: number) {
     const storedProduct = await this.prisma.storedProduct.findFirst({
       where: { product_id: productId },
     });
-    return storedProduct.total_quantity;
+    return storedProduct?.total_quantity ?? 0;
   }
 }

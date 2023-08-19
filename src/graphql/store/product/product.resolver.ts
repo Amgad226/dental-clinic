@@ -19,9 +19,9 @@ export class ProductResolver {
 
   @Query(() => Paginateproduct, { name: 'products' })
   async findAll(
-    @Args('page', { nullable: true }) page?: number,
-    @Args('search', { nullable: true }) search?: string,
-    @Args('item_per_page', { nullable: true }) item_per_page?: number,
+    @Args('page', { type: () => Int, nullable: true }) page?: number,
+    @Args('search', { type: () => String, nullable: true }) search?: string,
+    @Args('item_per_page', { type: () => Int, nullable: true }) item_per_page?: number,
   ) {
     const product = await this.productService.findAll(
       {

@@ -26,6 +26,7 @@ export class BookInResolver {
       page,
       item_per_page,
       serach,
+      product_id
     );
     return {
       items: book_in.data,
