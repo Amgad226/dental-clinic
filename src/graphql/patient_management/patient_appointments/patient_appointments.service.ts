@@ -11,7 +11,7 @@ export class PatientAppointmentsService {
       throw new Error('Date must greater than now date');
     }
     if (type === 'external' && !reservation_id) {
-      throw new Error('reservation_id requierd on external appointment type');
+      throw new Error('reservation_id required on external appointment type');
 
     }
     return await this.prisma.patientAppointment.create({
