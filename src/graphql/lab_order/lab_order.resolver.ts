@@ -3,19 +3,31 @@ import { LabOrderService } from './lab_order.service';
 import { LabOrder } from './entities/lab_order.entity';
 import { CreateLabOrderInput } from './dto/create-lab_order.input';
 import { UpdateLabOrderInput } from './dto/update-lab_order.input';
+import { PaginateLabOrder } from './entities/paginate-lab_order.entity';
 
 @Resolver(() => LabOrder)
 export class LabOrderResolver {
   constructor(private readonly labOrderService: LabOrderService) {}
 
-  @Mutation(() => LabOrder)
+  @Mutation(() => LabOrder )
   createLabOrder(@Args('createLabOrderInput') createLabOrderInput: CreateLabOrderInput) {
     return this.labOrderService.create(createLabOrderInput);
   }
 
-  @Query(() => [LabOrder], { name: 'labOrder' })
-  findAll() {
-    return this.labOrderService.findAll();
+  @Query(() => PaginateLabOrder, { name: 'labOrders' })
+  async findAll(
+    @Args('page', { nullable: true }) page?: number,
+    @Args('search', { nullable: true }) search?: string,
+    @Args('item_per_page', { nullable: true }) item_per_page?: number,
+  ) {
+
+    const labOrder= await this.labOrderService.findAll(page, item_per_page, search);
+    return {
+      items: labOrder.data,
+      totalPages: labOrder.totalPages,
+      page: labOrder.page,
+      item_per_page: labOrder.item_per_page,
+    };
   }
 
   @Query(() => LabOrder, { name: 'labOrder' })
@@ -24,8 +36,11 @@ export class LabOrderResolver {
   }
 
   @Mutation(() => LabOrder)
-  updateLabOrder(@Args('updateLabOrderInput') updateLabOrderInput: UpdateLabOrderInput) {
-    return this.labOrderService.update(updateLabOrderInput.id, updateLabOrderInput);
+  updateLabOrder(
+    @Args('id', { type: () => Int }) id: number,
+    
+    @Args('updateLabOrderInput') updateLabOrderInput: UpdateLabOrderInput) {
+    return this.labOrderService.update(id, updateLabOrderInput);
   }
 
   @Mutation(() => LabOrder)

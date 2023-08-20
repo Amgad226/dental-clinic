@@ -10,7 +10,7 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
-src/schema.gql
+./src/schema.gql
 # OS
 .DS_Store
 
@@ -34,3 +34,5 @@ src/schema.gql
 !.vscode/launch.json
 !.vscode/extensions.json
 .vercel
+
+

@@ -157,8 +157,9 @@ input CreateLabInput {
 }
 
 input CreateLabOrderInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  lab_id: Int!
+  name: String!
+  steps_names: [String!]!
 }
 
 input CreateMedicineInput {
@@ -503,8 +504,16 @@ type Lab {
 }
 
 type LabOrder {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  LabOrderStep: [LabOrderStep!]
+  id: Int!
+  lab: Lab
+  lab_id: Int!
+  name: String!
+}
+
+type LabOrderStep {
+  id: Int!
+  name: String!
 }
 
 input LoginInput {
@@ -632,7 +641,7 @@ type Mutation {
   updateChemicalMaterial(id: Int!, updateChemicalMaterialInput: UpdateChemicalMaterialInput!): ChemicalMaterial!
   updateDisease(id: Int!, updateDiseaseInput: UpdateDiseaseInput!): Disease!
   updateLab(id: Int!, updateLabInput: UpdateLabInput!): Lab!
-  updateLabOrder(updateLabOrderInput: UpdateLabOrderInput!): LabOrder!
+  updateLabOrder(id: Int!, updateLabOrderInput: UpdateLabOrderInput!): LabOrder!
   updateMedicine(id: Float!, updateMedicineInput: UpdateMedicineInput!): Medicine!
   updateOneWorkingHour(updateOneWorkingHour: UpdateWorkingHourInput!): WorkingHour!
   updatePatient(updatePatientInput: UpdatePatientInput!): Patient!
@@ -677,6 +686,14 @@ type PaginateGetProducts {
 type PaginateLab {
   item_per_page: Int!
   items: [Lab!]
+  meta: Meta
+  page: Int!
+  totalPages: Int!
+}
+
+type PaginateLabOrder {
+  item_per_page: Int!
+  items: [LabOrder!]
   meta: Meta
   page: Int!
   totalPages: Int!
@@ -1027,6 +1044,7 @@ type Query {
   getProducts(item_per_page: Float, page: Float, search: String): PaginateGetProducts!
   lab(id: Int!): Lab!
   labOrder(id: Int!): LabOrder!
+  labOrders(item_per_page: Float, page: Float, search: String): PaginateLabOrder!
   labs(item_per_page: Float, page: Float, search: String): PaginateLab!
   medicine(id: Int!): Medicine!
   medicineConflicts: Conflict!
@@ -1157,9 +1175,9 @@ input UpdateLabInput {
 }
 
 input UpdateLabOrderInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  lab_id: Int
+  name: String
+  steps_names: [String!]
 }
 
 input UpdateMedicineInput {

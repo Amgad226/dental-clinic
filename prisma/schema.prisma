@@ -68,7 +68,7 @@ model ChemicalChemicalMaterial {
   id                     Int              @id @default(autoincrement())
   chemical_material_1_id Int
   chemical_material_2_id Int
-  chemical_material_1    ChemicalMaterial @relation("ChemicalMaterial1", fields: [chemical_material_1_id],references: [id], onDelete: Cascade, onUpdate: Cascade)
+  chemical_material_1    ChemicalMaterial @relation("ChemicalMaterial1", fields: [chemical_material_1_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   chemical_material_2    ChemicalMaterial @relation("ChemicalMaterial2", fields: [chemical_material_2_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("chemical_materials_chemical_materials")
@@ -517,7 +517,7 @@ model PatientLabOrder {
   patient_session_id Int?
 
   patient   Patient?        @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  lab_order LabOrder       @relation(fields: [lab_order_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  lab_order LabOrder        @relation(fields: [lab_order_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   session   PatientSession? @relation(fields: [patient_session_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
@@ -549,6 +549,8 @@ model Lab {
   address String
 
   LabOrder LabOrder[]
+  @@map("labs")
+
 }
 
 model LabOrder {
@@ -559,6 +561,18 @@ model LabOrder {
   lab Lab @relation(fields: [lab_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   PatientLabOrder PatientLabOrder[]
+  LabOrderStep    LabOrderStep[]
+  @@map("lab_orders")
+
+}
+
+model LabOrderStep {
+  id           Int      @id @default(autoincrement())
+  name         String
+  lab_order_id Int
+  lab_order    LabOrder @relation(fields: [lab_order_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  @@map("lab_order_steps")
+
 }
 
 // 
