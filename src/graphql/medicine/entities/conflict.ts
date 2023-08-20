@@ -8,11 +8,11 @@ export class Conflict {
   @Field(() => Boolean, )
   bool: boolean;
 
-  // @Field(() => String, { description: 'name field ',nullable:true })
-  // prescription_patient_medicine?: string;
+  @Field(() => [[medicineConflicts]], { description: 'name field ',nullable:true })
+  prescription_patient_medicine?: [[medicineConflicts]];
 
 
-  @Field(() => String, { description: 'name field ',nullable:true })
+  @Field(() => [medicineConflicts], { description: 'name field ',nullable:true })
   prescription_medicines?: [medicineConflicts];
 
 

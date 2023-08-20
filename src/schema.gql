@@ -105,7 +105,10 @@ type Conflict {
   disease_medicine: [badHabitConflict!]
 
   """name field """
-  prescription_medicines: String
+  prescription_medicines: [medicineConflicts!]
+
+  """name field """
+  prescription_patient_medicine: [[medicineConflicts!]!]
 }
 
 input CreateBadHabitInput {
@@ -1345,6 +1348,14 @@ type badHabitConflict {
 
   """name field """
   medicant_name: String!
+}
+
+type medicineConflicts {
+  """id field """
+  message: [String!]!
+
+  """name field """
+  pair_of_medicine: String!
 }
 
 type paginateMedicine {

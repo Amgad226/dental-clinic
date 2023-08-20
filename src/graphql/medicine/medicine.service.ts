@@ -130,8 +130,6 @@ export class MedicineService {
   }
 
   async medicineConflicts(patient_id = 2, medicineArray = [1, 2]) {
-    // throw new GraphQLError('new ', {});
-    //
     const bad_habit_ids = await getPatientBadHabitIds(patient_id);
     const diseases_ids = await getPatientDiseasesIds(patient_id);
     const patient_medicine_ids = await getPatientMedicinesIds(patient_id);
@@ -145,6 +143,11 @@ export class MedicineService {
         ]),
       );
     }
+    prescription_patient_medicine = prescription_patient_medicine.filter(
+      (item) => {
+        if (item.length > 0) return item;
+      },
+    );
 
     const prescription_medicines = await checkConflictsByMedicinesIds(
       medicineArray,
@@ -160,24 +163,17 @@ export class MedicineService {
       diseases_ids,
     );
 
-    // throw new GraphQLError(typeof(bad_habit_medicine), {
-    //   extensions: {
-    //     code: {
-    //       // bool: true,
-    //       prescription_patient_medicine,
-    //       prescription_medicines,
-    //       bad_habit_medicine,
-    //       disease_medicine,
-    //     },
-    //   },
-    // });
-
     return {
-      bool: true,
+      bool:
+        prescription_patient_medicine.length > 0 ||
+        prescription_medicines.length > 0 ||
+        bad_habit_medicine.length > 0 ||
+        disease_medicine.length > 0,
+
       prescription_patient_medicine,
       prescription_medicines,
-       bad_habit_medicine,
-       disease_medicine,
+      bad_habit_medicine,
+      disease_medicine,
     };
   }
 }
