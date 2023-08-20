@@ -256,8 +256,13 @@ input CreatePatientInput {
 }
 
 input CreatePatientLabOrderFromSessionInput {
+  created_at: DateTime!
+  degree: String!
+  directions: String!
   lab_order_id: Int!
+  notation: [String!]!
   patient_id: Int!
+  type: String!
 }
 
 input CreatePatientLabOrderInput {

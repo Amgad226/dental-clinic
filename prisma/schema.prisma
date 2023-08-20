@@ -510,15 +510,27 @@ model PatientTreatmentDoneStep {
   session           PatientSession   @relation(fields: [patient_session_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
+model Notation {
+  id                   Int             @id @default(autoincrement())
+  notation             String
+  patient_lab_order_id Int
+  patient_lab_order              PatientLabOrder @relation(fields: [patient_lab_order_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
 model PatientLabOrder {
-  id                 Int  @id @default(autoincrement())
+  id                 Int      @id @default(autoincrement())
   patient_id         Int
   lab_order_id       Int
   patient_session_id Int?
+  type               String
+  created_at         DateTime
+  degree             String
+  directions         String
 
   patient   Patient?        @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   lab_order LabOrder        @relation(fields: [lab_order_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   session   PatientSession? @relation(fields: [patient_session_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Notation  Notation[]
 }
 
 model PatientPerscrptions {
@@ -549,8 +561,8 @@ model Lab {
   address String
 
   LabOrder LabOrder[]
-  @@map("labs")
 
+  @@map("labs")
 }
 
 model LabOrder {
@@ -562,8 +574,8 @@ model LabOrder {
 
   PatientLabOrder PatientLabOrder[]
   LabOrderStep    LabOrderStep[]
-  @@map("lab_orders")
 
+  @@map("lab_orders")
 }
 
 model LabOrderStep {
@@ -571,8 +583,8 @@ model LabOrderStep {
   name         String
   lab_order_id Int
   lab_order    LabOrder @relation(fields: [lab_order_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  @@map("lab_order_steps")
 
+  @@map("lab_order_steps")
 }
 
 // 
