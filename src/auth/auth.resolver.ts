@@ -58,6 +58,13 @@ export class AuthResolver {
     return this.authService.login(loginInput);
   }
 
+  @Public()
+  @Mutation(() => AuthResponse, { name: 'loginDoctor' })
+  loginDoctor(@Args('loginInput') loginInput: LoginInput) {
+    return this.authService.loginDoctor(loginInput);
+  }
+  
+
   @Mutation(() => LogoutResponse)
   async logout(@CurrentUserId() usesId) {
     return this.authService.logout(usesId);

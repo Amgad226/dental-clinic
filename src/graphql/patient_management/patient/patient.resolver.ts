@@ -16,10 +16,11 @@ export class PatientResolver {
 
   @Query(() => PaginatedPatient, { name: 'patients' })
   async findAll(
+    @Args('search', { nullable: true }) search?: string,
     @Args('page', { nullable: true }) page?: number,
     @Args('item_per_page', { nullable: true }) item_per_page?: number,
   ) {
-    const data = await this.patientService.findAll(page, item_per_page)
+    const data = await this.patientService.findAll(page, item_per_page,search)
     return {
       ...data,
       items: data.data,
