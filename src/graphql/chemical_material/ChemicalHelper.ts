@@ -140,7 +140,7 @@ export async function Conflict_bad_habit_Medicine(
       if (conflict_in_chemical_with_bad.length > 0) {
         var medicant_name = await getMedicinesNameByIds([medicines_ids[i]]);
         all_conflicts.push({
-          conflict_in_chemical_with_bad,
+          conflict_in_chemicals: conflict_in_chemical_with_bad,
           medicant_name: medicant_name.toString(),
         });
       }
@@ -180,7 +180,7 @@ export async function Conflict_Diseases_Medicine(
       if (conflict_in_chemical_with_disease.length > 0) {
         var medicant_name = await getMedicinesNameByIds([medicines_ids[i]]);
         all_conflicts.push({
-          conflict_in_chemical_with_disease,
+          conflict_in_chemicals: conflict_in_chemical_with_disease,
           medicant_name: medicant_name.toString(),
         });
       }

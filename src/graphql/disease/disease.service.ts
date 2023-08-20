@@ -3,6 +3,7 @@ import { CreateDiseaseInput } from './dto/create-disease.input';
 import { UpdateDiseaseInput } from './dto/update-disease.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PaginatorService } from 'src/pagination/PaginatorService';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class DiseaseService {
@@ -23,11 +24,21 @@ export class DiseaseService {
   }
 
   async findAll(page: any, item_per_page: any, search?: string) {
-    return await PaginatorService({
+    return await PaginatorService<Prisma.DiseaseFindManyArgs>({
       Modal: this.prisma.disease,
       item_per_page,
       page,
       search,
+      relations: {
+        include: {
+          diseaseChemicalMaterials:{
+            include:{
+
+              chemical_material:true 
+            }
+          }
+          },
+        },
     });
   }
 

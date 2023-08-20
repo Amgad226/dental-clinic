@@ -6,6 +6,7 @@ import { UpdateMedicineInput } from './dto/update-medicine.input';
 import { paginateMedicine } from './entities/paginateMedicine';
 import { checkIfExists, validator } from '../../validatior/validator';
 import { createMedicine, updateMedicine } from './validation/medicine.validation';
+import { Conflict } from './entities/conflict';
 
 @Resolver(() => Medicine)
 export class MedicineResolver {
@@ -44,7 +45,7 @@ export class MedicineResolver {
   }
 
   
-  @Query(() => Medicine, { name: 'medicineConflicts' })
+  @Query(() => Conflict, { name: 'medicineConflicts' })
   medicineConflicts() {
     return this.medicineService.medicineConflicts();
   }

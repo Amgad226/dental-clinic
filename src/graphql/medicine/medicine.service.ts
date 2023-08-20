@@ -15,6 +15,7 @@ import {
   getPatientDiseasesIds,
   getPatientMedicinesIds,
 } from '../chemical_material/ChemicalHelper';
+import { Conflict } from './entities/conflict';
 
 @Injectable()
 export class MedicineService {
@@ -71,6 +72,11 @@ export class MedicineService {
       relations: {
         include: {
           category: true,
+          medicineChemicalMaterials: {
+            include: {
+              chemical_material: true,
+            },
+          },
         },
       },
     });
@@ -123,7 +129,9 @@ export class MedicineService {
     return await this.prisma.medicine.delete({ where: { id } });
   }
 
-  async medicineConflicts(patient_id = 2, medicineArray = [1, 2, 3, 4]) {
+  async medicineConflicts(patient_id = 2, medicineArray = [1, 2]) {
+    // throw new GraphQLError('new ', {});
+    //
     const bad_habit_ids = await getPatientBadHabitIds(patient_id);
     const diseases_ids = await getPatientDiseasesIds(patient_id);
     const patient_medicine_ids = await getPatientMedicinesIds(patient_id);
@@ -152,16 +160,24 @@ export class MedicineService {
       diseases_ids,
     );
 
-    throw new GraphQLError('new ', {
-      extensions: {
-        code: {
-          bool: true,
-          prescription_patient_medicine,
-          prescription_medicines,
-          bad_habit_medicine,
-          disease_medicine,
-        },
-      },
-    });
+    // throw new GraphQLError(typeof(bad_habit_medicine), {
+    //   extensions: {
+    //     code: {
+    //       // bool: true,
+    //       prescription_patient_medicine,
+    //       prescription_medicines,
+    //       bad_habit_medicine,
+    //       disease_medicine,
+    //     },
+    //   },
+    // });
+
+    return {
+      bool: true,
+      prescription_patient_medicine,
+      prescription_medicines,
+       bad_habit_medicine,
+       disease_medicine,
+    };
   }
 }

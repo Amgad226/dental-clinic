@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int, Float } from '@nestjs/graphql';
 import { Category } from 'src/graphql/category/entities/category.entity';
-import { MedicineChemicalMaterials } from './medicineChemicalMaterials.entity';
+import { MedicineChemicalMaterials } from './medicine-chemical.entity';
 
 @ObjectType()
 export class Medicine {
