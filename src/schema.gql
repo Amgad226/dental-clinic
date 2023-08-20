@@ -149,6 +149,13 @@ input CreateDiseaseInput {
   name: String!
 }
 
+input CreateLabInput {
+  address: String!
+  email: String!
+  name: String!
+  phone: String!
+}
+
 input CreateLabOrderInput {
   """Example field (placeholder)"""
   exampleField: Int!
@@ -249,10 +256,12 @@ input CreatePatientInput {
 
 input CreatePatientLabOrderFromSessionInput {
   lab_order_id: Int!
+  patient_id: Int!
 }
 
 input CreatePatientLabOrderInput {
   lab_order_id: Int!
+  patient_id: Int!
   patient_session_id: Int!
 }
 
@@ -483,6 +492,16 @@ type GetProducts {
   totalQuantity: Int!
 }
 
+type Lab {
+  address: String!
+  email: String!
+
+  """Example field (placeholder)"""
+  id: Int!
+  name: String!
+  phone: String!
+}
+
 type LabOrder {
   """Example field (placeholder)"""
   exampleField: Int!
@@ -544,6 +563,7 @@ type Mutation {
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   createChemicalMaterial(createChemicalMaterialInput: CreateChemicalMaterialInput!): ChemicalMaterial!
   createDisease(createDiseaseInput: CreateDiseaseInput!): Disease!
+  createLab(createLabInput: CreateLabInput!): Lab!
   createLabOrder(createLabOrderInput: CreateLabOrderInput!): LabOrder!
   createMedicine(createMedicineInput: CreateMedicineInput!): Medicine!
   createPatient(createPatientInput: CreatePatientInput!): Patient!
@@ -580,6 +600,7 @@ type Mutation {
   removeCategory(id: Int!): Category!
   removeChemicalMaterial(id: Int!): ChemicalMaterial!
   removeDisease(id: Int!): Disease!
+  removeLab(id: Int!): Lab!
   removeLabOrder(id: Int!): LabOrder!
   removeMedicine(id: Int!): Medicine!
   removePatient(id: Int!): Patient!
@@ -610,6 +631,7 @@ type Mutation {
   updateBadHabit(id: Int!, updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
   updateChemicalMaterial(id: Int!, updateChemicalMaterialInput: UpdateChemicalMaterialInput!): ChemicalMaterial!
   updateDisease(id: Int!, updateDiseaseInput: UpdateDiseaseInput!): Disease!
+  updateLab(id: Int!, updateLabInput: UpdateLabInput!): Lab!
   updateLabOrder(updateLabOrderInput: UpdateLabOrderInput!): LabOrder!
   updateMedicine(id: Float!, updateMedicineInput: UpdateMedicineInput!): Medicine!
   updateOneWorkingHour(updateOneWorkingHour: UpdateWorkingHourInput!): WorkingHour!
@@ -647,6 +669,14 @@ type PaginateChemicalMaterial {
 type PaginateGetProducts {
   item_per_page: Int!
   items: [GetProducts!]
+  meta: Meta
+  page: Int!
+  totalPages: Int!
+}
+
+type PaginateLab {
+  item_per_page: Int!
+  items: [Lab!]
   meta: Meta
   page: Int!
   totalPages: Int!
@@ -995,7 +1025,9 @@ type Query {
   disease(id: Int!): Disease!
   diseases(item_per_page: Float, page: Float, search: String): Paginatedisease!
   getProducts(item_per_page: Float, page: Float, search: String): PaginateGetProducts!
+  lab(id: Int!): Lab!
   labOrder(id: Int!): LabOrder!
+  labs(item_per_page: Float, page: Float, search: String): PaginateLab!
   medicine(id: Int!): Medicine!
   medicineConflicts: Conflict!
   medicines(item_per_page: Float, page: Float, search: String): paginateMedicine!
@@ -1027,7 +1059,7 @@ type Query {
   patientTreatmentDoneStep(id: Int!): PatientTreatmentDoneStep!
   patientTreatmentDoneSteps(patient_session_id: Int, patient_treatment_id: Int): [PatientTreatmentDoneStep!]!
   patientTreatments(patient_id: Int, status: PatientTreatmentStatuses, type: PatientTreatmentTypes): [PatientTreatment!]!
-  patients(item_per_page: Float, page: Float): PaginatedPatient!
+  patients(item_per_page: Float, page: Float, search: String): PaginatedPatient!
   problem(id: Int!): Problem!
   problemType(id: Int!): ProblemType!
   problemTypes: [ProblemType!]!
@@ -1115,6 +1147,13 @@ input UpdateChemicalMaterialInput {
 input UpdateDiseaseInput {
   chemical_material_id: [Int!]
   name: String!
+}
+
+input UpdateLabInput {
+  address: String
+  email: String
+  name: String
+  phone: String
 }
 
 input UpdateLabOrderInput {
@@ -1208,6 +1247,7 @@ input UpdatePatientInput {
 input UpdatePatientLabOrderInput {
   id: Int!
   lab_order_id: Int
+  patient_id: Int
   patient_session_id: Int
 }
 
