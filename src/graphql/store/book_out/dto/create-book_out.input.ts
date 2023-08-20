@@ -14,5 +14,5 @@ export class CreateBookOutInput {
   created_at?: Date  
 
   @Field(()=>[Int])
-  stored_product_id: number;
+  stored_product_id: [number];
 }

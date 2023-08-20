@@ -4,7 +4,6 @@ import { BookInResolver } from './book_in.resolver';
 import { BookInService } from './book_in.service';
 import { CreateBookInInput } from './dto/create-book_in.input';
 import { StoredProductService } from '../stored_product/stored_product.service';
-import { async } from 'rxjs';
 
 describe('Bookin Resolver', () => {
   let resolver: BookInResolver;
@@ -57,7 +56,7 @@ describe('Bookin Resolver', () => {
         }
         // age:expect.any(Number)
       };
-      // Create the problem using the actual service method
+      // Create the bookInsusing the actual service method
       // const result = await service.create(createbookInInput);
       // expect(result).toEqual(expectedResult);
       jest.spyOn(service, 'create').mockImplementation(async () => createbookInMoke);
@@ -68,7 +67,7 @@ describe('Bookin Resolver', () => {
   });
 
   describe('findAll', () => {
-    it('should return paginated problems', async () => {
+    it('should return paginated bookIns', async () => {
       const page = 1;
       const search = '10';
       const itemPerPage = 10;
@@ -89,7 +88,6 @@ describe('Bookin Resolver', () => {
         item_per_page: itemPerPage,
         // age:expect.any(Number)
       };
-      // Mock the return value of the problemService.findAll method
       jest.spyOn(service, 'findAll').mockImplementation(async () => findAllMock);
       const result = await resolver.findAll(product_id,page, search, itemPerPage);
       expect(result).toEqual(expectedResult);
