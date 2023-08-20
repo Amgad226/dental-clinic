@@ -12,6 +12,7 @@ export class PatientSessionsService {
       data: {
         patient_id,
         patiient_appointment_id,
+
         PatientLabOrder: createPatientLabOrderFromSessionInput && {
           create: createPatientLabOrderFromSessionInput
         },

@@ -7,4 +7,7 @@ export class CreatePatientLabOrderInput {
 
   @Field(() => Int)
   lab_order_id: number;
+
+  @Field(() => Int)
+  patient_id: number;
 }

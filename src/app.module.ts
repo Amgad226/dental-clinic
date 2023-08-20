@@ -45,6 +45,7 @@ import { LabOrderModule } from './graphql/lab_order/lab_order.module';
 
 import { AccessTokenGuard } from './auth/guards/accessToken.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { LabModule } from './graphql/lab/lab.module';
 
 
 const apolloDriverConfig: ApolloDriverConfig = {
@@ -113,6 +114,7 @@ const serveStaticImagesConfig = {
     PatientPerscrptionsMediciensModule,
     PatientTreatmentDoneStepsModule,
     LabOrderModule,
+    LabModule,
   ],
   controllers: [AppController],
   providers: [
