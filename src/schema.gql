@@ -29,8 +29,23 @@ type AuthResponse {
 }
 
 type BadHabit {
+  badHabitChemicalMaterials: [BadHabitChemicalMaterials!]
   id: Int!
   name: String!
+}
+
+type BadHabitChemicalMaterials {
+  """chemical_material_id field """
+  bad_habit_id: Int!
+
+  """chemical_material"""
+  chemical_material: ChemicalMaterial
+
+  """concentration field """
+  chemical_material_id: Int!
+
+  """id field """
+  id: Int!
 }
 
 type BookIn {
@@ -74,14 +89,23 @@ type CheckPhoneResponse {
 }
 
 type ChemicalMaterial {
-  """conflicts of ChemicalMaterial field """
-  conflicts: [ChemicalMaterial!]
-
   """Example field (placeholder)"""
   id: Int!
 
   """Example field (placeholder)"""
   name: String!
+}
+
+type Conflict {
+  """name field """
+  bad_habit_medicine: [badHabitConflict!]
+  bool: Boolean!
+
+  """name field """
+  disease_medicine: [badHabitConflict!]
+
+  """name field """
+  prescription_medicines: String
 }
 
 input CreateBadHabitInput {
@@ -426,8 +450,23 @@ enum Days {
 }
 
 type Disease {
+  diseaseChemicalMaterials: [DiseaseChemicalMaterials!]
   id: Int!
   name: String!
+}
+
+type DiseaseChemicalMaterials {
+  """chemical_material"""
+  chemical_material: ChemicalMaterial
+
+  """concentration field """
+  chemical_material_id: Int!
+
+  """chemical_material_id field """
+  disease_id: Int!
+
+  """id field """
+  id: Int!
 }
 
 enum Gender {
@@ -954,7 +993,8 @@ type Query {
   diseases(item_per_page: Float, page: Float, search: String): Paginatedisease!
   getProducts(item_per_page: Float, page: Float, search: String): PaginateGetProducts!
   labOrder(id: Int!): LabOrder!
-  medicine: Medicine!
+  medicine(id: Int!): Medicine!
+  medicineConflicts: Conflict!
   medicines(item_per_page: Float, page: Float, search: String): paginateMedicine!
   patient(id: Int!): Patient!
   patientAppointment(id: Int!): PatientAppointment!
@@ -1297,6 +1337,14 @@ type WorkingHour {
   id: Int!
   open: Boolean!
   to: DateTime!
+}
+
+type badHabitConflict {
+  """id field """
+  conflict_in_chemicals: [String!]!
+
+  """name field """
+  medicant_name: String!
 }
 
 type paginateMedicine {

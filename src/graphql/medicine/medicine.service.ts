@@ -2,9 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { CreateMedicineInput } from './dto/create-medicine.input';
 import { UpdateMedicineInput } from './dto/update-medicine.input';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GraphQLError } from 'graphql';
 import { PaginatorService } from 'src/pagination/PaginatorService';
 import { Prisma } from '@prisma/client';
+import { GraphQLError } from 'graphql';
+import {
+  Conflict_Diseases_Medicine,
+  Conflict_bad_habit_Medicine,
+  checkConflictsByIds,
+  checkConflictsByMedicinesIds,
+  getChemicalMaterialFromMedicines,
+  getPatientBadHabitIds,
+  getPatientDiseasesIds,
+  getPatientMedicinesIds,
+} from '../chemical_material/ChemicalHelper';
+import { Conflict } from './entities/conflict';
 
 @Injectable()
 export class MedicineService {
@@ -61,6 +72,11 @@ export class MedicineService {
       relations: {
         include: {
           category: true,
+          medicineChemicalMaterials: {
+            include: {
+              chemical_material: true,
+            },
+          },
         },
       },
     });
@@ -113,21 +129,55 @@ export class MedicineService {
     return await this.prisma.medicine.delete({ where: { id } });
   }
 
-  async medicineConflicts() {
-    const medicineArray = [1, 2];
-    this.m(medicineArray, 1);
-  }
+  async medicineConflicts(patient_id = 2, medicineArray = [1, 2]) {
+    // throw new GraphQLError('new ', {});
+    //
+    const bad_habit_ids = await getPatientBadHabitIds(patient_id);
+    const diseases_ids = await getPatientDiseasesIds(patient_id);
+    const patient_medicine_ids = await getPatientMedicinesIds(patient_id);
 
-  async m(medicineArray: number[], patientID: number) {
-    let medicine_chemical_materials =
-      this.prisma.medicineChemicalMaterial.findMany({
-        where: {
-          medicine_id: { in: medicineArray },
-        },
-        select: {
-          chemical_material_id: true,
-        },
-      });
-    console.log(medicine_chemical_materials);
+    let prescription_patient_medicine = [];
+    for (let i = 0; i < medicineArray.length; i++) {
+      prescription_patient_medicine.push(
+        await checkConflictsByMedicinesIds([
+          ...patient_medicine_ids,
+          medicineArray[i],
+        ]),
+      );
+    }
+
+    const prescription_medicines = await checkConflictsByMedicinesIds(
+      medicineArray,
+    );
+
+    const bad_habit_medicine = await Conflict_bad_habit_Medicine(
+      medicineArray,
+      bad_habit_ids,
+    );
+
+    const disease_medicine = await Conflict_Diseases_Medicine(
+      medicineArray,
+      diseases_ids,
+    );
+
+    // throw new GraphQLError(typeof(bad_habit_medicine), {
+    //   extensions: {
+    //     code: {
+    //       // bool: true,
+    //       prescription_patient_medicine,
+    //       prescription_medicines,
+    //       bad_habit_medicine,
+    //       disease_medicine,
+    //     },
+    //   },
+    // });
+
+    return {
+      bool: true,
+      prescription_patient_medicine,
+      prescription_medicines,
+       bad_habit_medicine,
+       disease_medicine,
+    };
   }
 }

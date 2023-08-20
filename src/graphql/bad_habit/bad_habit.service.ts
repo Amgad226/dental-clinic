@@ -3,6 +3,7 @@ import { CreateBadHabitInput } from './dto/create-bad_habit.input';
 import { UpdateBadHabitInput } from './dto/update-bad_habit.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PaginatorService } from 'src/pagination/PaginatorService';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class BadHabitService {
@@ -23,11 +24,21 @@ export class BadHabitService {
   }
 
   async findAll(page: any, item_per_page: any, search?: string) {
-    return await PaginatorService({
+    return await PaginatorService<Prisma.BadHabitFindManyArgs>({
       Modal: this.prisma.badHabit,
       item_per_page,
       page,
       search,
+      relations: {
+        include: {
+          badHabitChemicalMaterials:{
+            include:{
+              chemical_material:true 
+            }
+          }
+          },
+        },
+      // },
     });
   }
 

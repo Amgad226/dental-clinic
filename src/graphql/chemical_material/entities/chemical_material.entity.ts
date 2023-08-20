@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ConflictChemicalMaterial } from './conflict-chemical-material';
 
 @ObjectType()
 export class ChemicalMaterial {
@@ -9,6 +10,6 @@ export class ChemicalMaterial {
   name: string;
 
   
-  @Field(() => [ChemicalMaterial], { description: 'conflicts of ChemicalMaterial field ' ,nullable:true })
-  conflicts?: ChemicalMaterial;
+  // @Field(() => [ConflictChemicalMaterial], { description: 'conflicts of ConflictChemicalMaterial field ' ,nullable:true })
+  // conflicts?: ConflictChemicalMaterial[];
 }
