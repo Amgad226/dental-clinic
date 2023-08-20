@@ -46,7 +46,6 @@ export async  function truncateDB() {
   // prisma.patientPerscrptionsMedicince.deleteMany()
   // prisma.labOrder.deleteMany();
   await prisma.$queryRaw`SET foreign_key_checks=0`;
-  await prisma.$queryRaw`TRUNCATE TABLE LabOrder;`
 
   await prisma.$queryRaw`TRUNCATE TABLE diseases_chemical_materials;`;
   await prisma.$queryRaw`TRUNCATE TABLE chemical_materials;`;
@@ -91,6 +90,9 @@ export async  function truncateDB() {
   await prisma.$queryRaw`TRUNCATE TABLE PatientTreatment;`;
   await prisma.$queryRaw`TRUNCATE TABLE PatientTreatmentDoneStep;`;
   await prisma.$queryRaw`TRUNCATE TABLE WorkingHours;`;
+  await prisma.$queryRaw`TRUNCATE TABLE lab_order_steps;`;
+  await prisma.$queryRaw`TRUNCATE TABLE lab_orders;`;
+  await prisma.$queryRaw`TRUNCATE TABLE labs;`;
 
 
 

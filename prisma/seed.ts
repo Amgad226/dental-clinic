@@ -11,6 +11,7 @@ import { seedTreatment, seedTreatmentType } from './seeders/TreatmentSeeder';
 import { seedStep, seedSubStep } from './seeders/StepSeeder';
 import { seedWorkingHour } from './seeders/WorkingHourSeeder';
 import { seedAppointment } from './seeders/AppointmentSeed';
+import { seedLab } from './seeders/LabSeeder';
 
 const prisma = new PrismaClient();
 
@@ -33,6 +34,7 @@ async function main() {
 
   await seedAppointment()
 
+  await seedLab()
   // await seedRepository()
   // await seedProduct()
   // await seedBookIn()

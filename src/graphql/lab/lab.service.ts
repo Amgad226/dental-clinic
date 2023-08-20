@@ -24,7 +24,6 @@ export class LabService {
       page,
       search,
     });
-
   }
 
   async findOne(id: number) {
@@ -34,17 +33,17 @@ export class LabService {
   }
 
   async update(id: number, updateLabInput: UpdateLabInput) {
-
-     var  a= await this.prisma.lab.update({
+    var a = await this.prisma.lab.update({
       where: { id },
       data: { ...updateLabInput },
     });
     console.dir(a);
-return a ;
+    return a;
   }
 
   async remove(id: number) {
     return await this.prisma.lab.delete({
       where: { id: id },
-    });  }
+    });
+  }
 }
