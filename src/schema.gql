@@ -267,9 +267,13 @@ input CreatePatientLabOrderFromSessionInput {
 }
 
 input CreatePatientLabOrderInput {
+  created_at: DateTime!
+  degree: String!
+  directions: String!
   lab_order_id: Int!
   patient_id: Int!
   patient_session_id: Int!
+  type: String!
 }
 
 input CreatePatientMedicalImageInput {
@@ -1271,10 +1275,14 @@ input UpdatePatientInput {
 }
 
 input UpdatePatientLabOrderInput {
+  created_at: DateTime
+  degree: String
+  directions: String
   id: Int!
   lab_order_id: Int
   patient_id: Int
   patient_session_id: Int
+  type: String
 }
 
 input UpdatePatientMedicalImageInput {
