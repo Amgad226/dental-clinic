@@ -24,14 +24,14 @@ export class PatientSessionsService {
           PatientLabOrder: {
             create: {
               ...rest,
-              
-              // Notation: {
-              //   createMany: {
-              //     data: notation.map((n) => {
-              //       return { notation: n };
-              //     }),
-              //   },
-              // },
+
+              Notation: {
+                createMany: {
+                  data: notation.map((n) => {
+                    return { notation: n };
+                  }),
+                },
+              },
             },
           },
           PatientPerscrptions: createPatientPerscrptionFromSessionInput && {

@@ -271,6 +271,7 @@ input CreatePatientLabOrderInput {
   degree: String!
   directions: String!
   lab_order_id: Int!
+  notation: [String!]!
   patient_id: Int!
   patient_session_id: Int!
   type: String!
@@ -1280,6 +1281,7 @@ input UpdatePatientLabOrderInput {
   directions: String
   id: Int!
   lab_order_id: Int
+  notation: [String!]
   patient_id: Int
   patient_session_id: Int
   type: String
