@@ -5,19 +5,15 @@ import { seedChemicalMaterial } from './seeders/chemicalMaterial';
 import { seedCategory } from './seeders/CategorySeeder';
 import { seedMedicines } from './seeders/medicineSeeder';
 import { seedbadHabit } from './seeders/BadhabitSeeder';
-import { seedPatient } from './seeders/PatientSeeder';
+import { seedPatient, seedPatientTreatment } from './seeders/PatientSeeder';
 import { truncateDB } from './seeders/TruncateSeeder';
-import {
-  seedPatientTreatment,
-  seedTreatment,
-  seedTreatmentType,
-} from './seeders/TreatmentSeeder';
+import { seedTreatment, seedTreatmentType } from './seeders/TreatmentSeeder';
 import { seedStep, seedSubStep } from './seeders/StepSeeder';
 import { seedWorkingHour } from './seeders/WorkingHourSeeder';
 import { seedAppointment } from './seeders/AppointmentSeed';
 import { seedLab } from './seeders/LabSeeder';
 import { seedLabOrder } from './seeders/LabOrderSeeder';
-import { seedProduct } from './seeders/ProductSeeder';
+import { seedBookIn, seedProduct } from './seeders/ProductSeeder';
 import { seedProblem, seedProblemType } from './seeders/ProblemSeeder';
 import { seedImageType } from './seeders/ImageSeeder';
 
@@ -34,14 +30,15 @@ async function main() {
 
   await seedProblemType();
   await seedProblem();
-  
-  await seedImageType();
-  await seedPatient();
 
+  await seedImageType();
 
   await seedTreatmentType();
   await seedTreatment();
+
+  await seedPatient();
   await seedPatientTreatment();
+
   await seedStep();
   await seedSubStep();
   await seedWorkingHour();
@@ -51,6 +48,8 @@ async function main() {
   await seedLab();
   await seedLabOrder();
   await seedProduct();
+  await seedBookIn();
+  
   // await seedRepository()
   // await seedBookIn()
 }

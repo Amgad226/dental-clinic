@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PatientTreatmentStatuses, PatientTreatmentTypes, PrismaClient } from '@prisma/client';
 import * as argon from 'argon2';
 const prisma = new PrismaClient();
 
@@ -49,6 +49,29 @@ export async function seedPatient() {
           ],
         },
       },
+
+      // PatientTreatment:{ seeded in treatmentSeeder
+      // }
+      // },
+      PatientCost:{
+        createMany:{
+          data:[
+            {
+              amount:1220,
+              treatment_id:1
+            }
+          ]
+        }
+      },
+      PatientPayment:{
+        createMany:{
+          data:[
+            {
+              amount:12, 
+            }
+          ]
+        }
+      }
     },
   });
 
@@ -97,6 +120,25 @@ export async function seedPatient() {
             },
           ],
         },
+      },
+      PatientCost:{
+        createMany:{
+          data:[
+            {
+              amount:220,
+              treatment_id:2
+            }
+          ]
+        }
+      },
+      PatientPayment:{
+        createMany:{
+          data:[
+            {
+              amount:12, 
+            }
+          ]
+        }
       },
     },
   });
@@ -157,3 +199,45 @@ export async function seedPatientDiagnoses() {}
 
 // patient diagnoses
 // patient image
+
+export async function seedPatientTreatment() {
+  const patientsTreatments = [
+    {
+      id: 1,
+      patient_id: 1,
+      treatment_id: 1,
+      place: 'في الاسنان العلوية فوق يمين زاوية',
+      price: 3112.123,
+      type: PatientTreatmentTypes.teethly,
+      status: PatientTreatmentStatuses.ongoing,
+    },
+    {
+      id: 2,
+      patient_id: 2,
+      treatment_id: 1,
+      place: 'في الاسنان العلوية فوق يمين زاوية + الخد اليساري',
+      price: 2132.34,
+      type: PatientTreatmentTypes.teethly,
+      status: PatientTreatmentStatuses.done,
+    },
+    {
+      id: 3,
+      patient_id: 1,
+      treatment_id: 3,
+      place: 'مكان مجهور  بالفم ',
+      price: 30000.3,
+      type: PatientTreatmentTypes.unteethly,
+      status: PatientTreatmentStatuses.ongoing,
+    },
+  ];
+
+  for (const { id, ...rest } of patientsTreatments) {
+    await prisma.patientTreatment.upsert({
+      where: { id },
+      update: {},
+      create: {
+        ...rest,
+      },
+    });
+  }
+}
