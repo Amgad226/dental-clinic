@@ -176,6 +176,12 @@ input CreateMedicineInput {
   name: String!
 }
 
+input CreateNotificationInput {
+  msg: String!
+  patient_id: Int!
+  title: String!
+}
+
 input CreatePatientAppointmentInput {
   """appointment date"""
   date: DateTime!
@@ -587,6 +593,7 @@ type Mutation {
   createLab(createLabInput: CreateLabInput!): Lab!
   createLabOrder(createLabOrderInput: CreateLabOrderInput!): LabOrder!
   createMedicine(createMedicineInput: CreateMedicineInput!): Medicine!
+  createNotification(createNotificationInput: CreateNotificationInput!): Boolean!
   createPatient(createPatientInput: CreatePatientInput!): Patient!
   createPatientAppointment(createPatientAppointmentInput: CreatePatientAppointmentInput!): PatientAppointment!
   createPatientBadHabit(createPatientBadHabitInput: CreatePatientBadHabitForExistingPatientInput!): PatientBadHabit!
@@ -617,6 +624,8 @@ type Mutation {
   login(loginInput: LoginInput!): AuthResponse!
   loginDoctor(loginInput: LoginInput!): AuthResponse!
   logout: LogoutResponse!
+  readMyNotifications(user_id: Float!): Boolean!
+  readNotification(notification_id: Float!): Boolean!
   removeBadHabit(id: Int!): BadHabit!
   removeCategory(id: Int!): Category!
   removeChemicalMaterial(id: Int!): ChemicalMaterial!
@@ -679,6 +688,15 @@ type Mutation {
   updateTreatmentType(id: Int!, updateTreatmentTypeInput: UpdateTreatmentTypeInput!): TreatmentType!
 }
 
+type Notification {
+  date: DateTime!
+  id: Int!
+  msg: String!
+  seen: Boolean!
+  title: String!
+  user_id: Int!
+}
+
 type PaginateChemicalMaterial {
   item_per_page: Int!
   items: [ChemicalMaterial!]
@@ -706,6 +724,14 @@ type PaginateLab {
 type PaginateLabOrder {
   item_per_page: Int!
   items: [LabOrder!]
+  meta: Meta
+  page: Int!
+  totalPages: Int!
+}
+
+type PaginateNotification {
+  item_per_page: Int!
+  items: [Notification!]
   meta: Meta
   page: Int!
   totalPages: Int!
@@ -1061,6 +1087,7 @@ type Query {
   medicine(id: Int!): Medicine!
   medicineConflicts: Conflict!
   medicines(item_per_page: Float, page: Float, search: String): paginateMedicine!
+  notifications(item_per_page: Float, page: Float, search: String, user_id: Float): PaginateNotification!
   patient(id: Int!): Patient!
   patientAppointment(id: Int!): PatientAppointment!
   patientAppointments(date: DateTime): [PatientAppointment!]!
