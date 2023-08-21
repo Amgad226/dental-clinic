@@ -2,10 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { CreatePatientPerscrptionsMedicienInput } from './dto/create-patient_perscrptions_medicien.input';
 import { UpdatePatientPerscrptionsMedicienInput } from './dto/update-patient_perscrptions_medicien.input';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { MedicineService } from 'src/graphql/medicine/medicine.service';
 
 @Injectable()
 export class PatientPerscrptionsMediciensService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService,private medicineService: MedicineService) { }
 
   async create(createPatientPerscrptionsMedicienInput: CreatePatientPerscrptionsMedicienInput) {
     return await this.prisma.patientPerscrptionsMedicince.create({
@@ -13,8 +14,8 @@ export class PatientPerscrptionsMediciensService {
     })
   }
 
-  async checkConflicts(medicince_ids: number[]) {
-    return true
+  async checkConflicts(profile_id:number,medicince_ids: number[]) {
+    return await this.medicineService.medicineConflicts(profile_id,medicince_ids )
   }
 
   async findAll({ patient_perscrption_id }: { patient_perscrption_id?: number }) {

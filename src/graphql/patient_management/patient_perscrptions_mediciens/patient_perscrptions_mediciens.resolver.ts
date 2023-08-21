@@ -3,6 +3,7 @@ import { PatientPerscrptionsMediciensService } from './patient_perscrptions_medi
 import { PatientPerscrptionsMedicien } from './entities/patient_perscrptions_medicien.entity';
 import { CreatePatientPerscrptionsMedicienInput } from './dto/create-patient_perscrptions_medicien.input';
 import { UpdatePatientPerscrptionsMedicienInput } from './dto/update-patient_perscrptions_medicien.input';
+import { Conflict } from 'src/graphql/medicine/entities/conflict';
 
 @Resolver(() => PatientPerscrptionsMedicien)
 export class PatientPerscrptionsMediciensResolver {
@@ -18,9 +19,12 @@ export class PatientPerscrptionsMediciensResolver {
     return this.patientPerscrptionsMediciensService.findAll({ patient_perscrption_id });
   }
 
-  @Query(() => Boolean, { name: 'checkConflictsForPerscriptionMedicines' })
-  checkConflicts(@Args('medicince_ids', { type: () => Int }) medicince_ids: number[]) {
-    return this.patientPerscrptionsMediciensService.checkConflicts(medicince_ids);
+  @Query(() => Conflict, { name: 'checkConflictsForPerscriptionMedicines' })
+  checkConflicts(
+    @Args('profile_id', { type: () => Int }) profile_id: number,
+    @Args('medicine_ids', { type: () => [Int] }) medicine_ids: number[]
+    ) {
+    return this.patientPerscrptionsMediciensService.checkConflicts(profile_id,medicine_ids);
   }
 
   @Query(() => PatientPerscrptionsMedicien, { name: 'patientPerscrptionsMedicien' })

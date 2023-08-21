@@ -1048,7 +1048,7 @@ type Query {
   bookOut(id: Int!): BookOut!
   bookOuts(item_per_page: Float, page: Float, search: String): [BookOut!]!
   categories: [Category!]!
-  checkConflictsForPerscriptionMedicines(medicince_ids: Int!): Boolean!
+  checkConflictsForPerscriptionMedicines(medicine_ids: [Int!]!, profile_id: Int!): Conflict!
   chemicalMaterial(id: Int!): ChemicalMaterial!
   chemicalMaterials(item_per_page: Float, page: Float, search: String): PaginateChemicalMaterial!
   disease(id: Int!): Disease!
