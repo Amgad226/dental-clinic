@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PatientTreatmentStatuses, PatientTreatmentTypes, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function seedTreatmentType() {
@@ -25,7 +25,6 @@ export async function seedTreatmentType() {
       update: {},
       create: {
         name,
-        
       },
     });
   }
@@ -71,6 +70,48 @@ export async function seedTreatment() {
         color,
         price,
         treatment_type_id,
+      },
+    });
+  }
+}
+
+export async function seedPatientTreatment() {
+  const patientsTreatments = [
+    {
+      id: 1,
+      patient_id: 1,
+      treatment_id: 1,
+      place: 'في الاسنان العلوية فوق يمين زاوية',
+      price: 3112.123,
+      type: PatientTreatmentTypes.teethly,
+      status: PatientTreatmentStatuses.ongoing,
+    },
+    {
+      id: 2,
+      patient_id: 2,
+      treatment_id: 1,
+      place: 'في الاسنان العلوية فوق يمين زاوية + الخد اليساري',
+      price:2132.34,
+      type: PatientTreatmentTypes.teethly,
+      status: PatientTreatmentStatuses.done,
+    },
+    {
+      id: 3,
+      patient_id: 1,
+      treatment_id: 3,
+      place: 'مكان مجهور  بالفم ',
+      price: 30000.30,
+      type: PatientTreatmentTypes.unteethly,
+      status: PatientTreatmentStatuses.ongoing,
+    },
+  ];
+
+  for (const { id,...rest } of patientsTreatments) {
+    await prisma.patientTreatment.upsert({
+      where: { id },
+      update: {},
+      create: {
+        ...rest,
       },
     });
   }
