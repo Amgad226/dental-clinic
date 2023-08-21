@@ -32,7 +32,7 @@ export async function seedBookIn() {
       quantity: 2,
       total_price: 5000 * 2,
       product_id: 1,
-      expiration_dateg: '2023-11-09T10:00:00.000Z',
+      expiration_date: '2023-11-09T10:00:00.000Z',
 
       total_quantity: 2,
     },
@@ -42,7 +42,7 @@ export async function seedBookIn() {
       quantity: 2,
       total_price: 2200 * 2,
       product_id: 2,
-      expiration_dateg: '2023-12-09T10:00:00.000Z',
+      expiration_date: '2023-12-09T10:00:00.000Z',
       total_quantity: 2,
     },
   ];
