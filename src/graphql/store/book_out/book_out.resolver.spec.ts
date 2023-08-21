@@ -29,17 +29,17 @@ describe('Bookin Resolver', () => {
         quantity:1,
         total_price: 1000,
         created_at: expect.any(Date),
-        product_id:1,
+        product_id:3,
         product: {
-          id:1,
+          id:3,
           name:'test'
         }
       };
       const createbookOutInput: CreateBookOutInput = {
         quantity:1,
         created_at: expect.any(Date),
-        product_id:1,
-        stored_product_id:[24],
+        product_id:3,
+        stored_product_id:[3],
       };
       const expectedResult = {
         id:1,
@@ -48,7 +48,7 @@ describe('Bookin Resolver', () => {
         created_at: createbookOutInput.created_at,
         product_id:createbookOutInput.product_id,
         product: {
-          id:1,
+          id:3,
           name:'test'
         }
         // age:expect.any(Number)
@@ -129,16 +129,16 @@ describe('Bookin Resolver', () => {
   
   describe('productsbookedOust',()=>{
     it('should return products that bookedOut', async () =>{
-      const id = 1;
+      const id = 3;
       const productsMock =[{
         id:1,
         quantity:1,
         price:1000,
         total_price: 1000,
         created_at: expect.any(Date),
-        product_id:1,
+        product_id:3,
         product: {
-          id:1,
+          id:3,
           name:'test'
         }
       }];
@@ -148,9 +148,9 @@ describe('Bookin Resolver', () => {
         price:1000,
         total_price: 1000,
         created_at:  expect.any(Date),
-        product_id:1,
+        product_id:3,
         product: {
-          id:1,
+          id:3,
           name:'test'
         }
       }];
