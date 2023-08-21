@@ -10,4 +10,19 @@ export class CreatePatientLabOrderInput {
 
   @Field(() => Int)
   patient_id: number;
+
+
+  @Field(() => String)
+  type: string;
+
+  @Field(() => String)
+  degree: string;
+
+  @Field(() => String)
+  directions: string;
+
+  @Field(() => Date)
+  created_at: Date;
+
+
 }

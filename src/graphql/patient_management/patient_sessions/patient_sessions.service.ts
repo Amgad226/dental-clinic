@@ -21,13 +21,14 @@ export class PatientSessionsService {
         data: {
           patient_id,
           patiient_appointment_id,
-
           PatientLabOrder: {
             create: {
               ...rest,
               Notation: {
-                create: {
-                    notation
+                createMany: {
+                  data: notation.map((n) => {
+                    return { notation: n };
+                  }),
                 },
               },
             },

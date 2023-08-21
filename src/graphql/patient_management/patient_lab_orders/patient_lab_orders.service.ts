@@ -8,9 +8,9 @@ export class PatientLabOrdersService {
   constructor(private prisma: PrismaService) { }
 
   async create(createPatientLabOrderInput: CreatePatientLabOrderInput) {
-    // return await this.prisma.patientLabOrder.create({
-    //   data: createPatientLabOrderInput
-    // });
+    return await this.prisma.patientLabOrder.create({
+      data: createPatientLabOrderInput
+    });
   }
 
   async findAll({ lab_order_id, patient_session_id, patient_id }:
