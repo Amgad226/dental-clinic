@@ -210,7 +210,7 @@ describe('PatientResolver', () => {
         address:'test',
         main_complaint:'test',
         maintal_status:'test',
-        created_at:expect.any(Number)
+        created_at:expect.any(Date)
       };
       const expectedResult = {
         id:deleteMoke.id,
@@ -222,7 +222,7 @@ describe('PatientResolver', () => {
         address:deleteMoke.address,
         main_complaint:deleteMoke.main_complaint,
         maintal_status:deleteMoke.maintal_status,
-        created_at:expect.any(Number)
+        created_at:expect.any(Date)
       };
       jest.spyOn(service, 'remove').mockImplementation(async () => deleteMoke);
       const result = await resolver.removePatient(id);
