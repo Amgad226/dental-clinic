@@ -72,7 +72,7 @@ describe('ProductResolver', () => {
 
   describe('find one', () => {
     it('should return single product', async () => {
-      const id = 3;
+      const id = 1;
       const findOneMoke = {
         id: expect.any(Number),
         name: 'test',
@@ -90,7 +90,7 @@ describe('ProductResolver', () => {
 
   describe('update product', () => {
     it('should return updated product', async () => {
-      const id = 3;
+      const id = 1;
       const updateProductMoke = {
         id:1,
         name: 'test updated from unit test',
@@ -112,7 +112,7 @@ describe('ProductResolver', () => {
 
   describe('delete product', () => {
     it('should return deleted product', async () => {
-      const id = 3;
+      const id = 1;
       const deleteMoke = {
         id: expect.any(Number),
         name: 'test',
