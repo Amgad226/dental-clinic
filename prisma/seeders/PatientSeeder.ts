@@ -22,6 +22,33 @@ export async function seedPatient() {
       PatientMedicine: {
         createMany: { data: [{ medicine_id: 1 }] },
       },
+      PatientDiagnose: {
+        createMany: {
+          data: [
+            {
+              place: 'فك',
+              expected_treatment: 'القيام ب تنضيف اللثة ',
+              problem_id: 1,
+            },
+            {
+              place: 'ضرس',
+              expected_treatment: 'القيام ب حشوة  و تضيف  ',
+              problem_id: 2,
+            },
+          ],
+        },
+      },
+      PatientMedicalImage: {
+        createMany: {
+          data: [
+            {
+              medical_image_type_id: 1,
+              src: 'sad',
+              title: 'a sas da',
+            },
+          ],
+        },
+      },
     },
   });
 
@@ -43,6 +70,33 @@ export async function seedPatient() {
       },
       PatientMedicine: {
         createMany: { data: [{ medicine_id: 2 }] },
+      },
+      PatientDiagnose: {
+        createMany: {
+          data: [
+            {
+              place: 'فك',
+              expected_treatment: 'القيام ب تنضيف اللثة ',
+              problem_id: 1,
+            },
+            {
+              place: 'ضرس',
+              expected_treatment: 'القيام ب حشوة  و تضيف  ',
+              problem_id: 2,
+            },
+          ],
+        },
+      },
+      PatientMedicalImage: {
+        createMany: {
+          data: [
+            {
+              medical_image_type_id: 2,
+              src: 'sad',
+              title: 'a sas da',
+            },
+          ],
+        },
       },
     },
   });
@@ -98,3 +152,8 @@ export async function seedPatient() {
     },
   });
 }
+
+export async function seedPatientDiagnoses() {}
+
+// patient diagnoses
+// patient image

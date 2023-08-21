@@ -4,15 +4,22 @@ import { seedDisease } from './seeders/diseaseSeeder';
 import { seedChemicalMaterial } from './seeders/chemicalMaterial';
 import { seedCategory } from './seeders/CategorySeeder';
 import { seedMedicines } from './seeders/medicineSeeder';
-import {  seedbadHabit } from './seeders/BadhabitSeeder';
+import { seedbadHabit } from './seeders/BadhabitSeeder';
 import { seedPatient } from './seeders/PatientSeeder';
 import { truncateDB } from './seeders/TruncateSeeder';
-import { seedPatientTreatment, seedTreatment, seedTreatmentType } from './seeders/TreatmentSeeder';
+import {
+  seedPatientTreatment,
+  seedTreatment,
+  seedTreatmentType,
+} from './seeders/TreatmentSeeder';
 import { seedStep, seedSubStep } from './seeders/StepSeeder';
 import { seedWorkingHour } from './seeders/WorkingHourSeeder';
 import { seedAppointment } from './seeders/AppointmentSeed';
 import { seedLab } from './seeders/LabSeeder';
 import { seedLabOrder } from './seeders/LabOrderSeeder';
+import { seedProduct } from './seeders/ProductSeeder';
+import { seedProblem, seedProblemType } from './seeders/ProblemSeeder';
+import { seedImageType } from './seeders/ImageSeeder';
 
 const prisma = new PrismaClient();
 
@@ -20,30 +27,32 @@ async function main() {
   await truncateDB();
   await seedRole();
   await seedCategory();
-  await seedChemicalMaterial()
-  await seedDisease()
-  await seedbadHabit()
-  await seedMedicines()
+  await seedChemicalMaterial();
+  await seedDisease();
+  await seedbadHabit();
+  await seedMedicines();
 
-  await seedPatient()
+  await seedProblemType();
+  await seedProblem();
   
-  await seedTreatmentType()
-  await seedTreatment()
-  await seedPatientTreatment()
-  await seedStep()
-  await seedSubStep()
-  await seedWorkingHour()
+  await seedImageType();
+  await seedPatient();
 
-  await seedAppointment()
 
-  await seedLab()
-  await seedLabOrder()
+  await seedTreatmentType();
+  await seedTreatment();
+  await seedPatientTreatment();
+  await seedStep();
+  await seedSubStep();
+  await seedWorkingHour();
+
+  await seedAppointment();
+
+  await seedLab();
+  await seedLabOrder();
+  await seedProduct();
   // await seedRepository()
-  // await seedProduct()
   // await seedBookIn()
-
-
-
 }
 main()
   .then(async () => {

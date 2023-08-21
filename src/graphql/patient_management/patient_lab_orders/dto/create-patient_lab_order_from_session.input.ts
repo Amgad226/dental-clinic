@@ -25,6 +25,10 @@ export class CreatePatientLabOrderFromSessionInput {
   @Field(() => Date)
   created_at: Date;
   
+  @Field(() => Date)
+  deliver_at: Date;
+  
+  
   @Field(() => [String])
   notation: string[];
 }

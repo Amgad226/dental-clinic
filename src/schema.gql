@@ -265,6 +265,7 @@ input CreatePatientInput {
 input CreatePatientLabOrderFromSessionInput {
   created_at: DateTime!
   degree: String!
+  deliver_at: DateTime!
   directions: String!
   lab_order_id: Int!
   notation: [String!]!
@@ -275,6 +276,7 @@ input CreatePatientLabOrderFromSessionInput {
 input CreatePatientLabOrderInput {
   created_at: DateTime!
   degree: String!
+  deliver_at: DateTime!
   directions: String!
   lab_order_id: Int!
   notation: [String!]!
@@ -1305,6 +1307,7 @@ input UpdatePatientInput {
 input UpdatePatientLabOrderInput {
   created_at: DateTime
   degree: String
+  deliver_at: DateTime
   directions: String
   id: Int!
   lab_order_id: Int

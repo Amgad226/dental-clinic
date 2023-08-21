@@ -526,6 +526,7 @@ model PatientLabOrder {
   patient_session_id Int?
   type               String
   created_at         DateTime
+  deliver_at         DateTime
   degree             String
   directions         String
 
