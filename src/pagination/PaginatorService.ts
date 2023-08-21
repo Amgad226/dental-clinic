@@ -62,7 +62,11 @@ export async function PaginatorService<T>(
     }, ...restProps
   });
 
-  const totalItems = await Modal.count();
+
+  const totalItems = await Modal.count({
+    where
+  });
+  
   const totalPages = Math.ceil(totalItems / item_per_page);
   return {
     data,

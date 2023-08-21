@@ -9,6 +9,9 @@ export class CreateLabOrderInput {
   lab_id: number;
 
 
+  @Field(() => String)
+  price: string;
+
   @Field(() => [String])
   steps_names: string[];
 
