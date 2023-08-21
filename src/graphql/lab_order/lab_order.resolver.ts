@@ -19,9 +19,10 @@ export class LabOrderResolver {
     @Args('page', { nullable: true }) page?: number,
     @Args('search', { nullable: true }) search?: string,
     @Args('item_per_page', { nullable: true }) item_per_page?: number,
+    @Args('lab_id', { nullable: true }) lab_id?: number,
   ) {
 
-    const labOrder= await this.labOrderService.findAll(page, item_per_page, search);
+    const labOrder= await this.labOrderService.findAll(page, item_per_page, search,lab_id);
     return {
       items: labOrder.data,
       totalPages: labOrder.totalPages,

@@ -549,21 +549,22 @@ model Lab {
   address String
 
   LabOrder LabOrder[]
-  @@map("labs")
 
+  @@map("labs")
 }
 
 model LabOrder {
   id     Int    @id @default(autoincrement())
   name   String
+  price  String
   lab_id Int
 
   lab Lab @relation(fields: [lab_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   PatientLabOrder PatientLabOrder[]
   LabOrderStep    LabOrderStep[]
-  @@map("lab_orders")
 
+  @@map("lab_orders")
 }
 
 model LabOrderStep {
@@ -571,8 +572,8 @@ model LabOrderStep {
   name         String
   lab_order_id Int
   lab_order    LabOrder @relation(fields: [lab_order_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  @@map("lab_order_steps")
 
+  @@map("lab_order_steps")
 }
 
 // 

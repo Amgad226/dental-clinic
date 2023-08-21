@@ -10,10 +10,10 @@ import { Prisma } from '@prisma/client';
 export class LabOrderService {
   constructor(private prisma: PrismaService) {}
 
-  async create({ lab_id, name, steps_names }: CreateLabOrderInput) {
+  async create({ lab_id,  steps_names ,...rest}: CreateLabOrderInput) {
     const labOrder = await this.prisma.labOrder.create({
       data: {
-        name,
+        ...rest,
         lab: {
           connect: {
             id: lab_id,
@@ -39,13 +39,16 @@ export class LabOrderService {
     return labOrder;
   }
 
-  async findAll(page: any, item_per_page: any, search?: string) {
+  async findAll(page: any, item_per_page: any, search?: string, lab_id?:number) {
     return await PaginatorService<Prisma.LabOrderFindManyArgs>({
       Modal: this.prisma.labOrder,
       item_per_page,
       page,
       search,
       relations: {
+        where:{
+          lab_id
+        },
         include: {
           lab: true,
           LabOrderStep: true,

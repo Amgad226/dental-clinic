@@ -13,9 +13,9 @@ export class PatientSessionsService {
         patient_id,
         patiient_appointment_id,
 
-        PatientLabOrder: createPatientLabOrderFromSessionInput && {
-          create: createPatientLabOrderFromSessionInput
-        },
+        // PatientLabOrder: createPatientLabOrderFromSessionInput && {
+        //   create: createPatientLabOrderFromSessionInput
+        // },
         PatientPerscrptions: createPatientPerscrptionFromSessionInput && {
           create: createPatientPerscrptionFromSessionInput
         }
