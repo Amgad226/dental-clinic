@@ -159,6 +159,7 @@ input CreateLabInput {
 input CreateLabOrderInput {
   lab_id: Int!
   name: String!
+  price: String!
   steps_names: [String!]!
 }
 
@@ -514,6 +515,7 @@ type LabOrder {
   lab: Lab
   lab_id: Int!
   name: String!
+  price: String!
 }
 
 type LabOrderStep {
@@ -1049,7 +1051,7 @@ type Query {
   getProducts(item_per_page: Float, page: Float, search: String): PaginateGetProducts!
   lab(id: Int!): Lab!
   labOrder(id: Int!): LabOrder!
-  labOrders(item_per_page: Float, page: Float, search: String): PaginateLabOrder!
+  labOrders(item_per_page: Float, lab_id: Float, page: Float, search: String): PaginateLabOrder!
   labs(item_per_page: Float, page: Float, search: String): PaginateLab!
   medicine(id: Int!): Medicine!
   medicineConflicts: Conflict!
@@ -1182,6 +1184,7 @@ input UpdateLabInput {
 input UpdateLabOrderInput {
   lab_id: Int
   name: String
+  price: String
   steps_names: [String!]
 }
 

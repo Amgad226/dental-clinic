@@ -10,6 +10,9 @@ export class LabOrder {
   @Field(() => String)
   name: string;
 
+  @Field(() => String)
+  price: string;
+
   @Field(() => Int)
   lab_id: number;
 

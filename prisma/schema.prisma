@@ -568,6 +568,7 @@ model Lab {
 model LabOrder {
   id     Int    @id @default(autoincrement())
   name   String
+  price  String
   lab_id Int
 
   lab Lab @relation(fields: [lab_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
