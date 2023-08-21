@@ -7,7 +7,7 @@ import { seedMedicines } from './seeders/medicineSeeder';
 import {  seedbadHabit } from './seeders/BadhabitSeeder';
 import { seedPatient } from './seeders/PatientSeeder';
 import { truncateDB } from './seeders/TruncateSeeder';
-import { seedTreatment, seedTreatmentType } from './seeders/TreatmentSeeder';
+import { seedPatientTreatment, seedTreatment, seedTreatmentType } from './seeders/TreatmentSeeder';
 import { seedStep, seedSubStep } from './seeders/StepSeeder';
 import { seedWorkingHour } from './seeders/WorkingHourSeeder';
 import { seedAppointment } from './seeders/AppointmentSeed';
@@ -29,6 +29,7 @@ async function main() {
   
   await seedTreatmentType()
   await seedTreatment()
+  await seedPatientTreatment()
   await seedStep()
   await seedSubStep()
   await seedWorkingHour()
