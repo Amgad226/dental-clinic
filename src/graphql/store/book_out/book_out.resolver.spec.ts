@@ -5,7 +5,7 @@ import { BookOutResolver } from './book_out.resolver';
 import { BookOutService } from './book_out.service';
 import { CreateBookOutInput } from './dto/create-book_out.input';
 
-describe('Bookin Resolver', () => {
+describe('BookOutResolver', () => {
   let resolver: BookOutResolver;
   let service: BookOutService;
 
@@ -29,17 +29,17 @@ describe('Bookin Resolver', () => {
         quantity:1,
         total_price: 1000,
         created_at: expect.any(Date),
-        product_id:3,
+        product_id:1,
         product: {
-          id:3,
+          id:1,
           name:'test'
         }
       };
       const createbookOutInput: CreateBookOutInput = {
         quantity:1,
         created_at: expect.any(Date),
-        product_id:3,
-        stored_product_id:[3],
+        product_id:1,
+        stored_product_id:[1],
       };
       const expectedResult = {
         id:1,
@@ -48,7 +48,7 @@ describe('Bookin Resolver', () => {
         created_at: createbookOutInput.created_at,
         product_id:createbookOutInput.product_id,
         product: {
-          id:3,
+          id:1,
           name:'test'
         }
         // age:expect.any(Number)
@@ -94,7 +94,7 @@ describe('Bookin Resolver', () => {
 
   describe('find one', () => {
     it('should return single bookout', async () => {
-      const id = 3;
+      const id = 1;
       const findOneMoke = {
         id:1,
         quantity:1,
@@ -129,16 +129,16 @@ describe('Bookin Resolver', () => {
   
   describe('productsbookedOust',()=>{
     it('should return products that bookedOut', async () =>{
-      const id = 3;
+      const id = 1;
       const productsMock =[{
         id:1,
         quantity:1,
         price:1000,
         total_price: 1000,
         created_at: expect.any(Date),
-        product_id:3,
+        product_id:1,
         product: {
-          id:3,
+          id:1,
           name:'test'
         }
       }];
@@ -148,9 +148,9 @@ describe('Bookin Resolver', () => {
         price:1000,
         total_price: 1000,
         created_at:  expect.any(Date),
-        product_id:3,
+        product_id:1,
         product: {
-          id:3,
+          id:1,
           name:'test'
         }
       }];

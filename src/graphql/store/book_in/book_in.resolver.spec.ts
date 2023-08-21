@@ -97,7 +97,7 @@ describe('Bookin Resolver', () => {
 
   describe('find one', () => {
     it('should return single bookin', async () => {
-      const id = 16;
+      const id = 1;
       const findOneMoke = {
         id:1,
         quantity:1,
