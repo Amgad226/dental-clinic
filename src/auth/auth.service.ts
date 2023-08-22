@@ -159,7 +159,7 @@ export class AuthService {
     }
 
     const hashedPassword = await argon.hash(password);
-    await this.prisma.user.update({
+   const user =  await this.prisma.user.update({
       where: {
         phone,
       },
