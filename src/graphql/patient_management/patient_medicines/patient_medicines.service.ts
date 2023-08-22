@@ -8,7 +8,7 @@ import { GraphQLError } from 'graphql';
 export class PatientMedicinesService {
   constructor(private prisma: PrismaService) { }
 
-  async create({ medicine_id, patient_id, notes }: CreatePatientMedicineForExistingPatientInput) {
+  async create({ medicine_id, patient_id, notes,start_date }: CreatePatientMedicineForExistingPatientInput) {
     const patientExist = await this.prisma.patient.findUnique({ where: { id: patient_id } })
     const medicineExist = await this.prisma.medicine.findUnique({ where: { id: medicine_id } })
 
@@ -24,7 +24,7 @@ export class PatientMedicinesService {
       include: { medicine: true },
 
       data: {
-        medicine_id, notes, patient_id
+        medicine_id, notes, patient_id,start_date
       }
     });
   }
