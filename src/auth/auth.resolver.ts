@@ -13,6 +13,8 @@ import { LoginInput } from './dto/login-input';
 import { CreateUserPatientInput } from './dto/create-patient';
 import { CreateUserPatientResponse } from './entities/create-user-patient.response';
 import { CreateUserAccountResponse } from './entities/create-user-account.response';
+import { ChangePasswordResponse } from './entities/change-password.response';
+import { ResetPasswordInput } from './dto/reset-password';
 
 @Resolver()
 export class AuthResolver {
@@ -69,6 +71,20 @@ export class AuthResolver {
   async logout(@CurrentUserId() usesId) {
     return this.authService.logout(usesId);
   }
+
+  @Public()
+  @Mutation(() => SendOtpResponse, { name: 'resetPassword' })
+  resetPassword(@Args('checkPhoneInput') checkPhoneInput: PhoneInput) {
+    return this.authService.resetPassword(checkPhoneInput);
+  }
+
+  @Public()
+  @Mutation(() => ChangePasswordResponse, { name: 'changePassword' })
+  changePassword(@Args('changePasswordInput') changePasswordInput: ResetPasswordInput) {
+    return this.authService.resetPassword(changePasswordInput);
+  }
+
+  
 
   // @Mutation(() => Auth)
   // reomveUser(@Args('id', { type: () => Int }) id: number) {

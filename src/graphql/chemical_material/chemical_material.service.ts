@@ -3,6 +3,7 @@ import { CreateChemicalMaterialInput } from './dto/create-chemical_material.inpu
 import { UpdateChemicalMaterialInput } from './dto/update-chemical_material.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PaginatorService } from 'src/pagination/PaginatorService';
+import { Prisma } from '@prisma/client';
 @Injectable()
 export class ChemicalMaterialService {
   constructor(private prisma: PrismaService) {}
@@ -51,11 +52,16 @@ export class ChemicalMaterialService {
   }
 
   async findAll(page: any, item_per_page: any, search?: string) {
-    return await PaginatorService({
+    return await PaginatorService<Prisma.DiseaseFindManyArgs>({
       Modal: this.prisma.chemicalMaterial,
       item_per_page,
       page,
       search,
+      relations:{
+        include:{
+            diseaseChemicalMaterials:true
+        }
+      }
     });
   }
 

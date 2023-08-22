@@ -8,10 +8,10 @@ import { OtpService } from 'src/auth/otp.service';
 
 @Injectable()
 export class NotificationService {
-  constructor(private prisma: PrismaService, private readonly otpService: OtpService,) {
-   
-
-  }
+  constructor(
+    private prisma: PrismaService,
+    private readonly otpService: OtpService,
+  ) {}
 
   async create({ patient_id, ...rest }: CreateNotificationInput) {
     const pivot = await this.prisma.patientUser.findFirst({
@@ -25,12 +25,15 @@ export class NotificationService {
           ...rest,
           user_id: pivot.user_id,
         },
-        include:{
-          user:true
-        }
+        include: {
+          user: true,
+        },
       });
 
-      this.otpService.sendSMSVerifyCode({ phone_number:notification.user.phone ,  template:rest.msg  })
+      this.otpService.sendSMSVerifyCode({
+        phone_number: notification.user.phone,
+        template: rest.msg,
+      });
       return true;
     }
     return false;

@@ -15,6 +15,8 @@ import { CreateUserAccountResponse } from './entities/create-user-account.respon
 import { LoginInput } from './dto/login-input';
 import { CreateUserPatientInput } from './dto/create-patient';
 import { PatientService } from 'src/graphql/patient_management/patient/patient.service';
+import { ResetPasswordInput } from './dto/reset-password';
+import { ChangePasswordResponse } from './entities/change-password.response';
 
 @Injectable()
 export class AuthService {
@@ -97,27 +99,9 @@ export class AuthService {
       });
     }
 
-    const otp = this.otpService.generateOtpCode();
+    const { isSended, otp } = await this.otpService.sendOtpToUser(phone, false);
 
-    await this.prisma.user.upsert({
-      where: { phone },
-      update: { otp },
-      create: {
-        phone,
-        otp,
-      },
-    });
-
-    const SEND_REAL_OTP = false;
-    const sended = SEND_REAL_OTP
-      ? await this.otpService.sendSMSVerifyCode({
-          phone_number: phone,
-          verify_code: otp,
-          template: 'Your code is $$CODE$$, Thank you',
-        })
-      : true;
-
-    return sended
+    return isSended
       ? {
           data: { otp },
           message: `Your code is ${otp}, Thank you`,
@@ -159,7 +143,7 @@ export class AuthService {
     }
 
     const hashedPassword = await argon.hash(password);
-   const updatedUser =  await this.prisma.user.update({
+    const updatedUser = await this.prisma.user.update({
       where: {
         phone,
       },
@@ -330,8 +314,8 @@ export class AuthService {
         extensions: { code: 404 },
       });
     }
-    
-    if(user.role_id!=2){
+
+    if (user.role_id != 2) {
       throw new GraphQLError('you are not doctor كول خرا', {
         extensions: { code: 403 },
       });
@@ -354,7 +338,6 @@ export class AuthService {
       });
     }
 
-  
     const { accessToken, refreshToken } = await this.createTokens(
       user.id,
       user.phone,
@@ -386,6 +369,53 @@ export class AuthService {
       },
     });
     return { loggedOut: true };
+  }
+
+  async resetPassword({ phone }: PhoneInput) {
+    const { isSended, otp } = await this.otpService.sendOtpToUser(phone, false);
+    return isSended
+      ? {
+          data: { otp },
+          message: `Your code is ${otp}, Thank you`,
+          status: 200,
+        }
+      : {
+          data: { otp },
+          message: "otp doesn't sended successfully ",
+          status: 400,
+        };
+  }
+
+  async changePassword({
+    password,
+    otp,
+    phone,
+  }: ResetPasswordInput): Promise<ChangePasswordResponse> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        phone,
+      },
+    });
+    if (!user) {
+      throw new GraphQLError('phone not found ', { extensions: { code: 404 } });
+    }
+
+    if (user.otp !== otp) {
+      throw new GraphQLError('Wrong otp', { extensions: { code: 404 } });
+    }
+    const hashedPassword = await argon.hash(password);
+    await this.prisma.user.update({
+      where: { phone },
+      data: {
+        hashedPassword,
+        otp: null,
+      },
+    });
+    return {
+      data: {},
+      message: 'Password updated successfully ',
+      status: 200,
+    };
   }
 
   async removeUser(userId: number) {

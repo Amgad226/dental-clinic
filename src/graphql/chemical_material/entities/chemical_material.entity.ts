@@ -10,6 +10,6 @@ export class ChemicalMaterial {
   name: string;
 
   
-  // @Field(() => [ConflictChemicalMaterial], { description: 'conflicts of ConflictChemicalMaterial field ' ,nullable:true })
-  // conflicts?: ConflictChemicalMaterial[];
+  @Field(() => [ConflictChemicalMaterial], { description: 'conflicts of ConflictChemicalMaterial field ' ,nullable:true })
+  conflicts?: ConflictChemicalMaterial[];
 }

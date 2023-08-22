@@ -75,6 +75,16 @@ type Category {
   name: String!
 }
 
+type ChangePassword {
+  bool: Boolean
+}
+
+type ChangePasswordResponse {
+  data: ChangePassword
+  message: String
+  status: Int
+}
+
 type CheckPhone {
   code: Float!
   message: String!
@@ -89,6 +99,9 @@ type CheckPhoneResponse {
 }
 
 type ChemicalMaterial {
+  """conflicts of ConflictChemicalMaterial field """
+  conflicts: [ConflictChemicalMaterial!]
+
   """Example field (placeholder)"""
   id: Int!
 
@@ -109,6 +122,14 @@ type Conflict {
 
   """name field """
   prescription_patient_medicine: [[medicineConflicts!]!]
+}
+
+type ConflictChemicalMaterial {
+  """Example field (placeholder)"""
+  id: Int!
+
+  """Example field (placeholder)"""
+  name: String!
 }
 
 input CreateBadHabitInput {
@@ -586,6 +607,7 @@ type Meta {
 type Mutation {
   CheckPhone(checkPhoneInput: PhoneInput!): CheckPhoneResponse!
   SendOtp(checkPhoneInput: PhoneInput!): SendOtpResponse!
+  changePassword(changePasswordInput: ResetPasswordInput!): ChangePasswordResponse!
   createBadHabit(createBadHabitInput: CreateBadHabitInput!): BadHabit!
   createBookIn(createBookInInput: CreateBookInInput!): BookIn!
   createBookOut(createBookOutInput: CreateBookOutInput!): BookOut!
@@ -659,6 +681,7 @@ type Mutation {
   removeTreatment(id: Int!): Treatment!
   removeTreatmentType(id: Int!): TreatmentType!
   removeWorkingHour(id: Int!): WorkingHour!
+  resetPassword(checkPhoneInput: PhoneInput!): SendOtpResponse!
   updateAllWorkingHour(updateAllWorkingHour: UpdateAllWorkingHourInput!): [WorkingHour!]!
   updateBadHabit(id: Int!, updateBadHabitInput: UpdateBadHabitInput!): BadHabit!
   updateChemicalMaterial(id: Int!, updateChemicalMaterialInput: UpdateChemicalMaterialInput!): ChemicalMaterial!
@@ -1134,6 +1157,13 @@ type Query {
   treatments(item_per_page: Float, page: Float, search: String): paginateTreatment!
   workingHour(day: Days!, id: Int!): WorkingHour!
   workingHours: [WorkingHour!]!
+}
+
+input ResetPasswordInput {
+  c_password: String!
+  otp: String!
+  password: String!
+  phone: String!
 }
 
 type SendOtp {
