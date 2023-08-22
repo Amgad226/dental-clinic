@@ -8,7 +8,7 @@ import { CreatePatientDiseaseForExistingPatientInput } from './dto/create-patien
 export class PatientDiseasesService {
   constructor(private prisma: PrismaService) { }
 
-  async create({ disease_id, patient_id, tight, notes }: CreatePatientDiseaseForExistingPatientInput) {
+  async create({ disease_id, patient_id, tight, notes,start_date }: CreatePatientDiseaseForExistingPatientInput) {
     const patientExist = await this.prisma.patient.findUnique({ where: { id: patient_id } })
     const diseaseExist = await this.prisma.disease.findUnique({ where: { id: disease_id } })
 
@@ -22,7 +22,7 @@ export class PatientDiseasesService {
     const patient_diseases = await this.prisma.patientDisease.create({
       include: { disease: true },
       data: {
-        tight, disease_id, patient_id, notes
+        tight, disease_id, patient_id, notes,start_date
       }
     })
 
