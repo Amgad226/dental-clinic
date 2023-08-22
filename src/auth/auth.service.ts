@@ -159,7 +159,7 @@ export class AuthService {
     }
 
     const hashedPassword = await argon.hash(password);
-   const user =  await this.prisma.user.update({
+   const updatedUser =  await this.prisma.user.update({
       where: {
         phone,
       },
@@ -175,7 +175,7 @@ export class AuthService {
     await this.updateRefreshToken(user.id, refreshToken);
 
     return {
-      data: { accessToken, refreshToken, user },
+      data: { accessToken, refreshToken, updatedUser },
       message: 'user verified successfully',
       status: 200,
     };
