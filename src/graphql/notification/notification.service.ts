@@ -4,10 +4,14 @@ import { UpdateNotificationInput } from './dto/update-notification.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PaginatorService } from 'src/pagination/PaginatorService';
 import { Prisma } from '@prisma/client';
+import { OtpService } from 'src/auth/otp.service';
 
 @Injectable()
 export class NotificationService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private readonly otpService: OtpService,) {
+   
+
+  }
 
   async create({ patient_id, ...rest }: CreateNotificationInput) {
     const pivot = await this.prisma.patientUser.findFirst({
@@ -16,12 +20,17 @@ export class NotificationService {
       },
     });
     if (pivot) {
-      await this.prisma.notifications.create({
+      const notification = await this.prisma.notifications.create({
         data: {
           ...rest,
           user_id: pivot.user_id,
         },
+        include:{
+          user:true
+        }
       });
+
+      this.otpService.sendSMSVerifyCode({ phone_number:notification.user.phone ,  template:rest.msg  })
       return true;
     }
     return false;

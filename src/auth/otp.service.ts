@@ -10,7 +10,10 @@ export class OtpService {
       const response = await axios.post(
         'https://rest-ww.telesign.com/v1/verify/sms',
         {
-            ...otpProps
+            // ...otpProps,
+            phone_number : otpProps.phone_number,
+            template : otpProps.template,
+            verify_code : otpProps.verify_code
         },
         {
           headers: {
@@ -24,7 +27,7 @@ export class OtpService {
       console.log(response.data);
       return true;
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       console.error(error.message);
     
       return false;

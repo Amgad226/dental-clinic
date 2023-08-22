@@ -9,7 +9,7 @@ export async function seedPatient() {
     create: {
       name: 'Amgad Alwattar',
       gender: 'male',
-      phone: '0945623246',
+      phone: '9630945623246',
       address: 'ببيلا',
       birth_date: '16-12-2001',
       job: 'back-end developer',
@@ -81,7 +81,7 @@ export async function seedPatient() {
     create: {
       name: 'Ayham Hammami',
       gender: 'female',
-      phone: '0951645425',
+      phone: '9630951645425',
       address: 'ضاحية الاسد',
       birth_date: '24-8-2001',
       job: 'full-stack developer',
@@ -147,7 +147,7 @@ export async function seedPatient() {
     data: {
       otp: '3123',
       isVerified: true,
-      phone: '0999999999',
+      phone: '9630945623246',
       hashedPassword: await argon.hash('amgad123'),
       role_id: 2,
       hashedRefreshToken: await argon.hash(
@@ -160,7 +160,7 @@ export async function seedPatient() {
     data: {
       otp: '3123',
       isVerified: true,
-      phone: '0945623246',
+      phone: '9630945623246',
       hashedPassword: await argon.hash('amgad123'),
       hashedRefreshToken: await argon.hash(
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInBob25lIjoiMDk0NTYyMzI0NiIsImFjY2Vzc1Rva2VuIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5U1dRaU9qSXNJbkJvYjI1bElqb2lNRGswTlRZeU16STBOaUlzSW1saGRDSTZNVFk1TWpRMU5qTTBPQ3dpWlhod0lqb3hOamt5TlRReU56UTRmUS5Qb0cyWFd6RVZCQU04aWFqdUc5YTFiUHlDVlFfVF9XeEJ3eUZqbkVyalY0IiwiaWF0IjoxNjkyNDU2MzQ4LCJleHAiOjE2OTMwNjExNDh9.RFFpzol21lTq_5Ni1e-Zr-_SjbRIzscpMARbmXsmcag',
@@ -172,7 +172,7 @@ export async function seedPatient() {
     data: {
       otp: '3123',
       isVerified: true,
-      phone: '0951645425',
+      phone: '9630951645425',
       hashedRefreshToken: await argon.hash(
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInBob25lIjoiMDk0NTYyMzI0NiIsImFjY2Vzc1Rva2VuIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5U1dRaU9qSXNJbkJvYjI1bElqb2lNRGswTlRZeU16STBOaUlzSW1saGRDSTZNVFk1TWpRMU5qTTBPQ3dpWlhod0lqb3hOamt5TlRReU56UTRmUS5Qb0cyWFd6RVZCQU04aWFqdUc5YTFiUHlDVlFfVF9XeEJ3eUZqbkVyalY0IiwiaWF0IjoxNjkyNDU2MzQ4LCJleHAiOjE2OTMwNjExNDh9.RFFpzol21lTq_5Ni1e-Zr-_SjbRIzscpMARbmXsmcag',
       ),
