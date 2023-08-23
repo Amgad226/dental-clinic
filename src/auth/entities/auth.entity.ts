@@ -17,10 +17,10 @@ export class Auth {
     @Field(() => User)
     user: User;
 
-    @Field(() => Patient)
-    patient: Patient;
+    @Field(() => Patient, { nullable: true })
+    patient?: Patient;
 
-    @Field(() => CheckPhone, {nullable:true})
+    @Field(() => CheckPhone, { nullable: true })
     status?: CheckPhone;
 }
 

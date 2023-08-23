@@ -26,14 +26,14 @@ export class AuthService {
     private configService: ConfigService,
     private patientService: PatientService,
     private readonly otpService: OtpService,
-  ) {}
+  ) { }
 
   async checkPhone(phoneInput: PhoneInput): Promise<CheckPhoneResponse> {
-    let user = await this.prisma.user.findFirst({
+    const user = await this.prisma.user.findFirst({
       where: { phone: phoneInput.phone },
     });
 
-    let patient = await this.prisma.patient.findFirst({
+    const patient = await this.prisma.patient.findFirst({
       where: { phone: phoneInput.phone },
     });
 
@@ -90,7 +90,7 @@ export class AuthService {
 
   // create user account,that is have phone and otp values and other null
   async sendOtp({ phone }: PhoneInput): Promise<SendOtpResponse> {
-    let user = await this.prisma.user.findFirst({
+    const user = await this.prisma.user.findFirst({
       where: { phone },
     });
     if (user?.isVerified) {
@@ -103,15 +103,15 @@ export class AuthService {
 
     return isSended
       ? {
-          data: { otp },
-          message: `Your code is ${otp}, Thank you`,
-          status: 200,
-        }
+        data: { otp },
+        message: `Your code is ${otp}, Thank you`,
+        status: 200,
+      }
       : {
-          data: { otp },
-          message: "otp doesn't sended successfully ",
-          status: 400,
-        };
+        data: { otp },
+        message: "otp doesn't sended successfully ",
+        status: 400,
+      };
   }
   //IS_PUBLIC
   // verify user account by otp and store password
@@ -157,9 +157,10 @@ export class AuthService {
       user.phone,
     );
     await this.updateRefreshToken(user.id, refreshToken);
+    console.log(updatedUser);
 
     return {
-      data: { accessToken, refreshToken, updatedUser },
+      data: { accessToken, refreshToken, user: updatedUser },
       message: 'user verified successfully',
       status: 200,
     };
@@ -375,15 +376,15 @@ export class AuthService {
     const { isSended, otp } = await this.otpService.sendOtpToUser(phone, false);
     return isSended
       ? {
-          data: { otp },
-          message: `Your code is ${otp}, Thank you`,
-          status: 200,
-        }
+        data: { otp },
+        message: `Your code is ${otp}, Thank you`,
+        status: 200,
+      }
       : {
-          data: { otp },
-          message: "otp doesn't sended successfully ",
-          status: 400,
-        };
+        data: { otp },
+        message: "otp doesn't sended successfully ",
+        status: 400,
+      };
   }
 
   async changePassword({
