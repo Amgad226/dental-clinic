@@ -57,11 +57,11 @@ export class ChemicalMaterialService {
       item_per_page,
       page,
       search,
-      relations:{
-        include:{
-            // diseaseChemicalMaterials:true
-        }
-      }
+      // relations:{
+        // include:{
+            // diseaseChemicalMajterials:true
+        // }
+      // }
     });
   }
 
@@ -71,12 +71,12 @@ export class ChemicalMaterialService {
       include: {
         chemicalChemicalMaterials1: {
           include: {
-            chemical_material_2: {},
+            chemical_material_2: true,
           },
         },
         chemicalChemicalMaterials2: {
           include: {
-            chemical_material_1: {},
+            chemical_material_1: true,
           },
         },
       },
