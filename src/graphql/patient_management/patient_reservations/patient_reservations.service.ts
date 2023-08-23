@@ -11,11 +11,11 @@ export class PatientReservationsService {
     const patient_reservations_count = await this.prisma.patientReservation.count({
       where: { patient_id },
     })
-    if (patient_reservations_count > 0) {
-      throw new Error('patient can not have more than 1 onHold reservation')
-    }
     if (date < new Date(Date.now())) {
       throw new Error('Date must greater than now date');
+    }
+    if (patient_reservations_count > 0) {
+      throw new Error('patient can not have more than 1 onHold reservation')
     }
     const day = new Date(date).toLocaleString('en-SY', { weekday: 'short' }) as Days
     const workingHours = await this.prisma.workingHours.findUnique({
