@@ -71,7 +71,7 @@ const graphQLModuleConfig: any = {
 };
 
 const serveStaticImagesConfig = {
-  rootPath: join(__dirname, '..', 'public'), // Specify the root path of your image directory
+  rootPath: join(process.env.host, '..', 'public'), // Specify the root path of your image directory
   serveRoot: '/public',
 };
 

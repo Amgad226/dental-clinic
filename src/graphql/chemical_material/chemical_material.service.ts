@@ -59,7 +59,7 @@ export class ChemicalMaterialService {
       search,
       relations:{
         include:{
-            diseaseChemicalMaterials:true
+            // diseaseChemicalMaterials:true
         }
       }
     });

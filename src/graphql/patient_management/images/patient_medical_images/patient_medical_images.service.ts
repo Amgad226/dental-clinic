@@ -3,10 +3,18 @@ import { CreatePatientMedicalImageInput } from './dto/create-patient_medical_ima
 import { UpdatePatientMedicalImageInput } from './dto/update-patient_medical_image.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ImagesUploaderService } from 'src/images_uploader/images_uploader.service';
+import { join } from 'path';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PatientMedicalImagesService {
-  constructor(private prisma: PrismaService, private imageUploaderService: ImagesUploaderService) { }
+  private host
+  constructor(private prisma: PrismaService, private imageUploaderService: ImagesUploaderService,
+    private configService: ConfigService,
+    ) { 
+      this.host = configService.get('host')
+
+    }
   async create({ medical_image_type_id, patient_id, title, image }: CreatePatientMedicalImageInput) {
     const { src } = await this.imageUploaderService.store({
       image,
@@ -14,7 +22,7 @@ export class PatientMedicalImagesService {
       patient_id
     })
 
-    return await this.prisma.patientMedicalImage.create({
+    const img =  await this.prisma.patientMedicalImage.create({
       data: {
         src,
         title,
@@ -26,10 +34,12 @@ export class PatientMedicalImagesService {
         imageType: true
       }
     });
+    img.src= join(this.host,img.src)
+    return img
   }
 
   async findAll(patient_id?: number, medical_image_type_id?: number) {
-    return await this.prisma.patientMedicalImage.findMany({
+    const images = await this.prisma.patientMedicalImage.findMany({
       where: {
         patient_id,
         medical_image_type_id
@@ -38,15 +48,22 @@ export class PatientMedicalImagesService {
         imageType: true,
       }
     });
+    const a =  images.filter((image)=>{
+       image.src=join(this.host,image.src)
+       return image
+    })
+    return a 
   }
 
   async update(id: number, updatePatientMedicalImageInput: UpdatePatientMedicalImageInput) {
-    return await this.prisma.patientMedicalImage.update({
+    const img= await this.prisma.patientMedicalImage.update({
       where: { id },
       data: {
         ...updatePatientMedicalImageInput
       },
     });
+    img.src= join(this.host,img.src)
+    return img
   }
 
   async remove(id: number) {

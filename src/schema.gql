@@ -943,11 +943,17 @@ type PatientDisease {
 }
 
 type PatientLabOrder {
+  created_at: DateTime!
+  degree: String!
+  deliver_at: DateTime!
+  directions: String!
   id: Int!
   lab_order: LabOrder!
   lab_order_id: Int!
+  notation: [String!]!
   patient_session_id: Int!
   session: PatientSession!
+  type: String!
 }
 
 type PatientMedicalImage {
