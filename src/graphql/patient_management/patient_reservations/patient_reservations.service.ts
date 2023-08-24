@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreatePatientReservationInput } from './dto/create-patient_reservation.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Days } from '@prisma/client';
+import { UpdatePatientReservationInput } from './dto/update-patient_reservation.input';
 
 @Injectable()
 export class PatientReservationsService {
@@ -52,6 +53,17 @@ export class PatientReservationsService {
     });
   }
 
+  async update({ updatePatientReservationInput }: { updatePatientReservationInput: UpdatePatientReservationInput }) {
+    return await this.prisma.patientReservation.update({
+      where: {
+        id: updatePatientReservationInput.id,
+      },
+      data: {
+        date: updatePatientReservationInput.date,
+        notes: updatePatientReservationInput.notes
+      }
+    });
+  }
   async remove(id: number) {
     return await this.prisma.patientReservation.delete({
       where: {

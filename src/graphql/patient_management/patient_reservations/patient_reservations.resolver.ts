@@ -19,6 +19,12 @@ export class PatientReservationsResolver {
   }
 
   @Mutation(() => PatientReservation)
+  updatePatientReservation(@Args('updatePatientReservationInput') updatePatientReservationInput: UpdatePatientReservationInput) {
+    return this.patientReservationsService.update({
+      updatePatientReservationInput
+    });
+  }
+  @Mutation(() => PatientReservation)
   removePatientReservation(@Args('id', { type: () => Int }) id: number) {
     return this.patientReservationsService.remove(id);
   }
