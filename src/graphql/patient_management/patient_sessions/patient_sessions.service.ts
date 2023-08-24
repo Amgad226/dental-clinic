@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class PatientSessionsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create({
     CreatePatientTreatmentDoneStepFromSessionInput,
@@ -35,7 +35,13 @@ export class PatientSessionsService {
             },
           },
           PatientPerscrptions: createPatientPerscrptionFromSessionInput && {
-            create: createPatientPerscrptionFromSessionInput,
+            create: {
+              PatientPerscrptionsMedicince: {
+                createMany: {
+                  data: [...createPatientPerscrptionFromSessionInput.PatientPerscrptionsMedicince]
+                }
+              }
+            },
           },
         },
       })

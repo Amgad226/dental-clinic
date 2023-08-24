@@ -16,7 +16,7 @@ enum AppointmentTypes {
 
 type Auth {
   accessToken: String!
-  patient: Patient!
+  patient: Patient
   refreshToken: String!
   status: CheckPhone
   user: User!
@@ -338,7 +338,7 @@ input CreatePatientPaymentInput {
 }
 
 input CreatePatientPerscrptionFromSessionInput {
-  createPatientPerscrptionsMedicienInput: [CreatePatientPerscrptionsMedicienFromSessionInput!]!
+  PatientPerscrptionsMedicince: [CreatePatientPerscrptionsMedicienFromSessionInput!]!
 }
 
 input CreatePatientPerscrptionInput {
