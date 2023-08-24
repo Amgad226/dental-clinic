@@ -46,8 +46,8 @@ describe('PatientReservationsResolver', () => {
           job: "back-end developer",
           main_complaint: null,
           maintal_status: null,
-          name: "Amgad Alwattar",
-          phone: "0945623246",
+          name: "Amgad samer wattar ",
+          phone: "911111111",
         }
       };
       // Create the disease using the actual service method

@@ -5,7 +5,7 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class AppService{
     constructor(private prisma :PrismaService){}
     helloWorld(){
-        return 'Hello, World-this change form docker container ';
+        return 'Hello, World , this a home page in backend ';
     }
     async storeDiseaseForTest(){
         try{

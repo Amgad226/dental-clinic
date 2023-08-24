@@ -83,8 +83,17 @@ export class PatientSessionsService {
             },
           },
         },
-        PatientLabOrder: true,
-        PatientPerscrptions: true,
+        PatientLabOrder: {
+            include:{
+              Notation:true
+            }
+        },
+        PatientPerscrptions: {
+          include:{
+            PatientPerscrptionsMedicince:true,
+          }
+          
+        },
       },
     });
     return data;

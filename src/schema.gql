@@ -702,6 +702,7 @@ type Mutation {
   updatePatientMedicine(updatePatientMedicineInput: UpdatePatientMedicineInput!): PatientMedicine!
   updatePatientPayment(updatePatientPaymentInput: UpdatePatientPaymentInput!): PatientPayment!
   updatePatientPerscrptionsMedicien(updatePatientPerscrptionsMedicienInput: UpdatePatientPerscrptionsMedicienInput!): PatientPerscrptionsMedicien!
+  updatePatientReservation(updatePatientReservationInput: UpdatePatientReservationInput!): PatientReservation!
   updatePatientSession(updatePatientSessionInput: UpdatePatientSessionInput!): PatientSession!
   updatePatientTeethTreatment(updatePatientTeethTreatmentInput: UpdatePatientTeethTreatmentInput!): PatientTeethTreatment!
   updatePatientTreatment(updatePatientTreatmentInput: UpdatePatientTreatmentInput!): PatientTreatment!
@@ -1389,6 +1390,13 @@ input UpdatePatientPerscrptionsMedicienInput {
   patient_perscrption_id: Int
   qantity: String
   repetition: String
+}
+
+input UpdatePatientReservationInput {
+  date: DateTime
+  id: Int!
+  notes: String
+  patient_id: Int
 }
 
 input UpdatePatientSessionInput {
