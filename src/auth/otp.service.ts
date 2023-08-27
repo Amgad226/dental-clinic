@@ -3,12 +3,16 @@ import { Injectable } from '@nestjs/common';
 import { OtpProps } from 'src/graphql/interfaces/props.interface';
 import { GraphQLError } from 'graphql';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { join } from 'path';
 
 @Injectable()
 export class OtpService {
   constructor(private prisma: PrismaService) {}
   async sendSMSVerifyCode(otpProps: OtpProps): Promise<boolean> {
     try {
+      if(otpProps.phone_number.length==9){
+        otpProps.phone_number=join("9630",otpProps.phone_number)
+      }
       const response = await axios.post(
         'https://rest-ww.telesign.com/v1/verify/sms',
         {

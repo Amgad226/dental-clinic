@@ -49,7 +49,10 @@ export class PatientReservationsService {
 
   async findAll({ patient_id }: { patient_id?: number }) {
     return await this.prisma.patientReservation.findMany({
-      where: { patient_id }
+      where: { patient_id },
+      include:{
+        patient:true
+      }
     });
   }
 

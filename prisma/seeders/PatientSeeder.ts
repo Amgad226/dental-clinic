@@ -4,12 +4,12 @@ const prisma = new PrismaClient();
 
 export async function seedPatient() {
   const amgad = await prisma.patient.upsert({
-    where: { phone: '0945623246' },
+    where: { phone: '911111111' },
     update: {},
     create: {
       name: 'Amgad samer wattar ',
       gender: 'male',
-      phone: '9630945623245',
+      phone: '911111111',
       address: 'ببيلا',
       birth_date: '16-12-2001',
       job: 'back-end developer',
@@ -76,12 +76,12 @@ export async function seedPatient() {
   });
 
   const ayham = await prisma.patient.upsert({
-    where: { phone: '0951645425' },
+    where: { phone: '922222222' },
     update: {},
     create: {
       name: 'Ayham Hammami',
       gender: 'female',
-      phone: '9630951645425',
+      phone: '922222222',
       address: 'ضاحية الاسد',
       birth_date: '24-8-2001',
       job: 'full-stack developer',
@@ -147,7 +147,7 @@ export async function seedPatient() {
     data: {
       otp: '3123',
       isVerified: true,
-      phone: '9630999999999',
+      phone: '999999999',
       hashedPassword: await argon.hash('amgad123'),
       role_id: 2,
       hashedRefreshToken: await argon.hash(
@@ -160,7 +160,7 @@ export async function seedPatient() {
     data: {
       otp: '3123',
       isVerified: true,
-      phone: '9630945623245',
+      phone: '911111111',
       hashedPassword: await argon.hash('amgad123'),
       hashedRefreshToken: await argon.hash(
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInBob25lIjoiMDk0NTYyMzI0NiIsImFjY2Vzc1Rva2VuIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5U1dRaU9qSXNJbkJvYjI1bElqb2lNRGswTlRZeU16STBOaUlzSW1saGRDSTZNVFk1TWpRMU5qTTBPQ3dpWlhod0lqb3hOamt5TlRReU56UTRmUS5Qb0cyWFd6RVZCQU04aWFqdUc5YTFiUHlDVlFfVF9XeEJ3eUZqbkVyalY0IiwiaWF0IjoxNjkyNDU2MzQ4LCJleHAiOjE2OTMwNjExNDh9.RFFpzol21lTq_5Ni1e-Zr-_SjbRIzscpMARbmXsmcag',
@@ -172,7 +172,7 @@ export async function seedPatient() {
     data: {
       otp: '3123',
       isVerified: true,
-      phone: '9630951645425',
+      phone: '922222222',
       hashedRefreshToken: await argon.hash(
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInBob25lIjoiMDk0NTYyMzI0NiIsImFjY2Vzc1Rva2VuIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5U1dRaU9qSXNJbkJvYjI1bElqb2lNRGswTlRZeU16STBOaUlzSW1saGRDSTZNVFk1TWpRMU5qTTBPQ3dpWlhod0lqb3hOamt5TlRReU56UTRmUS5Qb0cyWFd6RVZCQU04aWFqdUc5YTFiUHlDVlFfVF9XeEJ3eUZqbkVyalY0IiwiaWF0IjoxNjkyNDU2MzQ4LCJleHAiOjE2OTMwNjExNDh9.RFFpzol21lTq_5Ni1e-Zr-_SjbRIzscpMARbmXsmcag',
       ),
